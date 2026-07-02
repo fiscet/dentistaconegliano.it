@@ -25,6 +25,29 @@ export const faqs = [
   },
 ];
 
+export const faqImplantologia = [
+  {
+    q: "Chi è un buon candidato per gli impianti dentali?",
+    a: "Quasi tutti gli adulti in buona salute generale e con gengive sane possono ricevere impianti. In presenza di poco osso o di patologie specifiche valutiamo soluzioni dedicate durante la prima visita con diagnosi 3D.",
+  },
+  {
+    q: "Quanto dura l'intervento di inserimento dell'impianto?",
+    a: "L'inserimento di un singolo impianto richiede in genere 30-60 minuti. Per riabilitazioni più ampie i tempi aumentano, ma l'intervento resta ambulatoriale e in anestesia locale.",
+  },
+  {
+    q: "Quanto tempo passa prima della corona definitiva?",
+    a: "Dopo l'osteointegrazione, che dura in media 2-4 mesi, applichiamo la corona definitiva. Nei casi a carico immediato una protesi provvisoria fissa viene posizionata subito.",
+  },
+  {
+    q: "Gli impianti si notano rispetto ai denti naturali?",
+    a: "No. Le corone sono realizzate su misura in ceramica per colore, forma e trasparenza, risultando indistinguibili dai denti naturali.",
+  },
+  {
+    q: "Come si mantengono gli impianti nel tempo?",
+    a: "Come i denti naturali: spazzolino, filo o scovolino e igiene professionale periodica. Con controlli regolari gli impianti durano moltissimi anni.",
+  },
+];
+
 export const testimonials = [
   {
     name: "Giulia M.",
