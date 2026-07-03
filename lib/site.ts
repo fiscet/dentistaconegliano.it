@@ -6,8 +6,8 @@ export const site = {
   doctor: "Dott. Gianluca Marin",
   domain: "dentistaconegliano.it",
   url: "https://www.dentistaconegliano.it",
-  phone: "0438 123456",
-  phoneHref: "tel:+390438123456",
+  phone: "0438 415356",
+  phoneHref: "tel:+390438415356",
   address: {
     street: "Viale Italia, 120",
     postalCode: "31015",

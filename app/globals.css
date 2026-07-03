@@ -42,11 +42,15 @@
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --font-sans: var(--font-inter), sans-serif;
-  --font-heading: var(--font-inter), sans-serif;
+  --font-sans: var(--font-source-sans), sans-serif;
+  --font-heading: var(--font-source-sans), sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  /* Source Sans 3 ha una x-height più bassa di Inter e appare più piccolo
+     a parità di dimensione: normalizziamo la x-height a quella di Inter (~0.545)
+     così il testo torna leggibile come prima, senza alterare spaziature/layout. */
+  font-size-adjust: 0.545;
 }
