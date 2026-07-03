@@ -39,6 +39,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# sanity (schema.json è un artefatto intermedio del typegen; sanity.types.ts
+# invece va committato perché Vercel builda solo il sito, non lo studio)
+/studio/schema.json
+/studio/dist
+/studio/node_modules
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
