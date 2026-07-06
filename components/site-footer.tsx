@@ -1,6 +1,6 @@
 import type { SiteSettings } from '@/lib/settings';
 import type { NavItem } from '@/lib/nav';
-import type { SERVICES_QUERY_RESULT } from '@/sanity.types';
+import type { FOOTER_SERVICES_QUERY_RESULT } from '@/sanity.types';
 import Link from 'next/link';
 
 export default function SiteFooter({
@@ -9,7 +9,8 @@ export default function SiteFooter({
   quickLinks
 }: {
   settings: SiteSettings;
-  services: SERVICES_QUERY_RESULT;
+  // Colonna «I Nostri Servizi»: solo i servizi con flag "Mostra nel footer".
+  services: FOOTER_SERVICES_QUERY_RESULT;
   // Colonna «Link Rapidi»: dal campo footerLinks del menu Sanity (con
   // fallback all'array statico di lib/site.ts se non compilato).
   quickLinks: NavItem[];
@@ -62,23 +63,25 @@ export default function SiteFooter({
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-sky-400 mb-4">
-              I Nostri Servizi
-            </h4>
-            <ul className="flex flex-col gap-2.5 text-xs text-slate-400">
-              {serviceLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-primary-foreground transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {serviceLinks.length > 0 && (
+            <div>
+              <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-sky-400 mb-4">
+                I Nostri Servizi
+              </h4>
+              <ul className="flex flex-col gap-2.5 text-xs text-slate-400">
+                {serviceLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="hover:text-primary-foreground transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div>
             <h4 className="font-heading text-sm font-bold uppercase tracking-wider text-sky-400 mb-4">

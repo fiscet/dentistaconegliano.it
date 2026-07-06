@@ -322,6 +322,7 @@ export type Service = {
   };
   body?: BlockContent;
   order?: number;
+  showInFooter?: boolean;
   priceBadge?: string;
   priceMin?: number;
   priceMax?: number;
@@ -1148,6 +1149,15 @@ export type SERVICES_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: FOOTER_SERVICES_QUERY
+// Query: *[_type == "service" && showInFooter == true] | order(order asc, title asc){    _id,    title,    "slug": slug.current  }
+export type FOOTER_SERVICES_QUERY_RESULT = Array<{
+  _id: string;
+  title: string | null;
+  slug: string | null;
+}>;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: PRICED_SERVICES_QUERY
 // Query: *[_type == "service" && defined(priceMin)] | order(order asc, title asc){    _id,    title,    "slug": slug.current,    excerpt,    priceBadge,    priceMin,    priceMax,    priceNote,    priceFeatures,    popular  }
 export type PRICED_SERVICES_QUERY_RESULT = Array<{
@@ -1227,6 +1237,7 @@ declare module "@sanity/client" {
     '\n  *[_id == "pricePage"][0]{\n    hero{ eyebrow, title, description },\n    factors{\n      enabled,\n      eyebrow,\n      title,\n      items[]{ _key, icon, title, text }\n    },\n    list{ enabled, eyebrow, title, description },\n    cta{ enabled, eyebrow, title, description, boxTitle },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PRICE_PAGE_QUERY_RESULT;
     '\n  *[_type == "service" && showInHome == true] | order(order asc, title asc){\n    _id,\n    "slug": slug.current,\n    "title": coalesce(homeTitle, title),\n    "description": coalesce(homeExcerpt, excerpt),\n    icon\n  }\n': HOME_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
+    '\n  *[_type == "service" && showInFooter == true] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FOOTER_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    priceFeatures,\n    popular\n  }\n': PRICED_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SERVICE_QUERY_RESULT;
     '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }\n': SERVICE_SLUGS_QUERY_RESULT;

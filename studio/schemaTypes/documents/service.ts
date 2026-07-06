@@ -70,6 +70,15 @@ export const service = defineType({
       initialValue: 0,
       group: "content",
     }),
+    defineField({
+      name: "showInFooter",
+      title: "Mostra nel footer",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Se attivo, il servizio compare nella colonna «I Nostri Servizi» del footer. Utile per elencare solo i principali.",
+      group: "content",
+    }),
 
     // --- Prezzo (indicativo, per la pagina /prezzi) ---
     defineField({

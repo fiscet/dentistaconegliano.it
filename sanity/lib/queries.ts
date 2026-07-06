@@ -142,6 +142,15 @@ export const SERVICES_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+// Servizi da elencare nella colonna «I Nostri Servizi» del footer.
+export const FOOTER_SERVICES_QUERY = defineQuery(/* groq */ `
+  *[_type == "service" && showInFooter == true] | order(order asc, title asc){
+    _id,
+    title,
+    "slug": slug.current
+  }
+`);
+
 // Servizi con prezzo indicativo: card della pagina /prezzi.
 export const PRICED_SERVICES_QUERY = defineQuery(/* groq */ `
   *[_type == "service" && defined(priceMin)] | order(order asc, title asc){
