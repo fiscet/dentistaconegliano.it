@@ -19,8 +19,16 @@ type SanityNavLink = {
   children?: SanityNavLink[] | null;
 };
 
-// Mappa tipo documento → prefisso route del sito.
+// Mappa tipo documento → route del sito. Le pagine singleton hanno route
+// fisse (niente slug); ogni nuovo singleton va aggiunto qui e tra i tipi
+// referenziabili in studio/schemaTypes/objects/navLink.ts.
+const singletonRoutes: Record<string, string> = {
+  homePage: "/",
+};
+
 function internalHref(link: NonNullable<SanityNavLink["internalLink"]>): string | null {
+  const singletonRoute = singletonRoutes[link._type];
+  if (singletonRoute) return singletonRoute;
   if (!link.slug) return null;
   switch (link._type) {
     case "page":

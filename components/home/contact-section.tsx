@@ -1,8 +1,18 @@
-import { Phone, MapPin, Clock } from "lucide-react";
-import { site } from "@/lib/site";
-import ContactForm from "@/components/contact-form";
+import { Phone, MapPin, Clock } from 'lucide-react';
+import { getSiteSettings } from '@/lib/settings';
+import ContactForm from '@/components/contact-form';
+import { contactFallback as fallback } from '@/lib/fallback/home';
+import type { HOME_PAGE_QUERY_RESULT } from '@/sanity.types';
 
-export default function ContactSection() {
+export type ContactData = NonNullable<HOME_PAGE_QUERY_RESULT>['contact'];
+
+export default async function ContactSection({
+  data
+}: {
+  data?: ContactData | null;
+}) {
+  const settings = await getSiteSettings();
+
   return (
     <section
       id="contatti"
@@ -13,21 +23,23 @@ export default function ContactSection() {
           <div className="lg:col-span-5 flex flex-col gap-8">
             <div>
               <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
-                Parla con noi
+                {data?.eyebrow ?? fallback.eyebrow}
               </span>
               <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
-                Richiedi una Consulenza Gratuita
+                {data?.title ?? fallback.title}
               </h2>
-              <div className="w-20 h-1 bg-sky-500 mt-4 rounded-full" aria-hidden="true" />
+              <div
+                className="w-20 h-1 bg-sky-500 mt-4 rounded-full"
+                aria-hidden="true"
+              />
               <p className="text-base text-muted-foreground mt-4">
-                Siamo qui per darti tutte le risposte. Compila il modulo o
-                chiamaci direttamente per fissare un appuntamento diagnostico.
+                {data?.description ?? fallback.description}
               </p>
             </div>
 
             <div className="flex flex-col gap-6">
               <a
-                href={site.phoneHref}
+                href={settings.phoneHref}
                 className="flex items-center gap-4 bg-background p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center text-primary shrink-0">
@@ -37,7 +49,9 @@ export default function ContactSection() {
                   <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
                     Telefono Urgenze &amp; Info
                   </p>
-                  <p className="text-lg font-extrabold text-primary">{site.phone}</p>
+                  <p className="text-lg font-extrabold text-primary">
+                    {settings.phone}
+                  </p>
                 </div>
               </a>
 
@@ -49,7 +63,9 @@ export default function ContactSection() {
                   <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
                     Indirizzo dello Studio
                   </p>
-                  <p className="text-sm font-bold text-foreground">{site.addressLine}</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {settings.addressLine}
+                  </p>
                 </div>
               </div>
 
@@ -61,7 +77,9 @@ export default function ContactSection() {
                   <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
                     Orari di Apertura
                   </p>
-                  <p className="text-sm font-bold text-foreground">{site.openingHours}</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {settings.openingHours}
+                  </p>
                 </div>
               </div>
             </div>
@@ -75,7 +93,7 @@ export default function ContactSection() {
 
             <div className="bg-background p-8 sm:p-10 rounded-3xl border border-border shadow-xl relative">
               <h3 className="font-heading text-xl font-bold text-foreground mb-6">
-                Invia una richiesta immediata
+                {data?.formTitle ?? fallback.formTitle}
               </h3>
               <ContactForm />
             </div>

@@ -5,64 +5,88 @@ import Treatments from '@/components/home/treatments';
 import DoctorProfile from '@/components/home/doctor-profile';
 import ClinicalCases from '@/components/home/clinical-cases';
 import ContactSection from '@/components/home/contact-section';
-import { site } from '@/lib/site';
+import { getSiteSettings } from '@/lib/settings';
+import { sanityFetch } from '@/sanity/lib/live';
+import { HOME_PAGE_QUERY } from '@/sanity/lib/queries';
 
-export const metadata: Metadata = {
-  title:
-    'Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin',
-  description:
-    'Impianti dentali a carico immediato a Conegliano: denti fissi in 24 ore, All-on-4, chirurgia computer guidata e sedazione cosciente. Consulenza gratuita con il Dott. Gianluca Marin.'
-};
+const fallbackTitle =
+  'Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin';
+const fallbackDescription =
+  'Impianti dentali a carico immediato a Conegliano: denti fissi in 24 ore, All-on-4, chirurgia computer guidata e sedazione cosciente. Consulenza personalizzata con il Dott. Gianluca Marin.';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': ['Dentist', 'MedicalBusiness'],
-  name: site.name,
-  url: site.url,
-  telephone: '+390438415356',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: site.address.street,
-    postalCode: site.address.postalCode,
-    addressLocality: site.address.city,
-    addressRegion: site.address.province,
-    addressCountry: 'IT'
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '19:00'
+export async function generateMetadata(): Promise<Metadata> {
+  const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY });
+
+  return {
+    title: { absolute: home?.seoTitle ?? fallbackTitle },
+    description: home?.seoDescription ?? fallbackDescription
+  };
+}
+
+export default async function Home() {
+  const [settings, { data: home }] = await Promise.all([
+    getSiteSettings(),
+    sanityFetch({ query: HOME_PAGE_QUERY })
+  ]);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': ['Dentist', 'MedicalBusiness'],
+    name: settings.name,
+    url: settings.url,
+    telephone: settings.phoneHref.replace('tel:', ''),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings.address.street,
+      postalCode: settings.address.postalCode,
+      addressLocality: settings.address.city,
+      addressRegion: settings.address.province,
+      addressCountry: 'IT'
     },
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: 'Saturday',
-      opens: '09:00',
-      closes: '13:00'
-    }
-  ],
-  founder: {
-    '@type': 'Person',
-    name: site.doctor,
-    jobTitle: 'Direttore Sanitario e Chirurgo Implantologo'
-  },
-  medicalSpecialty: 'Dentistry'
-};
+    // Orario strutturato: il campo openingHours dei settings è testo libero,
+    // quindi la versione machine-readable resta definita qui.
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '19:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Saturday',
+        opens: '09:00',
+        closes: '13:00'
+      }
+    ],
+    founder: {
+      '@type': 'Person',
+      name: settings.doctor,
+      jobTitle: 'Direttore Sanitario e Chirurgo Implantologo'
+    },
+    medicalSpecialty: 'Dentistry'
+  };
 
-export default function Home() {
   return (
     <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Hero />
-      <StatsBar />
-      <Treatments />
-      <DoctorProfile />
-      <ClinicalCases />
-      <ContactSection />
+      {home?.hero?.enabled !== false && <Hero data={home?.hero} />}
+      {home?.stats?.enabled !== false && <StatsBar data={home?.stats} />}
+      {home?.treatments?.enabled !== false && (
+        <Treatments data={home?.treatments} />
+      )}
+      {home?.doctorProfile?.enabled !== false && (
+        <DoctorProfile data={home?.doctorProfile} />
+      )}
+      {home?.clinicalCases?.enabled !== false && (
+        <ClinicalCases data={home?.clinicalCases} />
+      )}
+      {home?.contact?.enabled !== false && (
+        <ContactSection data={home?.contact} />
+      )}
     </main>
   );
 }

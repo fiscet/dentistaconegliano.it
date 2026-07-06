@@ -1,11 +1,11 @@
-const stats = [
-  { value: "99.4%", label: "Percentuale di Successo degli Impianti" },
-  { value: "12.000+", label: "Impianti Inseriti con Successo" },
-  { value: "24 Ore", label: "Tempo medio per i Denti Fissi" },
-  { value: "Zero", label: "Dolore grazie alla Sedazione Cosciente" },
-];
+import { statsFallback } from "@/lib/fallback/home";
+import type { HOME_PAGE_QUERY_RESULT } from "@/sanity.types";
 
-export default function StatsBar() {
+export type StatsData = NonNullable<HOME_PAGE_QUERY_RESULT>["stats"];
+
+export default function StatsBar({ data }: { data?: StatsData | null }) {
+  const stats = data?.items?.length ? data.items : statsFallback;
+
   return (
     <section className="bg-primary text-primary-foreground py-12 relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true">
@@ -27,7 +27,7 @@ export default function StatsBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {stats.map((stat) => (
-            <div key={stat.label}>
+            <div key={stat._key}>
               <p className="text-4xl lg:text-5xl font-extrabold font-heading text-sky-300">
                 {stat.value}
               </p>

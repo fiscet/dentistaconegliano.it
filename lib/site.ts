@@ -17,6 +17,12 @@ export const site = {
   addressLine: "Viale Italia, 120 - 31015 Conegliano (TV)",
   openingHours: "Lun - Ven: 09:00 - 19:00 | Sab: 09:00 - 13:00",
   yearsBadge: "20+ Anni di Attività",
+  footerDescription:
+    "Esperienza ventennale e soluzioni implantari d'avanguardia per ripristinare il tuo sorriso in sicurezza.",
+  legalName: "Studio Dentistico dott. Gianluca Marin S.r.l.",
+  vatNumber: "01234567890",
+  shareCapital: "€ 10.000 i.v.",
+  alboRegistration: "Iscrizione Albo Odontoiatri TV n. 1234",
 } as const;
 
 export const nav = [

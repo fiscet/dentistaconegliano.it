@@ -38,7 +38,7 @@ export default function ContactForm() {
         </p>
         <p className="text-sm text-muted-foreground max-w-sm">
           Ti ricontatteremo al più presto per fissare la tua consulenza
-          gratuita.
+          personalizzata.
         </p>
       </div>
     );

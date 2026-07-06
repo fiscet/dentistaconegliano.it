@@ -1,13 +1,18 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { media } from "sanity-plugin-media";
 import { schemaTypes } from "./schemaTypes";
 import { structure } from "./structure";
 import { apiVersion, projectId } from "./env";
 
 const shared = {
   projectId,
-  plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
+  plugins: [
+    structureTool({ structure }),
+    visionTool({ defaultApiVersion: apiVersion }),
+    media(),
+  ],
   schema: { types: schemaTypes },
 };
 

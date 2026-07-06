@@ -10,6 +10,7 @@ export const siteSettings = defineType({
   groups: [
     { name: "identity", title: "Identità", default: true },
     { name: "contact", title: "Contatti" },
+    { name: "legal", title: "Dati legali" },
     seoGroup,
   ],
   fields: [
@@ -45,6 +46,42 @@ export const siteSettings = defineType({
       type: "string",
       description: "Es. 20+ Anni di Attività",
       group: "identity",
+    }),
+    defineField({
+      name: "footerDescription",
+      title: "Descrizione nel footer",
+      type: "text",
+      rows: 3,
+      description:
+        "Frase sotto il nome nel footer, es. Esperienza ventennale e soluzioni implantari...",
+      group: "identity",
+    }),
+    defineField({
+      name: "legalName",
+      title: "Ragione sociale",
+      type: "string",
+      description: "Es. Studio Dentistico dott. Gianluca Marin S.r.l.",
+      group: "legal",
+    }),
+    defineField({
+      name: "vatNumber",
+      title: "Partita IVA",
+      type: "string",
+      group: "legal",
+    }),
+    defineField({
+      name: "shareCapital",
+      title: "Capitale sociale",
+      type: "string",
+      description: "Es. € 10.000 i.v.",
+      group: "legal",
+    }),
+    defineField({
+      name: "alboRegistration",
+      title: "Iscrizione Albo",
+      type: "string",
+      description: "Es. Iscrizione Albo Odontoiatri TV n. 1234",
+      group: "legal",
     }),
     defineField({
       name: "phone",

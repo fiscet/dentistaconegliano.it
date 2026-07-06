@@ -5,10 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Phone, Calendar, Menu, X, ChevronDown } from "lucide-react";
 import Logo from "@/components/logo";
-import { site } from "@/lib/site";
 import { fallbackNav, type NavItem } from "@/lib/nav";
+import type { SiteSettings } from "@/lib/settings";
 
-export default function SiteHeader({ items = fallbackNav }: { items?: NavItem[] }) {
+export default function SiteHeader({
+  items = fallbackNav,
+  settings,
+}: {
+  items?: NavItem[];
+  settings: SiteSettings;
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -21,8 +27,8 @@ export default function SiteHeader({ items = fallbackNav }: { items?: NavItem[] 
     <header className="w-full bg-background border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <Link href="/" aria-label={site.name}>
-            <Logo />
+          <Link href="/" aria-label={settings.name}>
+            <Logo alt={settings.name} />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8" aria-label="Navigazione principale">
@@ -76,14 +82,14 @@ export default function SiteHeader({ items = fallbackNav }: { items?: NavItem[] 
           <div className="flex items-center gap-4">
             <div className="hidden md:flex flex-col text-right">
               <span className="text-[11px] font-bold text-sky-600 uppercase tracking-widest">
-                {site.yearsBadge}
+                {settings.yearsBadge}
               </span>
               <a
-                href={site.phoneHref}
+                href={settings.phoneHref}
                 className="text-base font-bold text-primary flex items-center gap-1 justify-end"
               >
                 <Phone className="w-4 h-4 text-sky-500" aria-hidden="true" />
-                {site.phone}
+                {settings.phone}
               </a>
             </div>
             <Link
@@ -137,11 +143,11 @@ export default function SiteHeader({ items = fallbackNav }: { items?: NavItem[] 
             </div>
           ))}
           <a
-            href={site.phoneHref}
+            href={settings.phoneHref}
             className="mt-2 px-3 py-2.5 rounded-lg text-sm font-bold text-primary flex items-center gap-2 bg-secondary"
           >
             <Phone className="w-4 h-4 text-sky-500" aria-hidden="true" />
-            {site.phone} · {site.yearsBadge}
+            {settings.phone} · {settings.yearsBadge}
           </a>
         </nav>
       )}

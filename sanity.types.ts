@@ -24,7 +24,7 @@ export type SanityImageAssetReference = {
 
 export type SeoImage = {
   asset?: SanityImageAssetReference;
-  media?: unknown; // Unable to locate the referenced type "seoImage.media" in schema
+  media?: unknown; // Unable to locate the referenced type "media" in schema
   hotspot?: SanityImageHotspot;
   crop?: SanityImageCrop;
   _type: "image";
@@ -88,6 +88,11 @@ export type SiteSettings = {
     _type: "image";
   };
   yearsBadge?: string;
+  footerDescription?: string;
+  legalName?: string;
+  vatNumber?: string;
+  shareCapital?: string;
+  alboRegistration?: string;
   phone?: string;
   email?: string;
   whatsapp?: string;
@@ -125,6 +130,13 @@ export type SanityImageHotspot = {
   width?: number;
 };
 
+export type HomePageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "homePage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -151,7 +163,8 @@ export type NavItem = {
   label?: string;
   linkType?: "path" | "internal" | "external";
   path?: string;
-  internalLink?: PageReference | ServiceReference | PostReference;
+  internalLink?:
+    HomePageReference | PageReference | ServiceReference | PostReference;
   externalUrl?: string;
   openInNewTab?: boolean;
   children?: Array<
@@ -166,7 +179,8 @@ export type NavLink = {
   label?: string;
   linkType?: "path" | "internal" | "external";
   path?: string;
-  internalLink?: PageReference | ServiceReference | PostReference;
+  internalLink?:
+    HomePageReference | PageReference | ServiceReference | PostReference;
   externalUrl?: string;
   openInNewTab?: boolean;
 };
@@ -299,6 +313,134 @@ export type Page = {
   seoImage?: SeoImage;
 };
 
+export type HomePage = {
+  _id: string;
+  _type: "homePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    enabled?: boolean;
+    badge?: string;
+    title?: string;
+    titleHighlight?: string;
+    titleSuffix?: string;
+    description?: string;
+    features?: Array<{
+      label?: string;
+      icon?:
+        "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+      _type: "feature";
+      _key: string;
+    }>;
+    ctaPrimaryLabel?: string;
+    ctaSecondaryLabel?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    experienceCard?: {
+      value?: string;
+      label?: string;
+      sublabel?: string;
+    };
+  };
+  stats?: {
+    enabled?: boolean;
+    items?: Array<{
+      value?: string;
+      label?: string;
+      _type: "stat";
+      _key: string;
+    }>;
+  };
+  treatments?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    items?: Array<{
+      title?: string;
+      description?: string;
+      href?: string;
+      icon?:
+        "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+      _type: "treatment";
+      _key: string;
+    }>;
+  };
+  doctorProfile?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    roleLabel?: string;
+    paragraphs?: Array<string>;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    highlights?: Array<{
+      title?: string;
+      subtitle?: string;
+      icon?:
+        "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+      _type: "highlight";
+      _key: string;
+    }>;
+    ctaLabel?: string;
+    ctaHref?: string;
+  };
+  clinicalCases?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    items?: Array<{
+      image?: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      badge?: string;
+      title?: string;
+      description?: string;
+      href?: string;
+      _type: "clinicalCase";
+      _key: string;
+    }>;
+  };
+  contact?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    formTitle?: string;
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+};
+
+export type MediaTag = {
+  _id: string;
+  _type: "media.tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: Slug;
+};
+
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
   background?: string;
@@ -405,6 +547,7 @@ export type AllSanitySchemaTypes =
   | SiteSettings
   | SanityImageCrop
   | SanityImageHotspot
+  | HomePageReference
   | PageReference
   | ServiceReference
   | PostReference
@@ -417,6 +560,8 @@ export type AllSanitySchemaTypes =
   | Slug
   | Service
   | Page
+  | HomePage
+  | MediaTag
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -443,6 +588,10 @@ export type NAVIGATION_QUERY_RESULT =
         openInNewTab: boolean | null;
         internalLink:
           | {
+              _type: "homePage";
+              slug: null;
+            }
+          | {
               _type: "page";
               slug: string | null;
             }
@@ -464,6 +613,10 @@ export type NAVIGATION_QUERY_RESULT =
           openInNewTab: boolean | null;
           internalLink:
             | {
+                _type: "homePage";
+                slug: null;
+              }
+            | {
                 _type: "page";
                 slug: string | null;
               }
@@ -483,13 +636,19 @@ export type NAVIGATION_QUERY_RESULT =
 
 // Source: ../sanity/lib/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_id == "siteSettings"][0]{    siteName,    shortName,    doctor,    yearsBadge,    phone,    email,    whatsapp,    address,    openingHours,    socials[]{ _key, platform, url },    seoTitle,    seoDescription  }
+// Query: *[_id == "siteSettings"][0]{    siteName,    shortName,    doctor,    logo,    yearsBadge,    footerDescription,    legalName,    vatNumber,    shareCapital,    alboRegistration,    phone,    email,    whatsapp,    address,    openingHours,    socials[]{ _key, platform, url },    seoTitle,    seoDescription,    seoImage  }
 export type SITE_SETTINGS_QUERY_RESULT =
   | {
       siteName: null;
       shortName: null;
       doctor: null;
+      logo: null;
       yearsBadge: null;
+      footerDescription: null;
+      legalName: null;
+      vatNumber: null;
+      shareCapital: null;
+      alboRegistration: null;
       phone: null;
       email: null;
       whatsapp: null;
@@ -498,12 +657,19 @@ export type SITE_SETTINGS_QUERY_RESULT =
       socials: null;
       seoTitle: null;
       seoDescription: null;
+      seoImage: null;
     }
   | {
       siteName: null;
       shortName: null;
       doctor: null;
+      logo: null;
       yearsBadge: null;
+      footerDescription: null;
+      legalName: null;
+      vatNumber: null;
+      shareCapital: null;
+      alboRegistration: null;
       phone: null;
       email: null;
       whatsapp: null;
@@ -512,12 +678,25 @@ export type SITE_SETTINGS_QUERY_RESULT =
       socials: null;
       seoTitle: string | null;
       seoDescription: string | null;
+      seoImage: SeoImage | null;
     }
   | {
       siteName: string | null;
       shortName: string | null;
       doctor: string | null;
+      logo: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
       yearsBadge: string | null;
+      footerDescription: string | null;
+      legalName: string | null;
+      vatNumber: string | null;
+      shareCapital: string | null;
+      alboRegistration: string | null;
       phone: string | null;
       email: string | null;
       whatsapp: string | null;
@@ -536,6 +715,164 @@ export type SITE_SETTINGS_QUERY_RESULT =
       }> | null;
       seoTitle: string | null;
       seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: HOME_PAGE_QUERY
+// Query: *[_id == "homePage"][0]{    hero{      enabled,      badge,      title,      titleHighlight,      titleSuffix,      description,      features[]{ _key, label, icon },      ctaPrimaryLabel,      ctaSecondaryLabel,      image{ ..., "alt": alt },      experienceCard    },    stats{      enabled,      items[]{ _key, value, label }    },    treatments{      enabled,      eyebrow,      title,      description,      items[]{ _key, title, description, href, icon }    },    doctorProfile{      enabled,      eyebrow,      title,      roleLabel,      paragraphs,      image{ ..., "alt": alt },      highlights[]{ _key, title, subtitle, icon },      ctaLabel,      ctaHref    },    clinicalCases{      enabled,      eyebrow,      title,      description,      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }    },    contact{      enabled,      eyebrow,      title,      description,      formTitle    },    seoTitle,    seoDescription,    seoImage  }
+export type HOME_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      stats: null;
+      treatments: null;
+      doctorProfile: null;
+      clinicalCases: null;
+      contact: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+    }
+  | {
+      hero: null;
+      stats: null;
+      treatments: null;
+      doctorProfile: null;
+      clinicalCases: null;
+      contact: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        enabled: boolean | null;
+        badge: string | null;
+        title: string | null;
+        titleHighlight: string | null;
+        titleSuffix: string | null;
+        description: string | null;
+        features: Array<{
+          _key: string;
+          label: string | null;
+          icon:
+            | "award"
+            | "check"
+            | "clock"
+            | "layers"
+            | "monitor"
+            | "shield"
+            | "zap"
+            | null;
+        }> | null;
+        ctaPrimaryLabel: string | null;
+        ctaSecondaryLabel: string | null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
+        experienceCard: {
+          value?: string;
+          label?: string;
+          sublabel?: string;
+        } | null;
+      } | null;
+      stats: {
+        enabled: boolean | null;
+        items: Array<{
+          _key: string;
+          value: string | null;
+          label: string | null;
+        }> | null;
+      } | null;
+      treatments: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        items: Array<{
+          _key: string;
+          title: string | null;
+          description: string | null;
+          href: string | null;
+          icon:
+            | "award"
+            | "check"
+            | "clock"
+            | "layers"
+            | "monitor"
+            | "shield"
+            | "zap"
+            | null;
+        }> | null;
+      } | null;
+      doctorProfile: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        roleLabel: string | null;
+        paragraphs: Array<string> | null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
+        highlights: Array<{
+          _key: string;
+          title: string | null;
+          subtitle: string | null;
+          icon:
+            | "award"
+            | "check"
+            | "clock"
+            | "layers"
+            | "monitor"
+            | "shield"
+            | "zap"
+            | null;
+        }> | null;
+        ctaLabel: string | null;
+        ctaHref: string | null;
+      } | null;
+      clinicalCases: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        items: Array<{
+          _key: string;
+          image: {
+            asset?: SanityImageAssetReference;
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt: string | null;
+            _type: "image";
+          } | null;
+          badge: string | null;
+          title: string | null;
+          description: string | null;
+          href: string | null;
+        }> | null;
+      } | null;
+      contact: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        formTitle: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
     }
   | null;
 
@@ -555,7 +892,8 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    }\n  }\n': NAVIGATION_QUERY_RESULT;
-    '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    yearsBadge,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      items[]{ _key, title, description, href, icon }\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    youtubeUrl,\n    description,\n    publishedAt\n  }\n': VIDEOS_QUERY_RESULT;
   }
 }

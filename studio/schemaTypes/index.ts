@@ -2,6 +2,7 @@ import { blockContent } from "./objects/blockContent";
 import { navLink, navItem } from "./objects/navLink";
 import { siteSettings } from "./documents/siteSettings";
 import { navigation } from "./documents/navigation";
+import { homePage } from "./documents/homePage";
 import { page } from "./documents/page";
 import { service } from "./documents/service";
 import { staffMember } from "./documents/staffMember";
@@ -17,6 +18,7 @@ export const schemaTypes = [
   // Documenti
   siteSettings,
   navigation,
+  homePage,
   page,
   service,
   staffMember,

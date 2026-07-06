@@ -42,7 +42,14 @@ const linkFields = [
     name: "internalLink",
     title: "Contenuto collegato",
     type: "reference",
-    to: [{ type: "page" }, { type: "service" }, { type: "post" }],
+    // Pagine singleton + tipi a lista; ogni nuova pagina singleton va
+    // aggiunta qui e nella mappa tipo→route di lib/nav.ts (sito).
+    to: [
+      { type: "homePage" },
+      { type: "page" },
+      { type: "service" },
+      { type: "post" },
+    ],
     hidden: ({ parent }) => parent?.linkType !== "internal",
   }),
   defineField({

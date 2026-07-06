@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Source_Sans_3 } from "next/font/google";
+import { getSiteSettings } from "@/lib/settings";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -7,15 +8,22 @@ const sourceSans = Source_Sans_3({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default:
-      "Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin",
-    template: "%s | Studio Dentistico Dott. Gianluca Marin",
-  },
-  description:
-    "Studio Dentistico Dott. Gianluca Marin a Conegliano (TV): implantologia a carico immediato, All-on-4, chirurgia computer guidata e sedazione cosciente. Oltre 20 anni di attività.",
-};
+const fallbackTitle =
+  "Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin";
+const fallbackDescription =
+  "Studio Dentistico Dott. Gianluca Marin a Conegliano (TV): implantologia a carico immediato, All-on-4, chirurgia computer guidata e sedazione cosciente. Oltre 20 anni di attività.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return {
+    title: {
+      default: settings.seoTitle ?? fallbackTitle,
+      template: `%s | ${settings.name}`,
+    },
+    description: settings.seoDescription ?? fallbackDescription,
+  };
+}
 
 export default function RootLayout({
   children,

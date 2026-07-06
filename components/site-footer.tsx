@@ -1,25 +1,28 @@
-import Link from "next/link";
-import { site } from "@/lib/site";
+import type { SiteSettings } from '@/lib/settings';
+import Link from 'next/link';
 
 const quickLinks = [
-  { label: "Home Page", href: "/" },
-  { label: "Prezzi e Trasparenza", href: "/costo-impianto-dentale-conegliano" },
-  { label: "Lo Studio e il Team", href: "/studio" },
-  { label: "Video", href: "/video" },
-  { label: "Casi Clinici", href: "/interventi-realizzati" },
-  { label: "Terapie", href: "/terapie" },
-  { label: "Blog", href: "/blog" },
+  { label: 'Home Page', href: '/' },
+  { label: 'Prezzi e Trasparenza', href: '/costo-impianto-dentale-conegliano' },
+  { label: 'Lo Studio e il Team', href: '/studio' },
+  { label: 'Video', href: '/video' },
+  { label: 'Casi Clinici', href: '/interventi-realizzati' },
+  { label: 'Terapie', href: '/terapie' },
+  { label: 'Blog', href: '/blog' }
 ];
 
 const serviceLinks = [
-  { label: "Carico Immediato", href: "/impianti-carico-immediato" },
-  { label: "All-on-4 / All-on-6", href: "/all-on-4" },
-  { label: "Chirurgia Computer Guidata", href: "/implantologia-dentale-conegliano" },
-  { label: "Sedazione Cosciente", href: "/sedazione-cosciente" },
-  { label: "Rigenerazione Ossea", href: "/rigenerazione-ossea-mascellare" },
+  { label: 'Carico Immediato', href: '/impianti-carico-immediato' },
+  { label: 'All-on-4 / All-on-6', href: '/all-on-4' },
+  {
+    label: 'Chirurgia Computer Guidata',
+    href: '/implantologia-dentale-conegliano'
+  },
+  { label: 'Sedazione Cosciente', href: '/sedazione-cosciente' },
+  { label: 'Rigenerazione Ossea', href: '/rigenerazione-ossea-mascellare' }
 ];
 
-export default function SiteFooter() {
+export default function SiteFooter({ settings }: { settings: SiteSettings }) {
   return (
     <footer className="bg-slate-900 text-primary-foreground py-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,17 +30,16 @@ export default function SiteFooter() {
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <span className="font-heading text-lg font-bold tracking-tight text-primary-foreground leading-tight">
-                {site.shortName}
+                {settings.shortName}
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              {site.name}. Esperienza ventennale e soluzioni implantari
-              d&apos;avanguardia per ripristinare il tuo sorriso in sicurezza.
+              {settings.name}. {settings.footerDescription}
             </p>
             <p className="text-xs text-slate-400">
-              Direttore Sanitario: {site.doctor}
+              Direttore Sanitario: {settings.doctor}
               <br />
-              Iscrizione Albo Odontoiatri TV n. 1234
+              {settings.alboRegistration}
             </p>
           </div>
 
@@ -82,17 +84,23 @@ export default function SiteFooter() {
               Trasparenza &amp; Note Legali
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">
-              Studio Dentistico dott. Gianluca Marin S.r.l.
+              {settings.legalName}
               <br />
-              P.IVA 01234567890 | Cap. Soc. € 10.000 i.v.
+              P.IVA {settings.vatNumber} | Cap. Soc. {settings.shareCapital}
               <br />
-              Sede Legale: {site.address.street} - {site.address.city}
+              Sede Legale: {settings.address.street} - {settings.address.city}
             </p>
             <div className="flex gap-4 text-xs text-slate-400">
-              <Link href="/privacy-policy" className="hover:text-primary-foreground transition-colors">
+              <Link
+                href="/privacy-policy"
+                className="hover:text-primary-foreground transition-colors"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/cookie-policy" className="hover:text-primary-foreground transition-colors">
+              <Link
+                href="/cookie-policy"
+                className="hover:text-primary-foreground transition-colors"
+              >
                 Cookie Policy
               </Link>
             </div>
@@ -101,8 +109,8 @@ export default function SiteFooter() {
 
         <div className="border-t border-slate-800 mt-12 pt-6 text-center text-xs text-slate-500">
           <p>
-            &copy; {new Date().getFullYear()} {site.name}. Tutti i diritti
-            riservati. Realizzato per {site.domain}
+            &copy; {new Date().getFullYear()} {settings.name}. Tutti i diritti
+            riservati. Realizzato per {settings.domain}
           </p>
         </div>
       </div>
