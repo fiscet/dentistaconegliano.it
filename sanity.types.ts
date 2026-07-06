@@ -137,6 +137,13 @@ export type HomePageReference = {
   [internalGroqTypeReferenceTo]?: "homePage";
 };
 
+export type PricePageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "pricePage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -164,7 +171,11 @@ export type NavItem = {
   linkType?: "path" | "internal" | "external";
   path?: string;
   internalLink?:
-    HomePageReference | PageReference | ServiceReference | PostReference;
+    | HomePageReference
+    | PricePageReference
+    | PageReference
+    | ServiceReference
+    | PostReference;
   externalUrl?: string;
   openInNewTab?: boolean;
   children?: Array<
@@ -180,7 +191,11 @@ export type NavLink = {
   linkType?: "path" | "internal" | "external";
   path?: string;
   internalLink?:
-    HomePageReference | PageReference | ServiceReference | PostReference;
+    | HomePageReference
+    | PricePageReference
+    | PageReference
+    | ServiceReference
+    | PostReference;
   externalUrl?: string;
   openInNewTab?: boolean;
 };
@@ -282,7 +297,15 @@ export type Service = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  icon?: "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+  icon?:
+    | "check"
+    | "clock"
+    | "zap"
+    | "layers"
+    | "monitor"
+    | "shield"
+    | "award"
+    | "activity";
   excerpt?: string;
   image?: {
     asset?: SanityImageAssetReference;
@@ -323,6 +346,55 @@ export type Page = {
   seoImage?: SeoImage;
 };
 
+export type PricePage = {
+  _id: string;
+  _type: "pricePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
+  factors?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    items?: Array<{
+      icon?:
+        | "check"
+        | "clock"
+        | "zap"
+        | "layers"
+        | "monitor"
+        | "shield"
+        | "award"
+        | "activity";
+      title?: string;
+      text?: string;
+      _type: "factor";
+      _key: string;
+    }>;
+  };
+  list?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
+  cta?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    boxTitle?: string;
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+};
+
 export type HomePage = {
   _id: string;
   _type: "homePage";
@@ -339,7 +411,14 @@ export type HomePage = {
     features?: Array<{
       label?: string;
       icon?:
-        "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+        | "check"
+        | "clock"
+        | "zap"
+        | "layers"
+        | "monitor"
+        | "shield"
+        | "award"
+        | "activity";
       _type: "feature";
       _key: string;
     }>;
@@ -392,7 +471,14 @@ export type HomePage = {
       title?: string;
       subtitle?: string;
       icon?:
-        "check" | "clock" | "zap" | "layers" | "monitor" | "shield" | "award";
+        | "check"
+        | "clock"
+        | "zap"
+        | "layers"
+        | "monitor"
+        | "shield"
+        | "award"
+        | "activity";
       _type: "highlight";
       _key: string;
     }>;
@@ -549,6 +635,7 @@ export type AllSanitySchemaTypes =
   | SanityImageCrop
   | SanityImageHotspot
   | HomePageReference
+  | PricePageReference
   | PageReference
   | ServiceReference
   | PostReference
@@ -561,6 +648,7 @@ export type AllSanitySchemaTypes =
   | Slug
   | Service
   | Page
+  | PricePage
   | HomePage
   | MediaTag
   | SanityImagePaletteSwatch
@@ -601,6 +689,10 @@ export type NAVIGATION_QUERY_RESULT =
               slug: string | null;
             }
           | {
+              _type: "pricePage";
+              slug: null;
+            }
+          | {
               _type: "service";
               slug: string | null;
             }
@@ -624,6 +716,10 @@ export type NAVIGATION_QUERY_RESULT =
             | {
                 _type: "post";
                 slug: string | null;
+              }
+            | {
+                _type: "pricePage";
+                slug: null;
               }
             | {
                 _type: "service";
@@ -748,6 +844,29 @@ export type HOME_PAGE_QUERY_RESULT =
     }
   | {
       hero: {
+        enabled: null;
+        badge: null;
+        title: string | null;
+        titleHighlight: null;
+        titleSuffix: null;
+        description: string | null;
+        features: null;
+        ctaPrimaryLabel: null;
+        ctaSecondaryLabel: null;
+        image: null;
+        experienceCard: null;
+      } | null;
+      stats: null;
+      treatments: null;
+      doctorProfile: null;
+      clinicalCases: null;
+      contact: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
         enabled: boolean | null;
         badge: string | null;
         title: string | null;
@@ -758,6 +877,7 @@ export type HOME_PAGE_QUERY_RESULT =
           _key: string;
           label: string | null;
           icon:
+            | "activity"
             | "award"
             | "check"
             | "clock"
@@ -816,6 +936,7 @@ export type HOME_PAGE_QUERY_RESULT =
           title: string | null;
           subtitle: string | null;
           icon:
+            | "activity"
             | "award"
             | "check"
             | "clock"
@@ -863,6 +984,86 @@ export type HOME_PAGE_QUERY_RESULT =
   | null;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: PRICE_PAGE_QUERY
+// Query: *[_id == "pricePage"][0]{    hero{ eyebrow, title, description },    factors{      enabled,      eyebrow,      title,      items[]{ _key, icon, title, text }    },    list{ enabled, eyebrow, title, description },    cta{ enabled, eyebrow, title, description, boxTitle },    seoTitle,    seoDescription,    seoImage  }
+export type PRICE_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      factors: null;
+      list: null;
+      cta: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+    }
+  | {
+      hero: null;
+      factors: null;
+      list: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      factors: null;
+      list: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      factors: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        items: Array<{
+          _key: string;
+          icon:
+            | "activity"
+            | "award"
+            | "check"
+            | "clock"
+            | "layers"
+            | "monitor"
+            | "shield"
+            | "zap"
+            | null;
+          title: string | null;
+          text: string | null;
+        }> | null;
+      } | null;
+      list: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      cta: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        boxTitle: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: HOME_SERVICES_QUERY
 // Query: *[_type == "service" && showInHome == true] | order(order asc, title asc){    _id,    "slug": slug.current,    "title": coalesce(homeTitle, title),    "description": coalesce(homeExcerpt, excerpt),    icon  }
 export type HOME_SERVICES_QUERY_RESULT = Array<{
@@ -871,6 +1072,7 @@ export type HOME_SERVICES_QUERY_RESULT = Array<{
   title: string | null;
   description: string | null;
   icon:
+    | "activity"
     | "award"
     | "check"
     | "clock"
@@ -890,6 +1092,7 @@ export type SERVICES_QUERY_RESULT = Array<{
   slug: string | null;
   excerpt: string | null;
   icon:
+    | "activity"
     | "award"
     | "check"
     | "clock"
@@ -933,6 +1136,7 @@ export type SERVICE_QUERY_RESULT = {
   slug: string | null;
   excerpt: string | null;
   icon:
+    | "activity"
     | "award"
     | "check"
     | "clock"
@@ -984,6 +1188,7 @@ declare module "@sanity/client" {
     '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    }\n  }\n': NAVIGATION_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_id == "pricePage"][0]{\n    hero{ eyebrow, title, description },\n    factors{\n      enabled,\n      eyebrow,\n      title,\n      items[]{ _key, icon, title, text }\n    },\n    list{ enabled, eyebrow, title, description },\n    cta{ enabled, eyebrow, title, description, boxTitle },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PRICE_PAGE_QUERY_RESULT;
     '\n  *[_type == "service" && showInHome == true] | order(order asc, title asc){\n    _id,\n    "slug": slug.current,\n    "title": coalesce(homeTitle, title),\n    "description": coalesce(homeExcerpt, excerpt),\n    icon\n  }\n': HOME_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    priceFeatures,\n    popular\n  }\n': PRICED_SERVICES_QUERY_RESULT;

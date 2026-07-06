@@ -9,4 +9,5 @@ export const iconOptions = [
   "monitor",
   "shield",
   "award",
+  "activity",
 ];

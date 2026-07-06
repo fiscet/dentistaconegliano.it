@@ -3,6 +3,7 @@ import { navLink, navItem } from "./objects/navLink";
 import { siteSettings } from "./documents/siteSettings";
 import { navigation } from "./documents/navigation";
 import { homePage } from "./documents/homePage";
+import { pricePage } from "./documents/pricePage";
 import { page } from "./documents/page";
 import { service } from "./documents/service";
 import { staffMember } from "./documents/staffMember";
@@ -19,6 +20,7 @@ export const schemaTypes = [
   siteSettings,
   navigation,
   homePage,
+  pricePage,
   page,
   service,
   staffMember,

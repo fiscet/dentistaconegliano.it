@@ -1,28 +1,33 @@
 import type { SiteSettings } from '@/lib/settings';
+import type { SERVICES_QUERY_RESULT } from '@/sanity.types';
 import Link from 'next/link';
 
+// Pagine del sito: rotte reali esistenti (niente 404). Le nuove pagine si
+// aggiungono qui appena costruite.
 const quickLinks = [
-  { label: 'Home Page', href: '/' },
-  { label: 'Prezzi e Trasparenza', href: '/costo-impianto-dentale-conegliano' },
-  { label: 'Lo Studio e il Team', href: '/studio' },
+  { label: 'Home', href: '/' },
+  { label: 'Servizi', href: '/servizi' },
+  { label: 'Prezzi', href: '/costo-impianto-dentale-conegliano' },
   { label: 'Video', href: '/video' },
-  { label: 'Casi Clinici', href: '/interventi-realizzati' },
-  { label: 'Terapie', href: '/terapie' },
-  { label: 'Blog', href: '/blog' }
+  { label: 'Contatti', href: '/#contatti' }
 ];
 
-const serviceLinks = [
-  { label: 'Carico Immediato', href: '/impianti-carico-immediato' },
-  { label: 'All-on-4 / All-on-6', href: '/all-on-4' },
-  {
-    label: 'Chirurgia Computer Guidata',
-    href: '/implantologia-dentale-conegliano'
-  },
-  { label: 'Sedazione Cosciente', href: '/sedazione-cosciente' },
-  { label: 'Rigenerazione Ossea', href: '/rigenerazione-ossea-mascellare' }
-];
+export default function SiteFooter({
+  settings,
+  services
+}: {
+  settings: SiteSettings;
+  services: SERVICES_QUERY_RESULT;
+}) {
+  // Colonna "I Nostri Servizi": generata dai servizi di Sanity, così resta
+  // sempre allineata (nessun link scritto a mano).
+  const serviceLinks = services
+    .filter((service) => service.slug)
+    .map((service) => ({
+      label: service.title ?? '',
+      href: `/servizi/${service.slug}`
+    }));
 
-export default function SiteFooter({ settings }: { settings: SiteSettings }) {
   return (
     <footer className="bg-slate-900 text-primary-foreground py-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

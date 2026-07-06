@@ -55,7 +55,7 @@ const items = [
       path("srv-tutti", "Tutti i servizi", "/servizi"),
     ],
   },
-  { ...path("prezzi", "Prezzi", "/prezzi"), _type: "navItem" },
+  { ...internal("prezzi", "Prezzi", "pricePage"), _type: "navItem" },
   { ...path("video", "Video", "/video"), _type: "navItem" },
   { ...path("contatti", "Contatti", "/#contatti"), _type: "navItem" },
 ];

@@ -46,6 +46,7 @@ const linkFields = [
     // aggiunta qui e nella mappa tipo→route di lib/nav.ts (sito).
     to: [
       { type: "homePage" },
+      { type: "pricePage" },
       { type: "page" },
       { type: "service" },
       { type: "post" },

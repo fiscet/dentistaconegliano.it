@@ -86,7 +86,7 @@ export default async function ServiceDetailPage({
             {formatServicePrice(service.priceMin, service.priceMax, service.priceNote)}
           </span>
           <Link
-            href="/prezzi"
+            href="/costo-impianto-dentale-conegliano"
             className="ml-auto text-sm font-semibold text-primary hover:underline"
           >
             Vedi tutti i prezzi

@@ -2,9 +2,10 @@ import type { StructureResolver } from "sanity/structure";
 import { CogIcon } from "@sanity/icons/Cog";
 import { MenuIcon } from "@sanity/icons/Menu";
 import { HomeIcon } from "@sanity/icons/Home";
+import { TagIcon } from "@sanity/icons/Tag";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
-const SINGLETONS = ["siteSettings", "navigation", "homePage"];
+const SINGLETONS = ["siteSettings", "navigation", "homePage", "pricePage"];
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -39,6 +40,15 @@ export const structure: StructureResolver = (S) =>
             .schemaType("homePage")
             .documentId("homePage")
             .title("Home Page"),
+        ),
+      S.listItem()
+        .title("Pagina Prezzi")
+        .icon(TagIcon)
+        .child(
+          S.document()
+            .schemaType("pricePage")
+            .documentId("pricePage")
+            .title("Pagina Prezzi"),
         ),
 
       S.divider(),
