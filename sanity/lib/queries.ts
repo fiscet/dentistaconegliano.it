@@ -66,8 +66,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       enabled,
       eyebrow,
       title,
-      description,
-      items[]{ _key, title, description, href, icon }
+      description
     },
     doctorProfile{
       enabled,
@@ -98,6 +97,72 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
     seoDescription,
     seoImage
   }
+`);
+
+// Card dei servizi mostrati nella sezione Trattamenti della home.
+// title/excerpt usano l'override home se presente (coalesce), altrimenti i
+// valori "ufficiali" del servizio.
+export const HOME_SERVICES_QUERY = defineQuery(/* groq */ `
+  *[_type == "service" && showInHome == true] | order(order asc, title asc){
+    _id,
+    "slug": slug.current,
+    "title": coalesce(homeTitle, title),
+    "description": coalesce(homeExcerpt, excerpt),
+    icon
+  }
+`);
+
+// Elenco completo dei servizi: pagina /servizi.
+export const SERVICES_QUERY = defineQuery(/* groq */ `
+  *[_type == "service"] | order(order asc, title asc){
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    icon,
+    image{ ..., "alt": alt }
+  }
+`);
+
+// Servizi con prezzo indicativo: card della pagina /prezzi.
+export const PRICED_SERVICES_QUERY = defineQuery(/* groq */ `
+  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    priceBadge,
+    priceMin,
+    priceMax,
+    priceNote,
+    priceFeatures,
+    popular
+  }
+`);
+
+// Dettaglio singolo servizio: /servizi/[slug].
+export const SERVICE_QUERY = defineQuery(/* groq */ `
+  *[_type == "service" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    icon,
+    image{ ..., "alt": alt },
+    body,
+    priceBadge,
+    priceMin,
+    priceMax,
+    priceNote,
+    seoTitle,
+    seoDescription,
+    seoImage
+  }
+`);
+
+// Slug di tutti i servizi per generateStaticParams.
+export const SERVICE_SLUGS_QUERY = defineQuery(/* groq */ `
+  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }
 `);
 
 export const VIDEOS_QUERY = defineQuery(/* groq */ `

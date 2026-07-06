@@ -46,7 +46,7 @@ export const treatmentsFallback = {
       title: "Carico Immediato (Denti in 24h)",
       description:
         "Consente di posizionare gli impianti e la protesi fissa provvisoria nella stessa seduta o entro il giorno successivo. Masticazione e sorriso ripristinati subito.",
-      href: "/impianti-carico-immediato",
+      href: "/servizi/impianti-carico-immediato",
     },
     {
       _key: "t2",
@@ -54,7 +54,7 @@ export const treatmentsFallback = {
       title: "All-on-4 & All-on-6",
       description:
         "Soluzioni ideali per intere arcate prive di denti o con denti gravemente compromessi. Con soli 4 o 6 impianti si ancora stabilmente una protesi fissa completa.",
-      href: "/all-on-4",
+      href: "/servizi/all-on-4",
     },
     {
       _key: "t3",
@@ -62,7 +62,7 @@ export const treatmentsFallback = {
       title: "Implantologia Computer Guidata",
       description:
         "Pianificazione 3D al computer che permette di inserire gli impianti con precisione millimetrica senza tagliare la gengiva e senza punti di sutura.",
-      href: "/implantologia-dentale-conegliano",
+      href: "/servizi/implantologia-computer-guidata",
     },
   ],
 };

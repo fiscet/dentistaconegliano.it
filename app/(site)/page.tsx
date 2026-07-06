@@ -7,7 +7,7 @@ import ClinicalCases from '@/components/home/clinical-cases';
 import ContactSection from '@/components/home/contact-section';
 import { getSiteSettings } from '@/lib/settings';
 import { sanityFetch } from '@/sanity/lib/live';
-import { HOME_PAGE_QUERY } from '@/sanity/lib/queries';
+import { HOME_PAGE_QUERY, HOME_SERVICES_QUERY } from '@/sanity/lib/queries';
 
 const fallbackTitle =
   'Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin';
@@ -24,9 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [settings, { data: home }] = await Promise.all([
+  const [settings, { data: home }, { data: homeServices }] = await Promise.all([
     getSiteSettings(),
-    sanityFetch({ query: HOME_PAGE_QUERY })
+    sanityFetch({ query: HOME_PAGE_QUERY }),
+    sanityFetch({ query: HOME_SERVICES_QUERY })
   ]);
 
   const jsonLd = {
@@ -48,15 +49,27 @@ export default async function Home() {
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday'],
         opens: '09:00',
+        closes: '18:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Thursday',
+        opens: '09:00',
+        closes: '13:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Thursday',
+        opens: '14:00',
         closes: '19:00'
       },
       {
         '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Saturday',
-        opens: '09:00',
-        closes: '13:00'
+        dayOfWeek: 'Friday',
+        opens: '08:30',
+        closes: '15:30'
       }
     ],
     founder: {
@@ -76,7 +89,7 @@ export default async function Home() {
       {home?.hero?.enabled !== false && <Hero data={home?.hero} />}
       {home?.stats?.enabled !== false && <StatsBar data={home?.stats} />}
       {home?.treatments?.enabled !== false && (
-        <Treatments data={home?.treatments} />
+        <Treatments header={home?.treatments} services={homeServices} />
       )}
       {home?.doctorProfile?.enabled !== false && (
         <DoctorProfile data={home?.doctorProfile} />

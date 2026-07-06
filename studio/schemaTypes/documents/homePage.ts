@@ -1,10 +1,7 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { HomeIcon } from "@sanity/icons/Home";
 import { seoFields, seoGroup } from "../shared/seoFields";
-
-// Nomi di icone lucide-react renderizzate dal sito: il componente mappa
-// il nome al componente icona, quindi la lista deve restare allineata.
-const iconOptions = ["check", "clock", "zap", "layers", "monitor", "shield", "award"];
+import { iconOptions } from "../shared/icons";
 
 const enabledField = defineField({
   name: "enabled",
@@ -151,39 +148,13 @@ export const homePage = defineType({
       type: "object",
       group: "treatments",
       options: { collapsible: true, collapsed: true },
+      description:
+        'Le card mostrano i Servizi con il flag "Mostra in home" attivo. Qui imposti solo l\'intestazione della sezione.',
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
         defineField({ name: "title", title: "Titolo", type: "string" }),
         defineField({ name: "description", title: "Descrizione", type: "text", rows: 3 }),
-        defineField({
-          name: "items",
-          title: "Trattamenti",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              name: "treatment",
-              fields: [
-                defineField({ name: "title", title: "Titolo", type: "string" }),
-                defineField({ name: "description", title: "Descrizione", type: "text", rows: 3 }),
-                defineField({
-                  name: "href",
-                  title: "Link",
-                  type: "string",
-                  description: "Percorso interno, es. /all-on-4",
-                }),
-                defineField({
-                  name: "icon",
-                  title: "Icona",
-                  type: "string",
-                  options: { list: iconOptions },
-                }),
-              ],
-              preview: { select: { title: "title", subtitle: "href" } },
-            }),
-          ],
-        }),
       ],
     }),
 
