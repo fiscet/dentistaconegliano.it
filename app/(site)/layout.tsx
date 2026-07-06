@@ -16,12 +16,13 @@ export default async function SiteLayout({
     getSiteSettings(),
   ]);
   const navItems = resolveNavItems(data?.items);
+  const footerItems = resolveNavItems(data?.footerLinks);
 
   return (
     <>
       <SiteHeader items={navItems} settings={settings} />
       {children}
-      <SiteFooter settings={settings} services={services} />
+      <SiteFooter settings={settings} services={services} quickLinks={footerItems} />
       <SanityLive />
     </>
   );

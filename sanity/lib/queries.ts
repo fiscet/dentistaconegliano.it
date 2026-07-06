@@ -15,7 +15,8 @@ export const NAVIGATION_QUERY = defineQuery(/* groq */ `
     items[]{
       ${navLinkFragment},
       children[]{ ${navLinkFragment} }
-    }
+    },
+    footerLinks[]{ ${navLinkFragment} }
   }
 `);
 

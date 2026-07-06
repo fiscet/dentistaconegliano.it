@@ -69,6 +69,11 @@ export type Navigation = {
       _key: string;
     } & NavItem
   >;
+  footerLinks?: Array<
+    {
+      _key: string;
+    } & NavLink
+  >;
 };
 
 export type SiteSettings = {
@@ -662,10 +667,11 @@ export type AllSanitySchemaTypes =
 
 // Source: ../sanity/lib/queries.ts
 // Variable: NAVIGATION_QUERY
-// Query: *[_id == "navigation"][0]{    items[]{        _key,  label,  linkType,  path,  externalUrl,  openInNewTab,  internalLink->{ _type, "slug": slug.current },      children[]{   _key,  label,  linkType,  path,  externalUrl,  openInNewTab,  internalLink->{ _type, "slug": slug.current } }    }  }
+// Query: *[_id == "navigation"][0]{    items[]{        _key,  label,  linkType,  path,  externalUrl,  openInNewTab,  internalLink->{ _type, "slug": slug.current },      children[]{   _key,  label,  linkType,  path,  externalUrl,  openInNewTab,  internalLink->{ _type, "slug": slug.current } }    },    footerLinks[]{   _key,  label,  linkType,  path,  externalUrl,  openInNewTab,  internalLink->{ _type, "slug": slug.current } }  }
 export type NAVIGATION_QUERY_RESULT =
   | {
       items: null;
+      footerLinks: null;
     }
   | {
       items: Array<{
@@ -727,6 +733,36 @@ export type NAVIGATION_QUERY_RESULT =
               }
             | null;
         }> | null;
+      }> | null;
+      footerLinks: Array<{
+        _key: string;
+        label: string | null;
+        linkType: "external" | "internal" | "path" | null;
+        path: string | null;
+        externalUrl: string | null;
+        openInNewTab: boolean | null;
+        internalLink:
+          | {
+              _type: "homePage";
+              slug: null;
+            }
+          | {
+              _type: "page";
+              slug: string | null;
+            }
+          | {
+              _type: "post";
+              slug: string | null;
+            }
+          | {
+              _type: "pricePage";
+              slug: null;
+            }
+          | {
+              _type: "service";
+              slug: string | null;
+            }
+          | null;
       }> | null;
     }
   | null;
@@ -1185,7 +1221,7 @@ export type VIDEOS_QUERY_RESULT = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    }\n  }\n': NAVIGATION_QUERY_RESULT;
+    '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    },\n    footerLinks[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n  }\n': NAVIGATION_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_id == "pricePage"][0]{\n    hero{ eyebrow, title, description },\n    factors{\n      enabled,\n      eyebrow,\n      title,\n      items[]{ _key, icon, title, text }\n    },\n    list{ enabled, eyebrow, title, description },\n    cta{ enabled, eyebrow, title, description, boxTitle },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PRICE_PAGE_QUERY_RESULT;

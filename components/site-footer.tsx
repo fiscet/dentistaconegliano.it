@@ -1,23 +1,18 @@
 import type { SiteSettings } from '@/lib/settings';
+import type { NavItem } from '@/lib/nav';
 import type { SERVICES_QUERY_RESULT } from '@/sanity.types';
 import Link from 'next/link';
 
-// Pagine del sito: rotte reali esistenti (niente 404). Le nuove pagine si
-// aggiungono qui appena costruite.
-const quickLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Servizi', href: '/servizi' },
-  { label: 'Prezzi', href: '/costo-impianto-dentale-conegliano' },
-  { label: 'Video', href: '/video' },
-  { label: 'Contatti', href: '/#contatti' }
-];
-
 export default function SiteFooter({
   settings,
-  services
+  services,
+  quickLinks
 }: {
   settings: SiteSettings;
   services: SERVICES_QUERY_RESULT;
+  // Colonna «Link Rapidi»: dal campo footerLinks del menu Sanity (con
+  // fallback all'array statico di lib/site.ts se non compilato).
+  quickLinks: NavItem[];
 }) {
   // Colonna "I Nostri Servizi": generata dai servizi di Sanity, così resta
   // sempre allineata (nessun link scritto a mano).
@@ -54,9 +49,10 @@ export default function SiteFooter({
             </h4>
             <ul className="flex flex-col gap-2.5 text-xs text-slate-400">
               {quickLinks.map((link) => (
-                <li key={link.href}>
+                <li key={link.key}>
                   <Link
                     href={link.href}
+                    target={link.newTab ? '_blank' : undefined}
                     className="hover:text-primary-foreground transition-colors"
                   >
                     {link.label}
