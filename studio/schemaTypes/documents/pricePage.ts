@@ -28,7 +28,6 @@ export const pricePage = defineType({
       title: "Sezione introduttiva",
       type: "object",
       group: "hero",
-      options: { collapsible: true, collapsed: false },
       fields: [
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
         defineField({ name: "title", title: "Titolo", type: "string" }),
@@ -41,7 +40,6 @@ export const pricePage = defineType({
       title: "Sezione «Cosa influenza il costo»",
       type: "object",
       group: "factors",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
@@ -76,7 +74,6 @@ export const pricePage = defineType({
       title: "Sezione Listino",
       type: "object",
       group: "list",
-      options: { collapsible: true, collapsed: true },
       description: 'Le card prezzo arrivano dai Servizi che hanno un "Prezzo minimo" compilato.',
       fields: [
         enabledField,
@@ -91,7 +88,6 @@ export const pricePage = defineType({
       title: "Sezione CTA finale",
       type: "object",
       group: "cta",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),

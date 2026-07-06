@@ -45,7 +45,6 @@ export const homePage = defineType({
       title: "Sezione Hero",
       type: "object",
       group: "hero",
-      options: { collapsible: true, collapsed: false },
       fields: [
         enabledField,
         defineField({
@@ -120,7 +119,6 @@ export const homePage = defineType({
       title: "Sezione Statistiche",
       type: "object",
       group: "stats",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({
@@ -147,7 +145,6 @@ export const homePage = defineType({
       title: "Sezione Trattamenti",
       type: "object",
       group: "treatments",
-      options: { collapsible: true, collapsed: true },
       description:
         'Le card mostrano i Servizi con il flag "Mostra in home" attivo. Qui imposti solo l\'intestazione della sezione.',
       fields: [
@@ -163,7 +160,6 @@ export const homePage = defineType({
       title: "Sezione Profilo Dottore",
       type: "object",
       group: "doctor",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
@@ -218,7 +214,6 @@ export const homePage = defineType({
       title: "Sezione Casi Clinici",
       type: "object",
       group: "cases",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
@@ -256,7 +251,6 @@ export const homePage = defineType({
       title: "Sezione Contatti",
       type: "object",
       group: "contact",
-      options: { collapsible: true, collapsed: true },
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
