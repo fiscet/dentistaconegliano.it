@@ -25,11 +25,13 @@ export const site = {
   alboRegistration: "Iscrizione Albo Odontoiatri TV n. 1234",
 } as const;
 
+// Fallback usato solo se il documento navigation di Sanity è vuoto.
+// Tenere le rotte esistenti (niente 404 nel menu). Le pagine ancora da
+// costruire (es. /studio) si aggiungono qui e in Sanity quando esistono.
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Prezzi", href: "/costo-impianto-dentale-conegliano" },
-  { label: "Lo Studio", href: "/studio" },
+  { label: "Servizi", href: "/servizi" },
+  { label: "Prezzi", href: "/prezzi" },
   { label: "Video", href: "/video" },
-  { label: "Casi Clinici", href: "/interventi-realizzati" },
   { label: "Contatti", href: "/#contatti" },
 ] as const;
