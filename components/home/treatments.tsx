@@ -42,10 +42,10 @@ export default function Treatments() {
   return (
     <section className="py-20 lg:py-28 bg-background relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-20" aria-hidden="true">
-        <div className="absolute -top-16 -right-10 w-80 lg:w-[28rem]">
+        <div className="absolute -top-16 -left-10 w-80 lg:w-[28rem]">
           <Image src={logoMotif} alt="" className="w-full h-auto object-contain" />
         </div>
-        <div className="absolute bottom-10 -left-16 w-72 lg:w-80 rotate-180">
+        <div className="absolute bottom-10 -right-16 w-72 lg:w-80 rotate-180">
           <Image src={logoMotif} alt="" className="w-full h-auto object-contain" />
         </div>
       </div>
