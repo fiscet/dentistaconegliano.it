@@ -47,6 +47,7 @@ const linkFields = [
     to: [
       { type: "homePage" },
       { type: "pricePage" },
+      { type: "studioPage" },
       { type: "page" },
       { type: "service" },
       { type: "post" },

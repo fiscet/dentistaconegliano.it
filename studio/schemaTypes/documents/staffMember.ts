@@ -26,6 +26,20 @@ export const staffMember = defineType({
       description: "Es. Odontoiatra, Igienista dentale, Assistente alla poltrona",
     }),
     defineField({
+      name: "category",
+      title: "Categoria",
+      type: "string",
+      options: {
+        list: [
+          { title: "Medico", value: "medico" },
+          { title: "Staff / Assistenza", value: "staff" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "medico",
+      description: "Serve a raggruppare il team nella pagina Lo Studio.",
+    }),
+    defineField({
       name: "photo",
       title: "Foto",
       type: "image",
@@ -35,8 +49,15 @@ export const staffMember = defineType({
       ],
     }),
     defineField({
+      name: "excerpt",
+      title: "Descrizione breve",
+      type: "text",
+      rows: 3,
+      description: "Testo mostrato nella card del team.",
+    }),
+    defineField({
       name: "bio",
-      title: "Biografia",
+      title: "Biografia completa",
       type: "blockContent",
     }),
     defineField({

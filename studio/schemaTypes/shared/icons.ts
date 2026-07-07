@@ -10,4 +10,10 @@ export const iconOptions = [
   "shield",
   "award",
   "activity",
+  "graduation-cap",
+  "file-text",
+  "credit-card",
+  "volume-2",
+  "users",
+  "heart-pulse",
 ];

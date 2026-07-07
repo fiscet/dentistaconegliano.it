@@ -149,6 +149,13 @@ export type PricePageReference = {
   [internalGroqTypeReferenceTo]?: "pricePage";
 };
 
+export type StudioPageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "studioPage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -178,6 +185,7 @@ export type NavItem = {
   internalLink?:
     | HomePageReference
     | PricePageReference
+    | StudioPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -198,6 +206,7 @@ export type NavLink = {
   internalLink?:
     | HomePageReference
     | PricePageReference
+    | StudioPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -276,6 +285,7 @@ export type StaffMember = {
   name?: string;
   slug?: Slug;
   role?: string;
+  category?: "medico" | "staff";
   photo?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -284,6 +294,7 @@ export type StaffMember = {
     alt?: string;
     _type: "image";
   };
+  excerpt?: string;
   bio?: BlockContent;
   order?: number;
 };
@@ -337,7 +348,13 @@ export type IconString =
   | "monitor"
   | "shield"
   | "award"
-  | "activity";
+  | "activity"
+  | "graduation-cap"
+  | "file-text"
+  | "credit-card"
+  | "volume-2"
+  | "users"
+  | "heart-pulse";
 
 export type Page = {
   _id: string;
@@ -349,6 +366,71 @@ export type Page = {
   slug?: Slug;
   intro?: string;
   body?: BlockContent;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+};
+
+export type StudioPage = {
+  _id: string;
+  _type: "studioPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    highlights?: Array<string>;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    imageRole?: string;
+  };
+  profile?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    cards?: Array<{
+      icon?: IconString;
+      title?: string;
+      text?: string;
+      _type: "iconCard";
+      _key: string;
+    }>;
+  };
+  team?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
+  studio?: {
+    enabled?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    features?: Array<{
+      icon?: IconString;
+      title?: string;
+      text?: string;
+      _type: "iconCard";
+      _key: string;
+    }>;
+  };
   seoTitle?: string;
   seoDescription?: string;
   seoImage?: SeoImage;
@@ -620,6 +702,7 @@ export type AllSanitySchemaTypes =
   | SanityImageHotspot
   | HomePageReference
   | PricePageReference
+  | StudioPageReference
   | PageReference
   | ServiceReference
   | PostReference
@@ -633,6 +716,7 @@ export type AllSanitySchemaTypes =
   | Service
   | IconString
   | Page
+  | StudioPage
   | PricePage
   | HomePage
   | MediaTag
@@ -682,6 +766,10 @@ export type NAVIGATION_QUERY_RESULT =
               _type: "service";
               slug: string | null;
             }
+          | {
+              _type: "studioPage";
+              slug: null;
+            }
           | null;
         children: Array<{
           _key: string;
@@ -710,6 +798,10 @@ export type NAVIGATION_QUERY_RESULT =
             | {
                 _type: "service";
                 slug: string | null;
+              }
+            | {
+                _type: "studioPage";
+                slug: null;
               }
             | null;
         }> | null;
@@ -741,6 +833,10 @@ export type NAVIGATION_QUERY_RESULT =
           | {
               _type: "service";
               slug: string | null;
+            }
+          | {
+              _type: "studioPage";
+              slug: null;
             }
           | null;
       }> | null;
@@ -870,6 +966,36 @@ export type HOME_PAGE_QUERY_RESULT =
         ctaPrimaryLabel: null;
         ctaSecondaryLabel: null;
         image: null;
+        experienceCard: null;
+      } | null;
+      stats: null;
+      treatments: null;
+      doctorProfile: null;
+      clinicalCases: null;
+      contact: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        enabled: null;
+        badge: null;
+        title: string | null;
+        titleHighlight: null;
+        titleSuffix: null;
+        description: string | null;
+        features: null;
+        ctaPrimaryLabel: null;
+        ctaSecondaryLabel: null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
         experienceCard: null;
       } | null;
       stats: null;
@@ -1022,6 +1148,19 @@ export type PRICE_PAGE_QUERY_RESULT =
         title: string | null;
         description: string | null;
       } | null;
+      factors: null;
+      list: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
       factors: {
         enabled: boolean | null;
         eyebrow: string | null;
@@ -1142,6 +1281,145 @@ export type SERVICE_SLUGS_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: STUDIO_PAGE_QUERY
+// Query: *[_id == "studioPage"][0]{    hero{      eyebrow,      title,      description,      highlights,      image{ ..., "alt": alt },      imageRole    },    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },    team{ enabled, eyebrow, title, description },    studio{      enabled,      eyebrow,      title,      description,      image{ ..., "alt": alt },      features[]{ _key, icon, title, text }    },    seoTitle,    seoDescription,    seoImage  }
+export type STUDIO_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      profile: null;
+      team: null;
+      studio: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+    }
+  | {
+      hero: null;
+      profile: null;
+      team: null;
+      studio: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+        highlights: null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
+        imageRole: null;
+      } | null;
+      profile: null;
+      team: null;
+      studio: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        highlights: null;
+        image: null;
+        imageRole: null;
+      } | null;
+      profile: null;
+      team: null;
+      studio: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        highlights: Array<string> | null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
+        imageRole: string | null;
+      } | null;
+      profile: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        cards: Array<{
+          _key: string;
+          icon: IconString | null;
+          title: string | null;
+          text: string | null;
+        }> | null;
+      } | null;
+      team: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      studio: {
+        enabled: boolean | null;
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt: string | null;
+          _type: "image";
+        } | null;
+        features: Array<{
+          _key: string;
+          icon: IconString | null;
+          title: string | null;
+          text: string | null;
+        }> | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: STAFF_QUERY
+// Query: *[_type == "staffMember"] | order(order asc, name asc){    _id,    name,    role,    category,    excerpt,    photo{ ..., "alt": alt }  }
+export type STAFF_QUERY_RESULT = Array<{
+  _id: string;
+  name: string | null;
+  role: string | null;
+  category: "medico" | "staff" | null;
+  excerpt: string | null;
+  photo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string | null;
+    _type: "image";
+  } | null;
+}>;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: VIDEOS_QUERY
 // Query: *[_type == "video"] | order(order asc, publishedAt desc){    _id,    title,    youtubeUrl,    description,    publishedAt  }
 export type VIDEOS_QUERY_RESULT = Array<{
@@ -1166,6 +1444,8 @@ declare module "@sanity/client" {
     '\n  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    priceFeatures,\n    popular\n  }\n': PRICED_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SERVICE_QUERY_RESULT;
     '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }\n': SERVICE_SLUGS_QUERY_RESULT;
+    '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': STUDIO_PAGE_QUERY_RESULT;
+    '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
     '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    youtubeUrl,\n    description,\n    publishedAt\n  }\n': VIDEOS_QUERY_RESULT;
   }
 }

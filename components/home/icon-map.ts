@@ -7,6 +7,12 @@ import {
   Shield,
   Award,
   Activity,
+  GraduationCap,
+  FileText,
+  CreditCard,
+  Volume2,
+  Users,
+  HeartPulse,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,6 +27,12 @@ const iconMap: Record<string, LucideIcon> = {
   shield: Shield,
   award: Award,
   activity: Activity,
+  "graduation-cap": GraduationCap,
+  "file-text": FileText,
+  "credit-card": CreditCard,
+  "volume-2": Volume2,
+  users: Users,
+  "heart-pulse": HeartPulse,
 };
 
 export function resolveIcon(name: string | null | undefined, fallback: LucideIcon): LucideIcon {

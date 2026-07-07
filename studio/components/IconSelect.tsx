@@ -10,6 +10,12 @@ import {
   Shield,
   Award,
   Activity,
+  GraduationCap,
+  FileText,
+  CreditCard,
+  Volume2,
+  Users,
+  HeartPulse,
   type LucideIcon,
 } from "lucide-react";
 
@@ -26,6 +32,12 @@ const icons: Record<string, LucideIcon> = {
   shield: Shield,
   award: Award,
   activity: Activity,
+  "graduation-cap": GraduationCap,
+  "file-text": FileText,
+  "credit-card": CreditCard,
+  "volume-2": Volume2,
+  users: Users,
+  "heart-pulse": HeartPulse,
 };
 
 // Input custom: mostra le opzioni icona come griglia di anteprime cliccabili

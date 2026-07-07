@@ -25,6 +25,7 @@ type SanityNavLink = {
 const singletonRoutes: Record<string, string> = {
   homePage: "/",
   pricePage: "/costo-impianto-dentale-conegliano",
+  studioPage: "/studio",
 };
 
 function internalHref(link: NonNullable<SanityNavLink["internalLink"]>): string | null {

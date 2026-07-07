@@ -3,9 +3,10 @@ import { CogIcon } from "@sanity/icons/Cog";
 import { MenuIcon } from "@sanity/icons/Menu";
 import { HomeIcon } from "@sanity/icons/Home";
 import { TagIcon } from "@sanity/icons/Tag";
+import { UsersIcon } from "@sanity/icons/Users";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
-const SINGLETONS = ["siteSettings", "navigation", "homePage", "pricePage"];
+const SINGLETONS = ["siteSettings", "navigation", "homePage", "pricePage", "studioPage"];
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -49,6 +50,15 @@ export const structure: StructureResolver = (S) =>
             .schemaType("pricePage")
             .documentId("pricePage")
             .title("Pagina Prezzi"),
+        ),
+      S.listItem()
+        .title("Pagina Lo Studio")
+        .icon(UsersIcon)
+        .child(
+          S.document()
+            .schemaType("studioPage")
+            .documentId("studioPage")
+            .title("Pagina Lo Studio"),
         ),
 
       S.divider(),

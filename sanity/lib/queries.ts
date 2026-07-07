@@ -192,6 +192,44 @@ export const SERVICE_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "service" && defined(slug.current)]{ "slug": slug.current }
 `);
 
+export const STUDIO_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "studioPage"][0]{
+    hero{
+      eyebrow,
+      title,
+      description,
+      highlights,
+      image{ ..., "alt": alt },
+      imageRole
+    },
+    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },
+    team{ enabled, eyebrow, title, description },
+    studio{
+      enabled,
+      eyebrow,
+      title,
+      description,
+      image{ ..., "alt": alt },
+      features[]{ _key, icon, title, text }
+    },
+    seoTitle,
+    seoDescription,
+    seoImage
+  }
+`);
+
+// Membri del team per la pagina Lo Studio.
+export const STAFF_QUERY = defineQuery(/* groq */ `
+  *[_type == "staffMember"] | order(order asc, name asc){
+    _id,
+    name,
+    role,
+    category,
+    excerpt,
+    photo{ ..., "alt": alt }
+  }
+`);
+
 export const VIDEOS_QUERY = defineQuery(/* groq */ `
   *[_type == "video"] | order(order asc, publishedAt desc){
     _id,
