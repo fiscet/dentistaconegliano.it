@@ -238,19 +238,19 @@ type Member = STAFF_QUERY_RESULT[number];
 
 function TeamGrid({ members }: { members: Member[] }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {members.map((m) => (
         <article
           key={m._id}
           className="bg-background border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
         >
-          <div className="aspect-4/5 bg-muted overflow-hidden">
+          <div className="aspect-video bg-muted overflow-hidden">
             {m.photo?.asset ? (
               <Image
-                src={urlFor(m.photo).width(600).height(750).url()}
+                src={urlFor(m.photo).width(800).height(450).url()}
                 alt={m.photo.alt ?? m.name ?? ""}
-                width={600}
-                height={750}
+                width={800}
+                height={450}
                 className="w-full h-full object-cover"
               />
             ) : (
