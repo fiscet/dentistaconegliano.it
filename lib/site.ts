@@ -36,6 +36,7 @@ export const nav = [
   // URL SEO keyword-rich (query locale "costo impianto dentale conegliano"),
   // label breve nel menu.
   { label: "Prezzi", href: "/costo-impianto-dentale-conegliano" },
+  { label: "Blog", href: "/blog" },
   { label: "Video", href: "/video" },
   { label: "Contatti", href: "/#contatti" },
 ] as const;

@@ -261,6 +261,40 @@ export const STAFF_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+// Elenco articoli del blog (più recenti prima).
+export const POSTS_QUERY = defineQuery(/* groq */ `
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    excerpt,
+    mainImage{ ..., "alt": alt },
+    "author": author->name
+  }
+`);
+
+// Dettaglio articolo: /blog/[slug].
+export const POST_QUERY = defineQuery(/* groq */ `
+  *[_type == "post" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    excerpt,
+    mainImage{ ..., "alt": alt },
+    author->{ name, role, photo{ ..., "alt": alt } },
+    body,
+    seoTitle,
+    seoDescription,
+    seoImage
+  }
+`);
+
+export const POST_SLUGS_QUERY = defineQuery(/* groq */ `
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+`);
+
 export const VIDEOS_QUERY = defineQuery(/* groq */ `
   *[_type == "video"] | order(order asc, publishedAt desc){
     _id,

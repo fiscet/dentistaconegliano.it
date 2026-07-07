@@ -1,7 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { UsersIcon } from "@sanity/icons/Users";
 import { seoFields, seoGroup } from "../shared/seoFields";
-import { iconOptions } from "./../shared/icons";
 
 const enabledField = defineField({
   name: "enabled",
