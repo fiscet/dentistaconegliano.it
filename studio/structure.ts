@@ -27,6 +27,10 @@ const LISTED = [
   "testimonial",
 ];
 
+// Tipi da NON mostrare nella sidebar: media.tag arriva dal plugin media e si
+// gestisce dentro il tool "Media", non come documento a sé.
+const HIDDEN = ["media.tag"];
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Contenuti")
@@ -104,6 +108,6 @@ export const structure: StructureResolver = (S) =>
       // Eventuali nuovi tipi non ancora elencati sopra.
       ...S.documentTypeListItems().filter((listItem) => {
         const id = listItem.getId() as string;
-        return !SINGLETONS.includes(id) && !LISTED.includes(id);
+        return !SINGLETONS.includes(id) && !LISTED.includes(id) && !HIDDEN.includes(id);
       }),
     ]);
