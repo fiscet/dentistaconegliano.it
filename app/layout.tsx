@@ -16,12 +16,34 @@ const fallbackDescription =
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
+  const title = settings.seoTitle ?? fallbackTitle;
+  const description = settings.seoDescription ?? fallbackDescription;
+  // Immagine social: campo seoImage di siteSettings; fallback a un'immagine
+  // statica del sito (risolta in assoluto grazie a metadataBase).
+  const ogImage = settings.seoImageUrl ?? "/images/gianluca-marin-home.jpg";
+
   return {
+    metadataBase: new URL(settings.url),
     title: {
-      default: settings.seoTitle ?? fallbackTitle,
+      default: title,
       template: `%s | ${settings.name}`,
     },
-    description: settings.seoDescription ?? fallbackDescription,
+    description,
+    openGraph: {
+      type: "website",
+      siteName: settings.name,
+      locale: "it_IT",
+      url: settings.url,
+      title,
+      description,
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import { urlFor } from "@/sanity/lib/image";
 import { site as fallback } from "@/lib/site";
 import type { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
@@ -31,6 +32,7 @@ export type SiteSettings = {
   socials: NonNullable<NonNullable<SITE_SETTINGS_QUERY_RESULT>["socials"]>;
   seoTitle?: string;
   seoDescription?: string;
+  seoImageUrl?: string;
 };
 
 // "0438 415356" -> "tel:+390438415356"; numeri già internazionali restano invariati.
@@ -80,5 +82,8 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     socials: data?.socials ?? [],
     seoTitle: data?.seoTitle ?? undefined,
     seoDescription: data?.seoDescription ?? undefined,
+    seoImageUrl: data?.seoImage?.asset
+      ? urlFor(data.seoImage).width(1200).height(630).fit("crop").url()
+      : undefined,
   };
 });
