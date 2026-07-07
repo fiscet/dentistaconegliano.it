@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useActionState } from "react";
 import Link from "next/link";
 import { Send, CircleCheck } from "lucide-react";
+import { submitContact, type ContactState } from "@/lib/actions/contact";
 
 const treatments = [
   "Implantologia a Carico Immediato (Denti in 24h)",
@@ -15,19 +16,14 @@ const treatments = [
 const inputClasses =
   "w-full px-4 py-3 rounded-xl border border-border bg-input focus:outline-none focus:ring-2 focus:ring-primary text-sm font-medium";
 
-const labelClasses =
-  "text-xs font-bold text-muted-foreground uppercase tracking-wider";
+const labelClasses = "text-xs font-bold text-muted-foreground uppercase tracking-wider";
+
+const initialState: ContactState = { status: "idle" };
 
 export default function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [state, formAction, pending] = useActionState(submitContact, initialState);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // TODO: collegare l'invio a un backend (server action / API / servizio email)
-    setSubmitted(true);
-  }
-
-  if (submitted) {
+  if (state.status === "success") {
     return (
       <div className="flex flex-col items-center text-center gap-4 py-12">
         <div className="w-16 h-16 rounded-full bg-sky-100 flex items-center justify-center text-primary">
@@ -37,15 +33,22 @@ export default function ContactForm() {
           Richiesta inviata con successo!
         </p>
         <p className="text-sm text-muted-foreground max-w-sm">
-          Ti ricontatteremo al più presto per fissare la tua consulenza
-          personalizzata.
+          Ti ricontatteremo al più presto per fissare la tua consulenza personalizzata.
         </p>
       </div>
     );
   }
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+    <form action={formAction} className="flex flex-col gap-5">
+      {/* Honeypot anti-bot: nascosto agli umani, i bot tendono a compilarlo. */}
+      <div className="absolute left-[-9999px] top-[-9999px]" aria-hidden="true">
+        <label>
+          Non compilare
+          <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="contact-name" className={labelClasses}>
@@ -77,7 +80,7 @@ export default function ContactForm() {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="contact-email" className={labelClasses}>
-          Indirizzo Email
+          Indirizzo Email *
         </label>
         <input
           id="contact-email"
@@ -85,6 +88,7 @@ export default function ContactForm() {
           type="email"
           placeholder="mario.rossi@esempio.it"
           className={inputClasses}
+          required
         />
       </div>
 
@@ -122,12 +126,8 @@ export default function ContactForm() {
           className="mt-1 rounded border-border text-primary focus:ring-primary"
           required
         />
-        <label
-          htmlFor="contact-privacy"
-          className="text-xs text-muted-foreground leading-normal"
-        >
-          Acconsento al trattamento dei miei dati personali per finalità di
-          contatto secondo la{" "}
+        <label htmlFor="contact-privacy" className="text-xs text-muted-foreground leading-normal">
+          Acconsento al trattamento dei miei dati personali per finalità di contatto secondo la{" "}
           <Link href="/privacy-policy" className="text-primary underline">
             Privacy Policy
           </Link>
@@ -135,12 +135,19 @@ export default function ContactForm() {
         </label>
       </div>
 
+      {state.status === "error" && state.message && (
+        <p role="alert" className="text-sm font-medium text-destructive">
+          {state.message}
+        </p>
+      )}
+
       <button
         type="submit"
-        className="w-full bg-primary hover:bg-primary/95 text-primary-foreground py-4 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all mt-4 flex items-center justify-center gap-2"
+        disabled={pending}
+        className="w-full bg-primary hover:bg-primary/95 text-primary-foreground py-4 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all mt-4 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         <Send className="w-5 h-5" aria-hidden="true" />
-        Invia Richiesta e Prenota
+        {pending ? "Invio in corso…" : "Invia Richiesta e Prenota"}
       </button>
     </form>
   );
