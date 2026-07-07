@@ -1540,6 +1540,27 @@ export type STAFF_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: PAGE_QUERY
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    intro,    body,    seoTitle,    seoDescription,    seoImage  }
+export type PAGE_QUERY_RESULT = {
+  _id: string;
+  title: string | null;
+  slug: string | null;
+  intro: string | null;
+  body: BlockContent | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoImage: SeoImage | null;
+} | null;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: PAGE_SLUGS_QUERY
+// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+export type PAGE_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: POSTS_QUERY
 // Query: *[_type == "post" && defined(slug.current)] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    excerpt,    mainImage{ ..., "alt": alt },    "author": author->name  }
 export type POSTS_QUERY_RESULT = Array<{
@@ -1631,6 +1652,8 @@ declare module "@sanity/client" {
     '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': STUDIO_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    intro,\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PAGE_QUERY_RESULT;
+    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PAGE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    "author": author->name\n  }\n': POSTS_QUERY_RESULT;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    author->{ name, role, photo{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': POST_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;

@@ -261,6 +261,24 @@ export const STAFF_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+// Pagina di contenuto generica (tipo "page"): route /[slug].
+export const PAGE_QUERY = defineQuery(/* groq */ `
+  *[_type == "page" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    intro,
+    body,
+    seoTitle,
+    seoDescription,
+    seoImage
+  }
+`);
+
+export const PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
+  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+`);
+
 // Elenco articoli del blog (più recenti prima).
 export const POSTS_QUERY = defineQuery(/* groq */ `
   *[_type == "post" && defined(slug.current)] | order(publishedAt desc){

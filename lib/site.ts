@@ -38,5 +38,5 @@ export const nav = [
   { label: "Prezzi", href: "/costo-impianto-dentale-conegliano" },
   { label: "Blog", href: "/blog" },
   { label: "Video", href: "/video" },
-  { label: "Contatti", href: "/#contatti" },
+  { label: "Contatti", href: "/contatti" },
 ] as const;
