@@ -1,7 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { TagIcon } from "@sanity/icons/Tag";
 import { seoFields, seoGroup } from "../shared/seoFields";
-import { iconOptions } from "../shared/icons";
 
 const enabledField = defineField({
   name: "enabled",
@@ -56,8 +55,7 @@ export const pricePage = defineType({
                 defineField({
                   name: "icon",
                   title: "Icona",
-                  type: "string",
-                  options: { list: iconOptions },
+                  type: "iconString",
                 }),
                 defineField({ name: "title", title: "Titolo", type: "string" }),
                 defineField({ name: "text", title: "Testo", type: "text", rows: 3 }),

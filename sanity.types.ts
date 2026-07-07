@@ -302,15 +302,7 @@ export type Service = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  icon?:
-    | "check"
-    | "clock"
-    | "zap"
-    | "layers"
-    | "monitor"
-    | "shield"
-    | "award"
-    | "activity";
+  icon?: IconString;
   excerpt?: string;
   image?: {
     asset?: SanityImageAssetReference;
@@ -336,6 +328,16 @@ export type Service = {
   seoDescription?: string;
   seoImage?: SeoImage;
 };
+
+export type IconString =
+  | "check"
+  | "clock"
+  | "zap"
+  | "layers"
+  | "monitor"
+  | "shield"
+  | "award"
+  | "activity";
 
 export type Page = {
   _id: string;
@@ -368,15 +370,7 @@ export type PricePage = {
     eyebrow?: string;
     title?: string;
     items?: Array<{
-      icon?:
-        | "check"
-        | "clock"
-        | "zap"
-        | "layers"
-        | "monitor"
-        | "shield"
-        | "award"
-        | "activity";
+      icon?: IconString;
       title?: string;
       text?: string;
       _type: "factor";
@@ -416,15 +410,7 @@ export type HomePage = {
     description?: string;
     features?: Array<{
       label?: string;
-      icon?:
-        | "check"
-        | "clock"
-        | "zap"
-        | "layers"
-        | "monitor"
-        | "shield"
-        | "award"
-        | "activity";
+      icon?: IconString;
       _type: "feature";
       _key: string;
     }>;
@@ -476,15 +462,7 @@ export type HomePage = {
     highlights?: Array<{
       title?: string;
       subtitle?: string;
-      icon?:
-        | "check"
-        | "clock"
-        | "zap"
-        | "layers"
-        | "monitor"
-        | "shield"
-        | "award"
-        | "activity";
+      icon?: IconString;
       _type: "highlight";
       _key: string;
     }>;
@@ -653,6 +631,7 @@ export type AllSanitySchemaTypes =
   | StaffMember
   | Slug
   | Service
+  | IconString
   | Page
   | PricePage
   | HomePage
@@ -913,16 +892,7 @@ export type HOME_PAGE_QUERY_RESULT =
         features: Array<{
           _key: string;
           label: string | null;
-          icon:
-            | "activity"
-            | "award"
-            | "check"
-            | "clock"
-            | "layers"
-            | "monitor"
-            | "shield"
-            | "zap"
-            | null;
+          icon: IconString | null;
         }> | null;
         ctaPrimaryLabel: string | null;
         ctaSecondaryLabel: string | null;
@@ -972,16 +942,7 @@ export type HOME_PAGE_QUERY_RESULT =
           _key: string;
           title: string | null;
           subtitle: string | null;
-          icon:
-            | "activity"
-            | "award"
-            | "check"
-            | "clock"
-            | "layers"
-            | "monitor"
-            | "shield"
-            | "zap"
-            | null;
+          icon: IconString | null;
         }> | null;
         ctaLabel: string | null;
         ctaHref: string | null;
@@ -1067,16 +1028,7 @@ export type PRICE_PAGE_QUERY_RESULT =
         title: string | null;
         items: Array<{
           _key: string;
-          icon:
-            | "activity"
-            | "award"
-            | "check"
-            | "clock"
-            | "layers"
-            | "monitor"
-            | "shield"
-            | "zap"
-            | null;
+          icon: IconString | null;
           title: string | null;
           text: string | null;
         }> | null;
@@ -1108,16 +1060,7 @@ export type HOME_SERVICES_QUERY_RESULT = Array<{
   slug: string | null;
   title: string | null;
   description: string | null;
-  icon:
-    | "activity"
-    | "award"
-    | "check"
-    | "clock"
-    | "layers"
-    | "monitor"
-    | "shield"
-    | "zap"
-    | null;
+  icon: IconString | null;
 }>;
 
 // Source: ../sanity/lib/queries.ts
@@ -1128,16 +1071,7 @@ export type SERVICES_QUERY_RESULT = Array<{
   title: string | null;
   slug: string | null;
   excerpt: string | null;
-  icon:
-    | "activity"
-    | "award"
-    | "check"
-    | "clock"
-    | "layers"
-    | "monitor"
-    | "shield"
-    | "zap"
-    | null;
+  icon: IconString | null;
   image: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -1181,16 +1115,7 @@ export type SERVICE_QUERY_RESULT = {
   title: string | null;
   slug: string | null;
   excerpt: string | null;
-  icon:
-    | "activity"
-    | "award"
-    | "check"
-    | "clock"
-    | "layers"
-    | "monitor"
-    | "shield"
-    | "zap"
-    | null;
+  icon: IconString | null;
   image: {
     asset?: SanityImageAssetReference;
     media?: unknown;

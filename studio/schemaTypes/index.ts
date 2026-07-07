@@ -1,3 +1,4 @@
+import { iconString } from "./shared/iconType";
 import { blockContent } from "./objects/blockContent";
 import { navLink, navItem } from "./objects/navLink";
 import { siteSettings } from "./documents/siteSettings";
@@ -12,6 +13,8 @@ import { testimonial } from "./documents/testimonial";
 import { video } from "./documents/video";
 
 export const schemaTypes = [
+  // Tipi condivisi
+  iconString,
   // Oggetti
   blockContent,
   navLink,

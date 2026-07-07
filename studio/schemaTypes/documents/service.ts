@@ -1,7 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { HeartIcon } from "@sanity/icons/Heart";
 import { seoFields, seoGroup } from "../shared/seoFields";
-import { iconOptions } from "../shared/icons";
 
 export const service = defineType({
   name: "service",
@@ -34,8 +33,7 @@ export const service = defineType({
     defineField({
       name: "icon",
       title: "Icona",
-      type: "string",
-      options: { list: iconOptions },
+      type: "iconString",
       description: "Mostrata nella card in home e nell'elenco servizi.",
       group: "content",
     }),

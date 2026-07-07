@@ -1,7 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { HomeIcon } from "@sanity/icons/Home";
 import { seoFields, seoGroup } from "../shared/seoFields";
-import { iconOptions } from "../shared/icons";
 
 const enabledField = defineField({
   name: "enabled",
@@ -80,8 +79,7 @@ export const homePage = defineType({
                 defineField({
                   name: "icon",
                   title: "Icona",
-                  type: "string",
-                  options: { list: iconOptions },
+                  type: "iconString",
                 }),
               ],
               preview: { select: { title: "label", subtitle: "icon" } },
@@ -191,8 +189,7 @@ export const homePage = defineType({
                 defineField({
                   name: "icon",
                   title: "Icona",
-                  type: "string",
-                  options: { list: iconOptions },
+                  type: "iconString",
                 }),
               ],
               preview: { select: { title: "title", subtitle: "subtitle" } },
