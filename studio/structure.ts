@@ -4,9 +4,28 @@ import { MenuIcon } from "@sanity/icons/Menu";
 import { HomeIcon } from "@sanity/icons/Home";
 import { TagIcon } from "@sanity/icons/Tag";
 import { UsersIcon } from "@sanity/icons/Users";
+import { ImagesIcon } from "@sanity/icons/Images";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
-const SINGLETONS = ["siteSettings", "navigation", "homePage", "pricePage", "studioPage"];
+const SINGLETONS = [
+  "siteSettings",
+  "navigation",
+  "homePage",
+  "pricePage",
+  "studioPage",
+  "casesPage",
+];
+
+// Tipi a collection già elencati esplicitamente nel menu.
+const LISTED = [
+  "page",
+  "service",
+  "clinicalCase",
+  "post",
+  "video",
+  "staffMember",
+  "testimonial",
+];
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -60,11 +79,21 @@ export const structure: StructureResolver = (S) =>
             .documentId("studioPage")
             .title("Pagina Lo Studio"),
         ),
+      S.listItem()
+        .title("Pagina Interventi Realizzati")
+        .icon(ImagesIcon)
+        .child(
+          S.document()
+            .schemaType("casesPage")
+            .documentId("casesPage")
+            .title("Pagina Interventi Realizzati"),
+        ),
 
       S.divider(),
 
       S.documentTypeListItem("page").title("Pagine"),
       S.documentTypeListItem("service").title("Servizi / Trattamenti"),
+      S.documentTypeListItem("clinicalCase").title("Casi Clinici / Interventi"),
       S.documentTypeListItem("post").title("Blog"),
       S.documentTypeListItem("video").title("Video"),
       S.documentTypeListItem("staffMember").title("Staff"),
@@ -75,9 +104,6 @@ export const structure: StructureResolver = (S) =>
       // Eventuali nuovi tipi non ancora elencati sopra.
       ...S.documentTypeListItems().filter((listItem) => {
         const id = listItem.getId() as string;
-        return (
-          !SINGLETONS.includes(id) &&
-          !["page", "service", "post", "video", "staffMember", "testimonial"].includes(id)
-        );
+        return !SINGLETONS.includes(id) && !LISTED.includes(id);
       }),
     ]);

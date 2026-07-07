@@ -84,8 +84,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       enabled,
       eyebrow,
       title,
-      description,
-      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }
+      description
     },
     contact{
       enabled,
@@ -190,6 +189,38 @@ export const SERVICE_QUERY = defineQuery(/* groq */ `
 // Slug di tutti i servizi per generateStaticParams.
 export const SERVICE_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "service" && defined(slug.current)]{ "slug": slug.current }
+`);
+
+// Casi clinici mostrati nella sezione della home (usa l'immagine "Dopo").
+export const HOME_CASES_QUERY = defineQuery(/* groq */ `
+  *[_type == "clinicalCase" && showInHome == true] | order(order asc, title asc){
+    _id,
+    badge,
+    title,
+    description,
+    "image": imageAfter{ ..., "alt": alt }
+  }
+`);
+
+// Tutti i casi clinici: galleria /interventi-realizzati (prima/dopo).
+export const CASES_QUERY = defineQuery(/* groq */ `
+  *[_type == "clinicalCase"] | order(order asc, title asc){
+    _id,
+    badge,
+    title,
+    description,
+    imageBefore{ ..., "alt": alt },
+    imageAfter{ ..., "alt": alt }
+  }
+`);
+
+export const CASES_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "casesPage"][0]{
+    hero{ eyebrow, title, description },
+    seoTitle,
+    seoDescription,
+    seoImage
+  }
 `);
 
 export const STUDIO_PAGE_QUERY = defineQuery(/* groq */ `

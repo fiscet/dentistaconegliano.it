@@ -6,8 +6,10 @@ import { navigation } from "./documents/navigation";
 import { homePage } from "./documents/homePage";
 import { pricePage } from "./documents/pricePage";
 import { studioPage } from "./documents/studioPage";
+import { casesPage } from "./documents/casesPage";
 import { page } from "./documents/page";
 import { service } from "./documents/service";
+import { clinicalCase } from "./documents/clinicalCase";
 import { staffMember } from "./documents/staffMember";
 import { post } from "./documents/post";
 import { testimonial } from "./documents/testimonial";
@@ -26,8 +28,10 @@ export const schemaTypes = [
   homePage,
   pricePage,
   studioPage,
+  casesPage,
   page,
   service,
+  clinicalCase,
   staffMember,
   post,
   testimonial,

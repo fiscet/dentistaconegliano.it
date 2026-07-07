@@ -57,6 +57,51 @@ export type Testimonial = {
   featured?: boolean;
 };
 
+export type ClinicalCase = {
+  _id: string;
+  _type: "clinicalCase";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  badge?: string;
+  imageBefore?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  imageAfter?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  description?: string;
+  order?: number;
+  showInHome?: boolean;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Navigation = {
   _id: string;
   _type: "navigation";
@@ -119,22 +164,6 @@ export type SiteSettings = {
   seoImage?: SeoImage;
 };
 
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
 export type HomePageReference = {
   _ref: string;
   _type: "reference";
@@ -154,6 +183,13 @@ export type StudioPageReference = {
   _type: "reference";
   _weak?: boolean;
   [internalGroqTypeReferenceTo]?: "studioPage";
+};
+
+export type CasesPageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "casesPage";
 };
 
 export type PageReference = {
@@ -186,6 +222,7 @@ export type NavItem = {
     | HomePageReference
     | PricePageReference
     | StudioPageReference
+    | CasesPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -207,6 +244,7 @@ export type NavLink = {
     | HomePageReference
     | PricePageReference
     | StudioPageReference
+    | CasesPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -366,6 +404,22 @@ export type Page = {
   slug?: Slug;
   intro?: string;
   body?: BlockContent;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+};
+
+export type CasesPage = {
+  _id: string;
+  _type: "casesPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
   seoTitle?: string;
   seoDescription?: string;
   seoImage?: SeoImage;
@@ -556,22 +610,6 @@ export type HomePage = {
     eyebrow?: string;
     title?: string;
     description?: string;
-    items?: Array<{
-      image?: {
-        asset?: SanityImageAssetReference;
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: "image";
-      };
-      badge?: string;
-      title?: string;
-      description?: string;
-      href?: string;
-      _type: "clinicalCase";
-      _key: string;
-    }>;
   };
   contact?: {
     enabled?: boolean;
@@ -696,13 +734,15 @@ export type AllSanitySchemaTypes =
   | SeoImage
   | Video
   | Testimonial
-  | Navigation
-  | SiteSettings
+  | ClinicalCase
   | SanityImageCrop
   | SanityImageHotspot
+  | Navigation
+  | SiteSettings
   | HomePageReference
   | PricePageReference
   | StudioPageReference
+  | CasesPageReference
   | PageReference
   | ServiceReference
   | PostReference
@@ -716,6 +756,7 @@ export type AllSanitySchemaTypes =
   | Service
   | IconString
   | Page
+  | CasesPage
   | StudioPage
   | PricePage
   | HomePage
@@ -746,6 +787,10 @@ export type NAVIGATION_QUERY_RESULT =
         externalUrl: string | null;
         openInNewTab: boolean | null;
         internalLink:
+          | {
+              _type: "casesPage";
+              slug: null;
+            }
           | {
               _type: "homePage";
               slug: null;
@@ -779,6 +824,10 @@ export type NAVIGATION_QUERY_RESULT =
           externalUrl: string | null;
           openInNewTab: boolean | null;
           internalLink:
+            | {
+                _type: "casesPage";
+                slug: null;
+              }
             | {
                 _type: "homePage";
                 slug: null;
@@ -814,6 +863,10 @@ export type NAVIGATION_QUERY_RESULT =
         externalUrl: string | null;
         openInNewTab: boolean | null;
         internalLink:
+          | {
+              _type: "casesPage";
+              slug: null;
+            }
           | {
               _type: "homePage";
               slug: null;
@@ -930,7 +983,7 @@ export type SITE_SETTINGS_QUERY_RESULT =
 
 // Source: ../sanity/lib/queries.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_id == "homePage"][0]{    hero{      enabled,      badge,      title,      titleHighlight,      titleSuffix,      description,      features[]{ _key, label, icon },      ctaPrimaryLabel,      ctaSecondaryLabel,      image{ ..., "alt": alt },      experienceCard    },    stats{      enabled,      items[]{ _key, value, label }    },    treatments{      enabled,      eyebrow,      title,      description    },    doctorProfile{      enabled,      eyebrow,      title,      roleLabel,      paragraphs,      image{ ..., "alt": alt },      highlights[]{ _key, title, subtitle, icon },      ctaLabel,      ctaHref    },    clinicalCases{      enabled,      eyebrow,      title,      description,      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }    },    contact{      enabled,      eyebrow,      title,      description,      formTitle    },    seoTitle,    seoDescription,    seoImage  }
+// Query: *[_id == "homePage"][0]{    hero{      enabled,      badge,      title,      titleHighlight,      titleSuffix,      description,      features[]{ _key, label, icon },      ctaPrimaryLabel,      ctaSecondaryLabel,      image{ ..., "alt": alt },      experienceCard    },    stats{      enabled,      items[]{ _key, value, label }    },    treatments{      enabled,      eyebrow,      title,      description    },    doctorProfile{      enabled,      eyebrow,      title,      roleLabel,      paragraphs,      image{ ..., "alt": alt },      highlights[]{ _key, title, subtitle, icon },      ctaLabel,      ctaHref    },    clinicalCases{      enabled,      eyebrow,      title,      description    },    contact{      enabled,      eyebrow,      title,      description,      formTitle    },    seoTitle,    seoDescription,    seoImage  }
 export type HOME_PAGE_QUERY_RESULT =
   | {
       hero: null;
@@ -1078,21 +1131,6 @@ export type HOME_PAGE_QUERY_RESULT =
         eyebrow: string | null;
         title: string | null;
         description: string | null;
-        items: Array<{
-          _key: string;
-          image: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            alt: string | null;
-            _type: "image";
-          } | null;
-          badge: string | null;
-          title: string | null;
-          description: string | null;
-          href: string | null;
-        }> | null;
       } | null;
       contact: {
         enabled: boolean | null;
@@ -1281,6 +1319,88 @@ export type SERVICE_SLUGS_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: HOME_CASES_QUERY
+// Query: *[_type == "clinicalCase" && showInHome == true] | order(order asc, title asc){    _id,    badge,    title,    description,    "image": imageAfter{ ..., "alt": alt }  }
+export type HOME_CASES_QUERY_RESULT = Array<{
+  _id: string;
+  badge: string | null;
+  title: string | null;
+  description: string | null;
+  image: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string | null;
+    _type: "image";
+  } | null;
+}>;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: CASES_QUERY
+// Query: *[_type == "clinicalCase"] | order(order asc, title asc){    _id,    badge,    title,    description,    imageBefore{ ..., "alt": alt },    imageAfter{ ..., "alt": alt }  }
+export type CASES_QUERY_RESULT = Array<{
+  _id: string;
+  badge: string | null;
+  title: string | null;
+  description: string | null;
+  imageBefore: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string | null;
+    _type: "image";
+  } | null;
+  imageAfter: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string | null;
+    _type: "image";
+  } | null;
+}>;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: CASES_PAGE_QUERY
+// Query: *[_id == "casesPage"][0]{    hero{ eyebrow, title, description },    seoTitle,    seoDescription,    seoImage  }
+export type CASES_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+    }
+  | {
+      hero: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: STUDIO_PAGE_QUERY
 // Query: *[_id == "studioPage"][0]{    hero{      eyebrow,      title,      description,      highlights,      image{ ..., "alt": alt },      imageRole    },    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },    team{ enabled, eyebrow, title, description },    studio{      enabled,      eyebrow,      title,      description,      image{ ..., "alt": alt },      features[]{ _key, icon, title, text }    },    seoTitle,    seoDescription,    seoImage  }
 export type STUDIO_PAGE_QUERY_RESULT =
@@ -1436,7 +1556,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    },\n    footerLinks[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n  }\n': NAVIGATION_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
-    '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      items[]{ _key, image{ ..., "alt": alt }, badge, title, description, href }\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_id == "pricePage"][0]{\n    hero{ eyebrow, title, description },\n    factors{\n      enabled,\n      eyebrow,\n      title,\n      items[]{ _key, icon, title, text }\n    },\n    list{ enabled, eyebrow, title, description },\n    cta{ enabled, eyebrow, title, description, boxTitle },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PRICE_PAGE_QUERY_RESULT;
     '\n  *[_type == "service" && showInHome == true] | order(order asc, title asc){\n    _id,\n    "slug": slug.current,\n    "title": coalesce(homeTitle, title),\n    "description": coalesce(homeExcerpt, excerpt),\n    icon\n  }\n': HOME_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
@@ -1444,6 +1564,9 @@ declare module "@sanity/client" {
     '\n  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    priceFeatures,\n    popular\n  }\n': PRICED_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SERVICE_QUERY_RESULT;
     '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }\n': SERVICE_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "clinicalCase" && showInHome == true] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    "image": imageAfter{ ..., "alt": alt }\n  }\n': HOME_CASES_QUERY_RESULT;
+    '\n  *[_type == "clinicalCase"] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    imageBefore{ ..., "alt": alt },\n    imageAfter{ ..., "alt": alt }\n  }\n': CASES_QUERY_RESULT;
+    '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': STUDIO_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
     '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    youtubeUrl,\n    description,\n    publishedAt\n  }\n': VIDEOS_QUERY_RESULT;

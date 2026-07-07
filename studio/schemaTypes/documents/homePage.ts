@@ -211,35 +211,13 @@ export const homePage = defineType({
       title: "Sezione Casi Clinici",
       type: "object",
       group: "cases",
+      description:
+        'Le card mostrano i Casi Clinici con il flag "Mostra in home" attivo. Qui imposti solo l\'intestazione della sezione.',
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
         defineField({ name: "title", title: "Titolo", type: "string" }),
         defineField({ name: "description", title: "Descrizione", type: "text", rows: 3 }),
-        defineField({
-          name: "items",
-          title: "Casi",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              name: "clinicalCase",
-              fields: [
-                imageWithAlt("image", "Immagine"),
-                defineField({ name: "badge", title: "Badge", type: "string" }),
-                defineField({ name: "title", title: "Titolo", type: "string" }),
-                defineField({ name: "description", title: "Descrizione", type: "text", rows: 3 }),
-                defineField({
-                  name: "href",
-                  title: "Link",
-                  type: "string",
-                  description: "Es. /interventi-realizzati",
-                }),
-              ],
-              preview: { select: { title: "title", subtitle: "badge", media: "image" } },
-            }),
-          ],
-        }),
       ],
     }),
 

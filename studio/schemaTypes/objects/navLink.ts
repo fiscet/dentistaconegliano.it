@@ -48,6 +48,7 @@ const linkFields = [
       { type: "homePage" },
       { type: "pricePage" },
       { type: "studioPage" },
+      { type: "casesPage" },
       { type: "page" },
       { type: "service" },
       { type: "post" },

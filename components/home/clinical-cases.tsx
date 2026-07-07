@@ -6,12 +6,25 @@ import {
   clinicalCasesFallback as fallback,
   clinicalCasesItemsFallback as fallbackCases,
 } from "@/lib/fallback/home";
-import type { HOME_PAGE_QUERY_RESULT } from "@/sanity.types";
+import type {
+  HOME_PAGE_QUERY_RESULT,
+  HOME_CASES_QUERY_RESULT,
+} from "@/sanity.types";
 
-export type ClinicalCasesData = NonNullable<HOME_PAGE_QUERY_RESULT>["clinicalCases"];
+export type ClinicalCasesHeader = NonNullable<HOME_PAGE_QUERY_RESULT>["clinicalCases"];
+export type ClinicalCasesData = HOME_CASES_QUERY_RESULT;
 
-export default function ClinicalCases({ data }: { data?: ClinicalCasesData | null }) {
-  const sanityCases = data?.items?.length ? data.items : null;
+const CASES_HREF = "/interventi-realizzati";
+
+export default function ClinicalCases({
+  header,
+  cases,
+}: {
+  header?: ClinicalCasesHeader | null;
+  cases?: ClinicalCasesData | null;
+}) {
+  // Fonte primaria: i casi con "Mostra in home"; fallback ai casi statici.
+  const sanityCases = cases?.length ? cases : null;
 
   return (
     <section className="py-20 lg:py-28 bg-background relative">
@@ -19,15 +32,15 @@ export default function ClinicalCases({ data }: { data?: ClinicalCasesData | nul
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
-              {data?.eyebrow ?? fallback.eyebrow}
+              {header?.eyebrow ?? fallback.eyebrow}
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl font-bold text-foreground">
-              {data?.title ?? fallback.title}
+              {header?.title ?? fallback.title}
             </h2>
             <div className="w-20 h-1 bg-sky-500 mt-4 rounded-full" aria-hidden="true" />
           </div>
           <p className="text-sm text-muted-foreground max-w-md">
-            {data?.description ?? fallback.description}
+            {header?.description ?? fallback.description}
           </p>
         </div>
 
@@ -35,8 +48,8 @@ export default function ClinicalCases({ data }: { data?: ClinicalCasesData | nul
           {sanityCases
             ? sanityCases.map((clinicalCase) => (
                 <Link
-                  key={clinicalCase._key}
-                  href={clinicalCase.href ?? "/interventi-realizzati"}
+                  key={clinicalCase._id}
+                  href={CASES_HREF}
                   className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block"
                 >
                   <div className="relative h-56 bg-muted overflow-hidden">
@@ -49,9 +62,11 @@ export default function ClinicalCases({ data }: { data?: ClinicalCasesData | nul
                         className="w-full h-full object-cover"
                       />
                     )}
-                    <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
-                      {clinicalCase.badge}
-                    </div>
+                    {clinicalCase.badge && (
+                      <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                        {clinicalCase.badge}
+                      </div>
+                    )}
                   </div>
                   <div className="p-6">
                     <h3 className="font-heading text-lg font-bold text-foreground mb-2">

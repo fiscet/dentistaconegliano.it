@@ -7,7 +7,11 @@ import ClinicalCases from '@/components/home/clinical-cases';
 import ContactSection from '@/components/home/contact-section';
 import { getSiteSettings } from '@/lib/settings';
 import { sanityFetch } from '@/sanity/lib/live';
-import { HOME_PAGE_QUERY, HOME_SERVICES_QUERY } from '@/sanity/lib/queries';
+import {
+  HOME_PAGE_QUERY,
+  HOME_SERVICES_QUERY,
+  HOME_CASES_QUERY
+} from '@/sanity/lib/queries';
 
 const fallbackTitle =
   'Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin';
@@ -24,11 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [settings, { data: home }, { data: homeServices }] = await Promise.all([
-    getSiteSettings(),
-    sanityFetch({ query: HOME_PAGE_QUERY }),
-    sanityFetch({ query: HOME_SERVICES_QUERY })
-  ]);
+  const [settings, { data: home }, { data: homeServices }, { data: homeCases }] =
+    await Promise.all([
+      getSiteSettings(),
+      sanityFetch({ query: HOME_PAGE_QUERY }),
+      sanityFetch({ query: HOME_SERVICES_QUERY }),
+      sanityFetch({ query: HOME_CASES_QUERY })
+    ]);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -95,7 +101,7 @@ export default async function Home() {
         <DoctorProfile data={home?.doctorProfile} />
       )}
       {home?.clinicalCases?.enabled !== false && (
-        <ClinicalCases data={home?.clinicalCases} />
+        <ClinicalCases header={home?.clinicalCases} cases={homeCases} />
       )}
       {home?.contact?.enabled !== false && (
         <ContactSection data={home?.contact} />
