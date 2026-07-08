@@ -128,7 +128,12 @@ export default function ContactForm() {
         />
         <label htmlFor="contact-privacy" className="text-xs text-muted-foreground leading-normal">
           Acconsento al trattamento dei miei dati personali per finalità di contatto secondo la{" "}
-          <Link href="/privacy-policy" className="text-primary underline">
+          <Link
+            href="https://www.iubenda.com/privacy-policy/29730377"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline"
+          >
             Privacy Policy
           </Link>
           .

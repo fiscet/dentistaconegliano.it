@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
-import { getSiteSettings } from "@/lib/settings";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Source_Sans_3 } from 'next/font/google';
+import { getSiteSettings } from '@/lib/settings';
+import './globals.css';
 
 const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
-  subsets: ["latin"],
+  variable: '--font-source-sans',
+  subsets: ['latin']
 });
 
 const fallbackTitle =
-  "Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin";
+  'Implantologia Dentale a Conegliano | Studio Dentistico Dott. Gianluca Marin';
 const fallbackDescription =
-  "Studio Dentistico Dott. Gianluca Marin a Conegliano (TV): implantologia a carico immediato, All-on-4, chirurgia computer guidata e sedazione cosciente. Oltre 20 anni di attività.";
+  'Studio Dentistico Dott. Gianluca Marin a Conegliano (TV): implantologia a carico immediato, All-on-4, chirurgia computer guidata e sedazione cosciente. Oltre 20 anni di attività.';
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -20,35 +20,35 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = settings.seoDescription ?? fallbackDescription;
   // Immagine social: campo seoImage di siteSettings; fallback a un'immagine
   // statica del sito (risolta in assoluto grazie a metadataBase).
-  const ogImage = settings.seoImageUrl ?? "/images/gianluca-marin-home.jpg";
+  const ogImage = settings.seoImageUrl ?? '/images/gianluca-marin-home.jpg';
 
   return {
     metadataBase: new URL(settings.url),
     title: {
       default: title,
-      template: `%s | ${settings.name}`,
+      template: `%s | ${settings.name}`
     },
     description,
     openGraph: {
-      type: "website",
+      type: 'website',
       siteName: settings.name,
-      locale: "it_IT",
+      locale: 'it_IT',
       url: settings.url,
       title,
       description,
-      images: [{ url: ogImage }],
+      images: [{ url: ogImage }]
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
-    },
+      images: [ogImage]
+    }
   };
 }
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
