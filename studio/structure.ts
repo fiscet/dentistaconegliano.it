@@ -2,7 +2,6 @@ import type { StructureResolver } from "sanity/structure";
 import { CogIcon } from "@sanity/icons/Cog";
 import { MenuIcon } from "@sanity/icons/Menu";
 import { HomeIcon } from "@sanity/icons/Home";
-import { TagIcon } from "@sanity/icons/Tag";
 import { UsersIcon } from "@sanity/icons/Users";
 import { ImagesIcon } from "@sanity/icons/Images";
 
@@ -11,7 +10,6 @@ const SINGLETONS = [
   "siteSettings",
   "navigation",
   "homePage",
-  "pricePage",
   "studioPage",
   "casesPage",
 ];
@@ -64,15 +62,6 @@ export const structure: StructureResolver = (S) =>
             .schemaType("homePage")
             .documentId("homePage")
             .title("Home Page"),
-        ),
-      S.listItem()
-        .title("Pagina Prezzi")
-        .icon(TagIcon)
-        .child(
-          S.document()
-            .schemaType("pricePage")
-            .documentId("pricePage")
-            .title("Pagina Prezzi"),
         ),
       S.listItem()
         .title("Pagina Lo Studio")

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CircleCheck, User } from "lucide-react";
 import { resolveIcon } from "@/components/home/icon-map";
+import { socialMeta, ogImageUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -20,9 +21,16 @@ const fallbackDescription =
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: studio } = await sanityFetch({ query: STUDIO_PAGE_QUERY });
+  const title = studio?.seoTitle ?? fallbackTitle;
+  const description = studio?.seoDescription ?? fallbackDescription;
   return {
-    title: { absolute: studio?.seoTitle ?? fallbackTitle },
-    description: studio?.seoDescription ?? fallbackDescription,
+    title: { absolute: title },
+    description,
+    ...(await socialMeta({
+      title,
+      description,
+      image: ogImageUrl(studio?.seoImage, studio?.hero?.image),
+    })),
   };
 }
 

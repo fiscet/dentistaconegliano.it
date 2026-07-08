@@ -4,7 +4,6 @@ import { navLink, navItem } from "./objects/navLink";
 import { siteSettings } from "./documents/siteSettings";
 import { navigation } from "./documents/navigation";
 import { homePage } from "./documents/homePage";
-import { pricePage } from "./documents/pricePage";
 import { studioPage } from "./documents/studioPage";
 import { casesPage } from "./documents/casesPage";
 import { page } from "./documents/page";
@@ -26,7 +25,6 @@ export const schemaTypes = [
   siteSettings,
   navigation,
   homePage,
-  pricePage,
   studioPage,
   casesPage,
   page,

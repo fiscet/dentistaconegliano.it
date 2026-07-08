@@ -28,7 +28,7 @@ const linkFields = [
     name: "path",
     title: "Percorso",
     type: "string",
-    description: "Percorso relativo al sito, es. /costo-impianto-dentale-conegliano oppure /#contatti",
+    description: "Percorso relativo al sito, es. /servizi oppure /#contatti",
     hidden: ({ parent }) => parent?.linkType !== "path",
     validation: (rule) =>
       rule.custom((value, context) => {
@@ -46,7 +46,6 @@ const linkFields = [
     // aggiunta qui e nella mappa tipo→route di lib/nav.ts (sito).
     to: [
       { type: "homePage" },
-      { type: "pricePage" },
       { type: "studioPage" },
       { type: "casesPage" },
       { type: "page" },

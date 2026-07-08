@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
-import { formatServicePrice } from "@/lib/format";
+import { socialMeta, ogImageUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { client } from "@/sanity/lib/client";
@@ -29,9 +29,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const { data: service } = await sanityFetch({ query: SERVICE_QUERY, params: { slug } });
   if (!service) return {};
+  const title = service.seoTitle ?? service.title ?? "Servizio";
+  const description = service.seoDescription ?? service.excerpt ?? undefined;
   return {
-    title: service.seoTitle ?? service.title ?? "Servizio",
-    description: service.seoDescription ?? service.excerpt ?? undefined,
+    title,
+    description,
+    ...(await socialMeta({
+      title,
+      description,
+      image: ogImageUrl(service.seoImage, service.image),
+      type: "article",
+    })),
   };
 }
 
@@ -79,19 +87,6 @@ export default async function ServiceDetailPage({
             />
           </div>
         )}
-
-        <div className="flex flex-wrap items-center gap-4 mb-10 p-5 bg-sky-50 rounded-2xl">
-          <span className="text-xs font-bold text-sky-600 uppercase tracking-widest">Prezzo</span>
-          <span className="font-heading text-xl font-bold text-foreground">
-            {formatServicePrice(service.priceMin, service.priceMax, service.priceNote)}
-          </span>
-          <Link
-            href="/costo-impianto-dentale-conegliano"
-            className="ml-auto text-sm font-semibold text-primary hover:underline"
-          >
-            Vedi tutti i prezzi
-          </Link>
-        </div>
 
         {service.body && (
           <div className="mb-12">

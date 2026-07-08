@@ -24,7 +24,6 @@ type SanityNavLink = {
 // referenziabili in studio/schemaTypes/objects/navLink.ts.
 const singletonRoutes: Record<string, string> = {
   homePage: "/",
-  pricePage: "/costo-impianto-dentale-conegliano",
   studioPage: "/studio",
   casesPage: "/interventi-realizzati",
 };

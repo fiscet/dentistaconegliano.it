@@ -171,13 +171,6 @@ export type HomePageReference = {
   [internalGroqTypeReferenceTo]?: "homePage";
 };
 
-export type PricePageReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "pricePage";
-};
-
 export type StudioPageReference = {
   _ref: string;
   _type: "reference";
@@ -220,7 +213,6 @@ export type NavItem = {
   path?: string;
   internalLink?:
     | HomePageReference
-    | PricePageReference
     | StudioPageReference
     | CasesPageReference
     | PageReference
@@ -242,7 +234,6 @@ export type NavLink = {
   path?: string;
   internalLink?:
     | HomePageReference
-    | PricePageReference
     | StudioPageReference
     | CasesPageReference
     | PageReference
@@ -364,12 +355,6 @@ export type Service = {
   body?: BlockContent;
   order?: number;
   showInFooter?: boolean;
-  priceBadge?: string;
-  priceMin?: number;
-  priceMax?: number;
-  priceNote?: string;
-  priceFeatures?: Array<string>;
-  popular?: boolean;
   showInHome?: boolean;
   homeTitle?: string;
   homeExcerpt?: string;
@@ -484,47 +469,6 @@ export type StudioPage = {
       _type: "iconCard";
       _key: string;
     }>;
-  };
-  seoTitle?: string;
-  seoDescription?: string;
-  seoImage?: SeoImage;
-};
-
-export type PricePage = {
-  _id: string;
-  _type: "pricePage";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  hero?: {
-    eyebrow?: string;
-    title?: string;
-    description?: string;
-  };
-  factors?: {
-    enabled?: boolean;
-    eyebrow?: string;
-    title?: string;
-    items?: Array<{
-      icon?: IconString;
-      title?: string;
-      text?: string;
-      _type: "factor";
-      _key: string;
-    }>;
-  };
-  list?: {
-    enabled?: boolean;
-    eyebrow?: string;
-    title?: string;
-    description?: string;
-  };
-  cta?: {
-    enabled?: boolean;
-    eyebrow?: string;
-    title?: string;
-    description?: string;
-    boxTitle?: string;
   };
   seoTitle?: string;
   seoDescription?: string;
@@ -740,7 +684,6 @@ export type AllSanitySchemaTypes =
   | Navigation
   | SiteSettings
   | HomePageReference
-  | PricePageReference
   | StudioPageReference
   | CasesPageReference
   | PageReference
@@ -758,7 +701,6 @@ export type AllSanitySchemaTypes =
   | Page
   | CasesPage
   | StudioPage
-  | PricePage
   | HomePage
   | MediaTag
   | SanityImagePaletteSwatch
@@ -804,10 +746,6 @@ export type NAVIGATION_QUERY_RESULT =
               slug: string | null;
             }
           | {
-              _type: "pricePage";
-              slug: null;
-            }
-          | {
               _type: "service";
               slug: string | null;
             }
@@ -839,10 +777,6 @@ export type NAVIGATION_QUERY_RESULT =
             | {
                 _type: "post";
                 slug: string | null;
-              }
-            | {
-                _type: "pricePage";
-                slug: null;
               }
             | {
                 _type: "service";
@@ -878,10 +812,6 @@ export type NAVIGATION_QUERY_RESULT =
           | {
               _type: "post";
               slug: string | null;
-            }
-          | {
-              _type: "pricePage";
-              slug: null;
             }
           | {
               _type: "service";
@@ -1146,90 +1076,6 @@ export type HOME_PAGE_QUERY_RESULT =
   | null;
 
 // Source: ../sanity/lib/queries.ts
-// Variable: PRICE_PAGE_QUERY
-// Query: *[_id == "pricePage"][0]{    hero{ eyebrow, title, description },    factors{      enabled,      eyebrow,      title,      items[]{ _key, icon, title, text }    },    list{ enabled, eyebrow, title, description },    cta{ enabled, eyebrow, title, description, boxTitle },    seoTitle,    seoDescription,    seoImage  }
-export type PRICE_PAGE_QUERY_RESULT =
-  | {
-      hero: null;
-      factors: null;
-      list: null;
-      cta: null;
-      seoTitle: null;
-      seoDescription: null;
-      seoImage: null;
-    }
-  | {
-      hero: null;
-      factors: null;
-      list: null;
-      cta: null;
-      seoTitle: string | null;
-      seoDescription: string | null;
-      seoImage: SeoImage | null;
-    }
-  | {
-      hero: {
-        eyebrow: null;
-        title: string | null;
-        description: string | null;
-      } | null;
-      factors: null;
-      list: null;
-      cta: null;
-      seoTitle: string | null;
-      seoDescription: string | null;
-      seoImage: SeoImage | null;
-    }
-  | {
-      hero: {
-        eyebrow: string | null;
-        title: string | null;
-        description: string | null;
-      } | null;
-      factors: null;
-      list: null;
-      cta: null;
-      seoTitle: string | null;
-      seoDescription: string | null;
-      seoImage: SeoImage | null;
-    }
-  | {
-      hero: {
-        eyebrow: string | null;
-        title: string | null;
-        description: string | null;
-      } | null;
-      factors: {
-        enabled: boolean | null;
-        eyebrow: string | null;
-        title: string | null;
-        items: Array<{
-          _key: string;
-          icon: IconString | null;
-          title: string | null;
-          text: string | null;
-        }> | null;
-      } | null;
-      list: {
-        enabled: boolean | null;
-        eyebrow: string | null;
-        title: string | null;
-        description: string | null;
-      } | null;
-      cta: {
-        enabled: boolean | null;
-        eyebrow: string | null;
-        title: string | null;
-        description: string | null;
-        boxTitle: string | null;
-      } | null;
-      seoTitle: string | null;
-      seoDescription: string | null;
-      seoImage: SeoImage | null;
-    }
-  | null;
-
-// Source: ../sanity/lib/queries.ts
 // Variable: HOME_SERVICES_QUERY
 // Query: *[_type == "service" && showInHome == true] | order(order asc, title asc){    _id,    "slug": slug.current,    "title": coalesce(homeTitle, title),    "description": coalesce(homeExcerpt, excerpt),    icon  }
 export type HOME_SERVICES_QUERY_RESULT = Array<{
@@ -1269,24 +1115,8 @@ export type FOOTER_SERVICES_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../sanity/lib/queries.ts
-// Variable: PRICED_SERVICES_QUERY
-// Query: *[_type == "service" && defined(priceMin)] | order(order asc, title asc){    _id,    title,    "slug": slug.current,    excerpt,    priceBadge,    priceMin,    priceMax,    priceNote,    priceFeatures,    popular  }
-export type PRICED_SERVICES_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: string | null;
-  excerpt: string | null;
-  priceBadge: string | null;
-  priceMin: number;
-  priceMax: number | null;
-  priceNote: string | null;
-  priceFeatures: Array<string> | null;
-  popular: boolean | null;
-}>;
-
-// Source: ../sanity/lib/queries.ts
 // Variable: SERVICE_QUERY
-// Query: *[_type == "service" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    excerpt,    icon,    image{ ..., "alt": alt },    body,    priceBadge,    priceMin,    priceMax,    priceNote,    seoTitle,    seoDescription,    seoImage  }
+// Query: *[_type == "service" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    excerpt,    icon,    image{ ..., "alt": alt },    body,    seoTitle,    seoDescription,    seoImage  }
 export type SERVICE_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -1302,10 +1132,6 @@ export type SERVICE_QUERY_RESULT = {
     _type: "image";
   } | null;
   body: BlockContent | null;
-  priceBadge: string | null;
-  priceMin: number | null;
-  priceMax: number | null;
-  priceNote: string | null;
   seoTitle: string | null;
   seoDescription: string | null;
   seoImage: SeoImage | null;
@@ -1640,12 +1466,10 @@ declare module "@sanity/client" {
     '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    },\n    footerLinks[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n  }\n': NAVIGATION_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctaPrimaryLabel,\n      ctaSecondaryLabel,\n      image{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': HOME_PAGE_QUERY_RESULT;
-    '\n  *[_id == "pricePage"][0]{\n    hero{ eyebrow, title, description },\n    factors{\n      enabled,\n      eyebrow,\n      title,\n      items[]{ _key, icon, title, text }\n    },\n    list{ enabled, eyebrow, title, description },\n    cta{ enabled, eyebrow, title, description, boxTitle },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': PRICE_PAGE_QUERY_RESULT;
     '\n  *[_type == "service" && showInHome == true] | order(order asc, title asc){\n    _id,\n    "slug": slug.current,\n    "title": coalesce(homeTitle, title),\n    "description": coalesce(homeExcerpt, excerpt),\n    icon\n  }\n': HOME_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && showInFooter == true] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FOOTER_SERVICES_QUERY_RESULT;
-    '\n  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    priceFeatures,\n    popular\n  }\n': PRICED_SERVICES_QUERY_RESULT;
-    '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    priceBadge,\n    priceMin,\n    priceMax,\n    priceNote,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SERVICE_QUERY_RESULT;
+    '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SERVICE_QUERY_RESULT;
     '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }\n': SERVICE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "clinicalCase" && showInHome == true] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    "image": imageAfter{ ..., "alt": alt }\n  }\n': HOME_CASES_QUERY_RESULT;
     '\n  *[_type == "clinicalCase"] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    imageBefore{ ..., "alt": alt },\n    imageAfter{ ..., "alt": alt }\n  }\n': CASES_QUERY_RESULT;

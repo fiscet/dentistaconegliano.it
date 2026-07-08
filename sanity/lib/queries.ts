@@ -99,23 +99,6 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
   }
 `);
 
-export const PRICE_PAGE_QUERY = defineQuery(/* groq */ `
-  *[_id == "pricePage"][0]{
-    hero{ eyebrow, title, description },
-    factors{
-      enabled,
-      eyebrow,
-      title,
-      items[]{ _key, icon, title, text }
-    },
-    list{ enabled, eyebrow, title, description },
-    cta{ enabled, eyebrow, title, description, boxTitle },
-    seoTitle,
-    seoDescription,
-    seoImage
-  }
-`);
-
 // Card dei servizi mostrati nella sezione Trattamenti della home.
 // title/excerpt usano l'override home se presente (coalesce), altrimenti i
 // valori "ufficiali" del servizio.
@@ -150,22 +133,6 @@ export const FOOTER_SERVICES_QUERY = defineQuery(/* groq */ `
   }
 `);
 
-// Servizi con prezzo indicativo: card della pagina /prezzi.
-export const PRICED_SERVICES_QUERY = defineQuery(/* groq */ `
-  *[_type == "service" && defined(priceMin)] | order(order asc, title asc){
-    _id,
-    title,
-    "slug": slug.current,
-    excerpt,
-    priceBadge,
-    priceMin,
-    priceMax,
-    priceNote,
-    priceFeatures,
-    popular
-  }
-`);
-
 // Dettaglio singolo servizio: /servizi/[slug].
 export const SERVICE_QUERY = defineQuery(/* groq */ `
   *[_type == "service" && slug.current == $slug][0]{
@@ -176,10 +143,6 @@ export const SERVICE_QUERY = defineQuery(/* groq */ `
     icon,
     image{ ..., "alt": alt },
     body,
-    priceBadge,
-    priceMin,
-    priceMax,
-    priceNote,
     seoTitle,
     seoDescription,
     seoImage

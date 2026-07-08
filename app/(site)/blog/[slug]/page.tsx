@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
+import { socialMeta, ogImageUrl } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
@@ -28,9 +29,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const { data: post } = await sanityFetch({ query: POST_QUERY, params: { slug } });
   if (!post) return {};
+  const title = post.seoTitle ?? post.title ?? "Articolo";
+  const description = post.seoDescription ?? post.excerpt ?? undefined;
   return {
-    title: post.seoTitle ?? post.title ?? "Articolo",
-    description: post.seoDescription ?? post.excerpt ?? undefined,
+    title,
+    description,
+    ...(await socialMeta({
+      title,
+      description,
+      image: ogImageUrl(post.seoImage, post.mainImage),
+      type: "article",
+    })),
   };
 }
 

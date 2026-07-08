@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { socialMeta, ogImageUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -17,9 +18,12 @@ const fallbackDescription =
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: page } = await sanityFetch({ query: CASES_PAGE_QUERY });
+  const title = page?.seoTitle ?? fallbackTitle;
+  const description = page?.seoDescription ?? fallbackDescription;
   return {
-    title: { absolute: page?.seoTitle ?? fallbackTitle },
-    description: page?.seoDescription ?? fallbackDescription,
+    title: { absolute: title },
+    description,
+    ...(await socialMeta({ title, description, image: ogImageUrl(page?.seoImage) })),
   };
 }
 

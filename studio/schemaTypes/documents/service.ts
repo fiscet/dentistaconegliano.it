@@ -9,7 +9,6 @@ export const service = defineType({
   icon: HeartIcon,
   groups: [
     { name: "content", title: "Contenuto", default: true },
-    { name: "price", title: "Prezzo" },
     { name: "home", title: "In Home" },
     seoGroup,
   ],
@@ -76,54 +75,6 @@ export const service = defineType({
       description:
         "Se attivo, il servizio compare nella colonna «I Nostri Servizi» del footer. Utile per elencare solo i principali.",
       group: "content",
-    }),
-
-    // --- Prezzo (indicativo, per la pagina /prezzi) ---
-    defineField({
-      name: "priceBadge",
-      title: "Etichetta prezzo",
-      type: "string",
-      description: "Piccola etichetta sulla card, es. 'Arcata Completa', 'Soluzione Singola'.",
-      group: "price",
-    }),
-    defineField({
-      name: "priceMin",
-      title: "Prezzo minimo (€)",
-      type: "number",
-      description: "Estremo inferiore del range indicativo. Vuoto = 'su preventivo'.",
-      validation: (rule) => rule.min(0),
-      group: "price",
-    }),
-    defineField({
-      name: "priceMax",
-      title: "Prezzo massimo (€)",
-      type: "number",
-      description: "Estremo superiore del range. Vuoto = prezzo 'a partire da'.",
-      validation: (rule) => rule.min(0),
-      group: "price",
-    }),
-    defineField({
-      name: "priceNote",
-      title: "Nota prezzo",
-      type: "string",
-      description: "Es. 'ad arcata', 'a impianto'. Mostrata sotto il prezzo.",
-      group: "price",
-    }),
-    defineField({
-      name: "priceFeatures",
-      title: "Cosa include",
-      type: "array",
-      of: [{ type: "string" }],
-      description: "Voci elencate nella card prezzo (es. 'Corona in zirconio inclusa').",
-      group: "price",
-    }),
-    defineField({
-      name: "popular",
-      title: 'Evidenzia come "Più richiesto"',
-      type: "boolean",
-      initialValue: false,
-      description: "Mette in risalto la card nella pagina /prezzi.",
-      group: "price",
     }),
 
     // --- In Home ---

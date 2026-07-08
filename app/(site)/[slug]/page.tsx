@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PortableTextBody from "@/components/portable-text";
+import { socialMeta, ogImageUrl } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PAGE_QUERY, PAGE_SLUGS_QUERY } from "@/sanity/lib/queries";
@@ -23,9 +24,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const { data: page } = await sanityFetch({ query: PAGE_QUERY, params: { slug } });
   if (!page) return {};
+  const title = page.seoTitle ?? page.title ?? "Pagina";
+  const description = page.seoDescription ?? page.intro ?? undefined;
   return {
-    title: page.seoTitle ?? page.title ?? "Pagina",
-    description: page.seoDescription ?? page.intro ?? undefined,
+    title,
+    description,
+    ...(await socialMeta({
+      title,
+      description,
+      image: ogImageUrl(page.seoImage),
+      type: "article",
+    })),
   };
 }
 

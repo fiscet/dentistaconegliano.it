@@ -6,6 +6,7 @@ import DoctorProfile from '@/components/home/doctor-profile';
 import ClinicalCases from '@/components/home/clinical-cases';
 import ContactSection from '@/components/home/contact-section';
 import { getSiteSettings } from '@/lib/settings';
+import { socialMeta, ogImageUrl } from '@/lib/seo';
 import { sanityFetch } from '@/sanity/lib/live';
 import {
   HOME_PAGE_QUERY,
@@ -21,9 +22,12 @@ const fallbackDescription =
 export async function generateMetadata(): Promise<Metadata> {
   const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY });
 
+  const title = home?.seoTitle ?? fallbackTitle;
+  const description = home?.seoDescription ?? fallbackDescription;
   return {
-    title: { absolute: home?.seoTitle ?? fallbackTitle },
-    description: home?.seoDescription ?? fallbackDescription
+    title: { absolute: title },
+    description,
+    ...(await socialMeta({ title, description, image: ogImageUrl(home?.seoImage) }))
   };
 }
 
