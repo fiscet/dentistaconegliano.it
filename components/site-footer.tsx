@@ -2,6 +2,7 @@ import type { SiteSettings } from '@/lib/settings';
 import type { NavItem } from '@/lib/nav';
 import type { FOOTER_SERVICES_QUERY_RESULT } from '@/sanity.types';
 import Link from 'next/link';
+import { CookiePreferencesButton } from '@/components/cookie-preferences-button';
 
 export default function SiteFooter({
   settings,
@@ -111,6 +112,7 @@ export default function SiteFooter({
               >
                 Cookie Policy
               </a>
+              {process.env.NEXT_PUBLIC_GA_ID && <CookiePreferencesButton />}
             </div>
           </div>
         </div>

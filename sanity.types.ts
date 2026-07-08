@@ -303,6 +303,12 @@ export type BlockContent = Array<
       _type: "image";
       _key: string;
     }
+  | {
+      url?: string;
+      caption?: string;
+      _type: "youtube";
+      _key: string;
+    }
 >;
 
 export type StaffMember = {

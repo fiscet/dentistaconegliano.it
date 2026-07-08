@@ -5,6 +5,8 @@ import { getSiteSettings } from "@/lib/settings";
 import { doctorProfileFallback as fallback } from "@/lib/fallback/home";
 import { urlFor } from "@/sanity/lib/image";
 import { resolveIcon } from "@/components/home/icon-map";
+import { FanRectangles } from "@/components/motion/fan-rectangles";
+import { RevealFrame } from "@/components/motion/reveal-frame";
 import type { HOME_PAGE_QUERY_RESULT } from "@/sanity.types";
 import doctorImage from "@/public/images/gianluca-marin-home.jpg";
 
@@ -24,16 +26,28 @@ export default async function DoctorProfile({ data }: { data?: DoctorProfileData
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-5 relative flex justify-center">
-            <div
-              className="absolute -bottom-4 -right-4 w-[95%] h-[95%] bg-primary rounded-3xl transform rotate-3 -z-10"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute -top-4 -left-4 w-[90%] h-[90%] bg-sky-200/50 rounded-3xl transform -rotate-3 -z-10"
-              aria-hidden="true"
+            <FanRectangles
+              rects={[
+                {
+                  className:
+                    "absolute -bottom-4 -right-4 w-[95%] h-[95%] bg-primary rounded-3xl -z-10",
+                  rotate: 3,
+                  delay: 0.1,
+                },
+                {
+                  className:
+                    "absolute -top-4 -left-4 w-[90%] h-[90%] bg-sky-200/50 rounded-3xl -z-10",
+                  rotate: -3,
+                  delay: 0.25,
+                },
+              ]}
+              trigger="inView"
             />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-border max-w-sm">
+            <RevealFrame
+              className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-border max-w-sm"
+              trigger="inView"
+            >
               {sanityImage ? (
                 <Image
                   src={urlFor(sanityImage).width(800).height(1000).url()}
@@ -55,7 +69,7 @@ export default async function DoctorProfile({ data }: { data?: DoctorProfileData
                   {data?.roleLabel ?? fallback.roleLabel}
                 </p>
               </div>
-            </div>
+            </RevealFrame>
           </div>
 
           <div className="lg:col-span-7 flex flex-col gap-6">

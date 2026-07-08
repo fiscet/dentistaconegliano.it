@@ -3,8 +3,27 @@ import {
   type PortableTextComponents,
 } from "@portabletext/react";
 import type { BlockContent } from "@/sanity.types";
+import { urlFor } from "@/sanity/lib/image";
+import { LiteYouTube } from "@/components/lite-youtube";
 
 const components: PortableTextComponents = {
+  types: {
+    image: ({ value }: { value: { asset?: unknown; alt?: string } }) => {
+      if (!value?.asset) return null;
+      return (
+        <figure className="my-6">
+          <img
+            src={urlFor(value).width(1600).fit("max").auto("format").url()}
+            alt={value.alt ?? ""}
+            loading="lazy"
+            className="h-auto w-full rounded-xl"
+          />
+        </figure>
+      );
+    },
+    youtube: ({ value }: { value: { url?: string; caption?: string } }) =>
+      value?.url ? <LiteYouTube url={value.url} caption={value.caption} /> : null,
+  },
   block: {
     normal: ({ children }) => (
       <p className="text-base text-muted-foreground leading-relaxed mb-4">{children}</p>
