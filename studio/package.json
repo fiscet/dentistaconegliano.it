@@ -1,0 +1,28 @@
+{
+  "name": "dentistaconegliano-studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "deploy-graphql": "sanity graphql deploy",
+    "schema:deploy": "sanity schema deploy",
+    "typegen": "sanity schema extract --workspace production && sanity typegen generate"
+  },
+  "dependencies": {
+    "@sanity/icons": "^5.0.0",
+    "@sanity/vision": "^6.3.0",
+    "lucide-react": "^1.23.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sanity": "^6.3.0",
+    "sanity-plugin-media": "^5.0.10",
+    "styled-components": "^6.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}

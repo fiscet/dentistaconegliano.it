@@ -1,0 +1,6 @@
+# Sanity generated / build output
+.sanity/
+dist/
+
+# Typegen (rigenerato dal sito, non committare qui)
+schema.json
