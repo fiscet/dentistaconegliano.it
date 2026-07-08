@@ -1,5 +1,10 @@
 import { defineType, defineArrayMember } from "sanity";
 import { ImageIcon } from "@sanity/icons/Image";
+import { PlayIcon } from "@sanity/icons/Play";
+
+// Estrae l'ID video da un URL YouTube (watch, youtu.be, shorts, embed).
+const YOUTUBE_ID_RE =
+  /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
 
 export const blockContent = defineType({
   name: "blockContent",
@@ -53,6 +58,38 @@ export const blockContent = defineType({
           description: "Descrizione dell'immagine per accessibilità e SEO.",
         },
       ],
+    }),
+    defineArrayMember({
+      name: "youtube",
+      title: "Video YouTube",
+      type: "object",
+      icon: PlayIcon,
+      fields: [
+        {
+          name: "url",
+          title: "URL YouTube",
+          type: "url",
+          description: "Incolla il link del video (es. https://www.youtube.com/watch?v=…).",
+          validation: (rule) =>
+            rule
+              .required()
+              .custom((value) =>
+                !value || YOUTUBE_ID_RE.test(value) ? true : "Link YouTube non valido",
+              ),
+        },
+        {
+          name: "caption",
+          title: "Didascalia",
+          type: "string",
+        },
+      ],
+      preview: {
+        select: { title: "caption", subtitle: "url" },
+        prepare: ({ title, subtitle }) => ({
+          title: title || "Video YouTube",
+          subtitle,
+        }),
+      },
     }),
   ],
 });

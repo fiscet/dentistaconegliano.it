@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { statsFallback } from "@/lib/fallback/home";
 import type { HOME_PAGE_QUERY_RESULT } from "@/sanity.types";
 
@@ -26,13 +29,25 @@ export default function StatsBar({ data }: { data?: StatsData | null }) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-          {stats.map((stat) => (
-            <div key={stat._key}>
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat._key}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 200,
+                damping: 24,
+                mass: 0.8,
+              }}
+            >
               <p className="text-4xl lg:text-5xl font-extrabold font-heading text-sky-300">
                 {stat.value}
               </p>
               <p className="text-sm mt-2 text-sky-100">{stat.label}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -4,6 +4,8 @@ import { getSiteSettings } from '@/lib/settings';
 import { heroFallback as fallback } from '@/lib/fallback/home';
 import { urlFor } from '@/sanity/lib/image';
 import { resolveIcon } from '@/components/home/icon-map';
+import { FanRectangles } from '@/components/motion/fan-rectangles';
+import { RevealFrame } from '@/components/motion/reveal-frame';
 import type { HOME_PAGE_QUERY_RESULT } from '@/sanity.types';
 import doctorImage from '@/public/images/gianluca-marin-home.jpg';
 
@@ -114,16 +116,24 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
           </div>
 
           <div className="lg:col-span-6 relative flex justify-center items-center">
-            <div
-              className="absolute -bottom-4 -left-4 w-[90%] h-[90%] bg-sky-100/80 rounded-3xl transform -rotate-3 -z-10 border border-sky-200"
-              aria-hidden="true"
-            />
-            <div
-              className="absolute -top-4 -right-4 w-[85%] h-[85%] bg-primary/10 rounded-3xl transform rotate-6 -z-10"
-              aria-hidden="true"
+            <FanRectangles
+              rects={[
+                {
+                  className:
+                    'absolute -bottom-4 -left-4 w-[90%] h-[90%] bg-sky-100/80 rounded-3xl -z-10 border border-sky-200',
+                  rotate: -3,
+                  delay: 0.1,
+                },
+                {
+                  className:
+                    'absolute -top-4 -right-4 w-[85%] h-[85%] bg-primary/10 rounded-3xl -z-10',
+                  rotate: 6,
+                  delay: 0.25,
+                },
+              ]}
             />
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-border max-w-md md:max-w-full">
+            <RevealFrame className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-border max-w-md md:max-w-full">
               {sanityImage ? (
                 <Image
                   src={urlFor(sanityImage).width(1200).height(900).url()}
@@ -154,7 +164,7 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
                   </p>
                 </div>
               </div>
-            </div>
+            </RevealFrame>
           </div>
         </div>
       </div>

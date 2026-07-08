@@ -1,7 +1,12 @@
 import type { Metadata } from 'next';
 import { Source_Sans_3 } from 'next/font/google';
 import { getSiteSettings } from '@/lib/settings';
+import { Analytics } from '@/components/analytics';
+import { CookieConsent } from '@/components/cookie-consent';
+import { MotionProvider } from '@/components/motion-provider';
 import './globals.css';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const sourceSans = Source_Sans_3({
   variable: '--font-source-sans',
@@ -55,7 +60,11 @@ export default function RootLayout({
   return (
     <html lang="it" className={`${sourceSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground overflow-x-hidden">
-        {children}
+        {GA_ID && <Analytics />}
+        <MotionProvider>
+          {children}
+          {GA_ID && <CookieConsent />}
+        </MotionProvider>
       </body>
     </html>
   );
