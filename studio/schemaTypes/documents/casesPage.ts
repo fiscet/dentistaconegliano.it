@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { ImagesIcon } from "@sanity/icons/Images";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 export const casesPage = defineType({
   name: "casesPage",
@@ -22,6 +22,7 @@ export const casesPage = defineType({
       ],
     }),
     ...seoFields,
+    noIndexField,
   ],
   preview: {
     prepare: () => ({ title: "Pagina Interventi Realizzati" }),

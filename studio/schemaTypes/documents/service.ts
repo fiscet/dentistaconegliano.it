@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { HeartIcon } from "@sanity/icons/Heart";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 export const service = defineType({
   name: "service",
@@ -105,6 +105,7 @@ export const service = defineType({
     }),
 
     ...seoFields,
+    noIndexField,
   ],
   orderings: [
     {

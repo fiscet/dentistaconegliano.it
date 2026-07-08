@@ -1,6 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { UsersIcon } from "@sanity/icons/Users";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 const enabledField = defineField({
   name: "enabled",
@@ -118,6 +118,7 @@ export const studioPage = defineType({
     }),
 
     ...seoFields,
+    noIndexField,
   ],
   preview: {
     prepare: () => ({ title: "Pagina Lo Studio" }),

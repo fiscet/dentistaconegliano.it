@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
-import { socialMeta, ogImageUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { client } from "@/sanity/lib/client";
@@ -40,6 +40,8 @@ export async function generateMetadata({
       image: ogImageUrl(service.seoImage, service.image),
       type: "article",
     })),
+    ...(await canonicalUrl(`/servizi/${slug}`)),
+    ...robotsMeta(service.noIndex),
   };
 }
 

@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
+import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { sanityFetch } from "@/sanity/lib/live";
 import { VIDEOS_QUERY } from "@/sanity/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Video",
-  description:
-    "I video dello Studio Dentistico Dott. Gianluca Marin: interventi, tecnologie e consigli per la salute dei tuoi denti.",
-};
+const title = "Video";
+const description =
+  "I video dello Studio Dentistico Dott. Gianluca Marin: interventi, tecnologie e consigli per la salute dei tuoi denti.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title,
+    description,
+    ...(await socialMeta({ title, description })),
+    ...(await canonicalUrl("/video")),
+  };
+}
 
 function youtubeId(url: string): string | null {
   const match = url.match(

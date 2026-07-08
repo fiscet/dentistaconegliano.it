@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { DocumentTextIcon } from "@sanity/icons/DocumentText";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 export const post = defineType({
   name: "post",
@@ -64,6 +64,7 @@ export const post = defineType({
       group: "content",
     }),
     ...seoFields,
+    noIndexField,
   ],
   orderings: [
     {

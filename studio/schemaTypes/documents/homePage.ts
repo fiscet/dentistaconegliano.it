@@ -1,6 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { HomeIcon } from "@sanity/icons/Home";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 const enabledField = defineField({
   name: "enabled",
@@ -236,6 +236,7 @@ export const homePage = defineType({
     }),
 
     ...seoFields,
+    noIndexField,
   ],
   preview: {
     prepare: () => ({ title: "Home Page" }),

@@ -95,7 +95,8 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
     },
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
@@ -145,7 +146,8 @@ export const SERVICE_QUERY = defineQuery(/* groq */ `
     body,
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
@@ -182,7 +184,8 @@ export const CASES_PAGE_QUERY = defineQuery(/* groq */ `
     hero{ eyebrow, title, description },
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
@@ -208,7 +211,8 @@ export const STUDIO_PAGE_QUERY = defineQuery(/* groq */ `
     },
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
@@ -234,7 +238,8 @@ export const PAGE_QUERY = defineQuery(/* groq */ `
     body,
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
@@ -268,7 +273,8 @@ export const POST_QUERY = defineQuery(/* groq */ `
     body,
     seoTitle,
     seoDescription,
-    seoImage
+    seoImage,
+    noIndex
   }
 `);
 
