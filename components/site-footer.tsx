@@ -95,18 +95,22 @@ export default function SiteFooter({
               Sede Legale: {settings.address.street} - {settings.address.city}
             </p>
             <div className="flex gap-4 text-xs text-slate-400">
-              <Link
-                href="/privacy-policy"
+              <a
+                href="https://www.iubenda.com/privacy-policy/29730377"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-primary-foreground transition-colors"
               >
                 Privacy Policy
-              </Link>
-              <Link
-                href="/cookie-policy"
+              </a>
+              <a
+                href="https://www.iubenda.com/privacy-policy/29730377/cookie-policy"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-primary-foreground transition-colors"
               >
                 Cookie Policy
-              </Link>
+              </a>
             </div>
           </div>
         </div>
