@@ -9,20 +9,20 @@ export const site = {
   phone: "0438 415356",
   phoneHref: "tel:+390438415356",
   address: {
-    street: "Viale Italia, 120",
+    street: "Via Maggiore Giovanni Piovesana 159",
     postalCode: "31015",
     city: "Conegliano",
     province: "TV",
   },
-  addressLine: "Viale Italia, 120 - 31015 Conegliano (TV)",
+  addressLine: "Via Maggiore Giovanni Piovesana 159 - 31015 Conegliano (TV)",
   openingHours: "Lun - Ven: 09:00 - 19:00 | Sab: 09:00 - 13:00",
   yearsBadge: "20+ Anni di Attività",
   footerDescription:
     "Esperienza ventennale e soluzioni implantari d'avanguardia per ripristinare il tuo sorriso in sicurezza.",
   legalName: "Studio Dentistico dott. Gianluca Marin S.r.l.",
-  vatNumber: "01234567890",
+  vatNumber: "03687380265",
   shareCapital: "€ 10.000 i.v.",
-  alboRegistration: "Iscrizione Albo Odontoiatri TV n. 1234",
+  alboRegistration: "Iscrizione Albo Odontoiatri TV n. 695",
 } as const;
 
 // Fallback usato solo se il documento navigation di Sanity è vuoto.

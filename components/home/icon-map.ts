@@ -13,6 +13,17 @@ import {
   Volume2,
   Users,
   HeartPulse,
+  Baby,
+  Sparkles,
+  Smile,
+  Crown,
+  Syringe,
+  AlignCenter,
+  Scissors,
+  Sun,
+  RefreshCw,
+  Droplets,
+  Wind,
   type LucideIcon,
 } from "lucide-react";
 
@@ -33,6 +44,17 @@ const iconMap: Record<string, LucideIcon> = {
   "volume-2": Volume2,
   users: Users,
   "heart-pulse": HeartPulse,
+  baby: Baby,
+  sparkles: Sparkles,
+  smile: Smile,
+  crown: Crown,
+  syringe: Syringe,
+  "align-center": AlignCenter,
+  scissors: Scissors,
+  sun: Sun,
+  "refresh-cw": RefreshCw,
+  droplets: Droplets,
+  wind: Wind,
 };
 
 export function resolveIcon(name: string | null | undefined, fallback: LucideIcon): LucideIcon {

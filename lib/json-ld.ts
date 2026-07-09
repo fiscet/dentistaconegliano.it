@@ -23,27 +23,15 @@ export function dentistJsonLd(settings: SiteSettings) {
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday"],
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         opens: "09:00",
-        closes: "18:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Thursday",
-        opens: "09:00",
-        closes: "13:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Thursday",
-        opens: "14:00",
         closes: "19:00",
       },
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Friday",
-        opens: "08:30",
-        closes: "15:30",
+        dayOfWeek: "Saturday",
+        opens: "09:00",
+        closes: "13:00",
       },
     ],
     founder: {
