@@ -20,7 +20,7 @@ const fallbackDescription =
   "Conosci lo Studio Dentistico Dott. Gianluca Marin a Conegliano: il team di odontoiatri specializzati, la filosofia di cura e le tecnologie dello studio.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: studio } = await sanityFetch({ query: STUDIO_PAGE_QUERY });
+  const { data: studio } = await sanityFetch({ query: STUDIO_PAGE_QUERY, stega: false });
   const title = studio?.seoTitle ?? fallbackTitle;
   const description = studio?.seoDescription ?? fallbackDescription;
   return {

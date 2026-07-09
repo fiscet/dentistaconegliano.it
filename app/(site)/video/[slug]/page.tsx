@@ -28,7 +28,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { data: video } = await sanityFetch({ query: VIDEO_QUERY, params: { slug } });
+  const { data: video } = await sanityFetch({
+    query: VIDEO_QUERY,
+    params: { slug },
+    stega: false,
+  });
   if (!video) return {};
   const title = video.title ?? "Video";
   const description = video.description ?? undefined;

@@ -22,7 +22,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { data: page } = await sanityFetch({ query: PAGE_QUERY, params: { slug } });
+  const { data: page } = await sanityFetch({
+    query: PAGE_QUERY,
+    params: { slug },
+    stega: false,
+  });
   if (!page) return {};
   const title = page.seoTitle ?? page.title ?? "Pagina";
   const description = page.seoDescription ?? page.intro ?? undefined;

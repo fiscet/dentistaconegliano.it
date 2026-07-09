@@ -29,7 +29,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { data: service } = await sanityFetch({ query: SERVICE_QUERY, params: { slug } });
+  const { data: service } = await sanityFetch({
+    query: SERVICE_QUERY,
+    params: { slug },
+    stega: false,
+  });
   if (!service) return {};
   const title = service.seoTitle ?? service.title ?? "Servizio";
   const description = service.seoDescription ?? service.excerpt ?? undefined;

@@ -21,7 +21,7 @@ const fallbackDescription =
   'Impianti dentali a carico immediato a Conegliano: denti fissi in 24 ore, All-on-4, chirurgia computer guidata e sedazione cosciente. Consulenza personalizzata con il Dott. Gianluca Marin.';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY });
+  const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY, stega: false });
 
   const title = home?.seoTitle ?? fallbackTitle;
   const description = home?.seoDescription ?? fallbackDescription;
