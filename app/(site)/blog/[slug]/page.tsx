@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
 import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
-import { articleJsonLd } from "@/lib/json-ld";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { formatDate } from "@/lib/format";
 import { getSiteSettings } from "@/lib/settings";
 import { urlFor } from "@/sanity/lib/image";
@@ -56,20 +56,30 @@ export default async function PostPage({ params }: { params: Promise<Params> }) 
 
   if (!post) notFound();
 
+  const postUrl = new URL(`/blog/${slug}`, settings.url).toString();
   const jsonLd = articleJsonLd({
     title: post.seoTitle ?? post.title ?? "Articolo",
     description: post.seoDescription ?? post.excerpt ?? undefined,
     image: ogImageUrl(post.seoImage, post.mainImage),
     publishedAt: post.publishedAt ?? undefined,
     authorName: post.author?.name ?? undefined,
-    url: new URL(`/blog/${slug}`, settings.url).toString(),
+    url: postUrl,
   });
+  const breadcrumbJsonLdData = breadcrumbJsonLd([
+    { name: "Home", url: settings.url },
+    { name: "Blog", url: new URL("/blog", settings.url).toString() },
+    { name: post.title ?? "Articolo", url: postUrl },
+  ]);
 
   return (
     <main className="flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdData) }}
       />
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <Link

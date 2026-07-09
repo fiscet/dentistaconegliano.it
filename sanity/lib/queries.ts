@@ -151,9 +151,9 @@ export const SERVICE_QUERY = defineQuery(/* groq */ `
   }
 `);
 
-// Slug di tutti i servizi per generateStaticParams.
+// Slug di tutti i servizi per generateStaticParams (+ _updatedAt per la sitemap).
 export const SERVICE_SLUGS_QUERY = defineQuery(/* groq */ `
-  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }
+  *[_type == "service" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 `);
 
 // Casi clinici mostrati nella sezione della home (usa l'immagine "Dopo").
@@ -244,7 +244,7 @@ export const PAGE_QUERY = defineQuery(/* groq */ `
 `);
 
 export const PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
-  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 `);
 
 // Elenco articoli del blog (più recenti prima).
@@ -279,7 +279,7 @@ export const POST_QUERY = defineQuery(/* groq */ `
 `);
 
 export const POST_SLUGS_QUERY = defineQuery(/* groq */ `
-  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 `);
 
 export const VIDEOS_QUERY = defineQuery(/* groq */ `

@@ -13,10 +13,16 @@ const staticRoutes = [
   "/blog",
 ];
 
-function entriesFor(prefix: string, items: { slug: string | null }[]): MetadataRoute.Sitemap {
+function entriesFor(
+  prefix: string,
+  items: { slug: string | null; _updatedAt: string }[],
+): MetadataRoute.Sitemap {
   return items
-    .filter((item): item is { slug: string } => Boolean(item.slug))
-    .map((item) => ({ url: `${site.url}${prefix}/${item.slug}` }));
+    .filter((item): item is { slug: string; _updatedAt: string } => Boolean(item.slug))
+    .map((item) => ({
+      url: `${site.url}${prefix}/${item.slug}`,
+      lastModified: item._updatedAt,
+    }));
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -26,8 +32,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     client.fetch(PAGE_SLUGS_QUERY),
   ]);
 
+  // Contenuto statico/hardcoded: usa il momento del build come lastModified.
+  const buildTime = new Date();
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${site.url}${path}`,
+    lastModified: buildTime,
   }));
 
   return [

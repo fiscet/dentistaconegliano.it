@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
 import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
+import { serviceJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { client } from "@/sanity/lib/client";
@@ -58,8 +59,30 @@ export default async function ServiceDetailPage({
 
   if (!service) notFound();
 
+  const url = new URL(`/servizi/${slug}`, settings.url).toString();
+  const serviceJsonLdData = serviceJsonLd({
+    name: service.title ?? "Servizio",
+    description: service.excerpt ?? undefined,
+    url,
+    image: service.image?.asset ? urlFor(service.image).width(1200).height(675).url() : undefined,
+    provider: { name: settings.name, url: settings.url },
+  });
+  const breadcrumbJsonLdData = breadcrumbJsonLd([
+    { name: "Home", url: settings.url },
+    { name: "Servizi", url: new URL("/servizi", settings.url).toString() },
+    { name: service.title ?? "Servizio", url },
+  ]);
+
   return (
     <main className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLdData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdData) }}
+      />
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <Link
           href="/servizi"

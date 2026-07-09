@@ -385,7 +385,18 @@ export type IconString =
   | "credit-card"
   | "volume-2"
   | "users"
-  | "heart-pulse";
+  | "heart-pulse"
+  | "baby"
+  | "sparkles"
+  | "smile"
+  | "crown"
+  | "syringe"
+  | "align-center"
+  | "scissors"
+  | "sun"
+  | "refresh-cw"
+  | "droplets"
+  | "wind";
 
 export type Page = {
   _id: string;
@@ -1169,9 +1180,10 @@ export type SERVICE_QUERY_RESULT = {
 
 // Source: ../sanity/lib/queries.ts
 // Variable: SERVICE_SLUGS_QUERY
-// Query: *[_type == "service" && defined(slug.current)]{ "slug": slug.current }
+// Query: *[_type == "service" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 export type SERVICE_SLUGS_QUERY_RESULT = Array<{
   slug: string | null;
+  _updatedAt: string;
 }>;
 
 // Source: ../sanity/lib/queries.ts
@@ -1438,9 +1450,10 @@ export type PAGE_QUERY_RESULT = {
 
 // Source: ../sanity/lib/queries.ts
 // Variable: PAGE_SLUGS_QUERY
-// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 export type PAGE_SLUGS_QUERY_RESULT = Array<{
   slug: string | null;
+  _updatedAt: string;
 }>;
 
 // Source: ../sanity/lib/queries.ts
@@ -1501,9 +1514,10 @@ export type POST_QUERY_RESULT = {
 
 // Source: ../sanity/lib/queries.ts
 // Variable: POST_SLUGS_QUERY
-// Query: *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+// Query: *[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 export type POST_SLUGS_QUERY_RESULT = Array<{
   slug: string | null;
+  _updatedAt: string;
 }>;
 
 // Source: ../sanity/lib/queries.ts
@@ -1528,17 +1542,17 @@ declare module "@sanity/client" {
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && showInFooter == true] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FOOTER_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': SERVICE_QUERY_RESULT;
-    '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current }\n': SERVICE_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "service" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': SERVICE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "clinicalCase" && showInHome == true] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    "image": imageAfter{ ..., "alt": alt }\n  }\n': HOME_CASES_QUERY_RESULT;
     '\n  *[_type == "clinicalCase"] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    imageBefore{ ..., "alt": alt },\n    imageAfter{ ..., "alt": alt }\n  }\n': CASES_QUERY_RESULT;
     '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': STUDIO_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
     '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    intro,\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': PAGE_QUERY_RESULT;
-    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PAGE_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': PAGE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    "author": author->name\n  }\n': POSTS_QUERY_RESULT;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    author->{ name, role, photo{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': POST_QUERY_RESULT;
-    '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': POST_SLUGS_QUERY_RESULT;
     '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    youtubeUrl,\n    description,\n    publishedAt\n  }\n': VIDEOS_QUERY_RESULT;
   }
 }

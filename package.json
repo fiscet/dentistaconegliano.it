@@ -2,11 +2,15 @@
   "name": "dentistaconegliano.it",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "studio": "npm --prefix studio run dev",
     "typegen": "npm --prefix studio run typegen"
   },
