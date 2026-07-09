@@ -1,7 +1,12 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/sanity/lib/client";
 import { site } from "@/lib/site";
-import { SERVICE_SLUGS_QUERY, POST_SLUGS_QUERY, PAGE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import {
+  SERVICE_SLUGS_QUERY,
+  POST_SLUGS_QUERY,
+  PAGE_SLUGS_QUERY,
+  VIDEO_SLUGS_QUERY,
+} from "@/sanity/lib/queries";
 
 const staticRoutes = [
   "",
@@ -26,10 +31,11 @@ function entriesFor(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [services, posts, pages] = await Promise.all([
+  const [services, posts, pages, videos] = await Promise.all([
     client.fetch(SERVICE_SLUGS_QUERY),
     client.fetch(POST_SLUGS_QUERY),
     client.fetch(PAGE_SLUGS_QUERY),
+    client.fetch(VIDEO_SLUGS_QUERY),
   ]);
 
   // Contenuto statico/hardcoded: usa il momento del build come lastModified.
@@ -43,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticEntries,
     ...entriesFor("/servizi", services),
     ...entriesFor("/blog", posts),
+    ...entriesFor("/video", videos),
     ...entriesFor("", pages),
   ];
 }

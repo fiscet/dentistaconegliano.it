@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { site } from "@/lib/site";
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import { Home, Compass, Phone, ArrowRight, MapPin, Sparkles } from "lucide-react";
 
 export default function NotFoundContent() {
   // Varianti di animazione per il caricamento staccato (stagger) degli elementi
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -18,7 +18,7 @@ export default function NotFoundContent() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,

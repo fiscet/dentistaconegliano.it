@@ -126,27 +126,44 @@ function youtubeVideoId(url: string): string | null {
   return match?.[1] ?? null;
 }
 
+// Converte una durata "mm:ss" (formato dello Studio) nel formato ISO 8601
+// richiesto da schema.org per VideoObject.duration (es. "4:13" -> "PT4M13S").
+function toIso8601Duration(duration: string): string | null {
+  const match = duration.match(/^(\d{1,3}):(\d{2})$/);
+  if (!match) return null;
+  const minutes = Number(match[1]);
+  const seconds = Number(match[2]);
+  return `PT${minutes}M${seconds}S`;
+}
+
 export function videoObjectJsonLd({
   title,
   description,
   youtubeUrl,
   publishedAt,
+  duration,
+  thumbnailUrl,
 }: {
   title: string;
   description?: string;
   youtubeUrl: string;
   publishedAt?: string;
+  duration?: string;
+  thumbnailUrl?: string;
 }) {
   const id = youtubeVideoId(youtubeUrl);
   if (!id) return null;
+
+  const isoDuration = duration ? toIso8601Duration(duration) : null;
 
   return {
     "@context": "https://schema.org",
     "@type": "VideoObject",
     name: title,
     description: description ?? title,
-    thumbnailUrl: [`https://i.ytimg.com/vi/${id}/hqdefault.jpg`],
+    thumbnailUrl: [thumbnailUrl ?? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`],
     ...(publishedAt ? { uploadDate: publishedAt } : {}),
+    ...(isoDuration ? { duration: isoDuration } : {}),
     embedUrl: `https://www.youtube-nocookie.com/embed/${id}`,
     contentUrl: youtubeUrl,
   };

@@ -11,6 +11,7 @@ import { getSiteSettings } from "@/lib/settings";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SERVICE_QUERY, SERVICE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { LiteYouTube } from "@/components/lite-youtube";
 
 type Params = { slug: string };
 
@@ -116,6 +117,35 @@ export default async function ServiceDetailPage({
         {service.body && (
           <div className="mb-12">
             <PortableTextBody value={service.body} />
+          </div>
+        )}
+
+        {service.relatedVideos && service.relatedVideos.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Video su questo trattamento</h2>
+            <div className="grid gap-8 sm:grid-cols-2">
+              {service.relatedVideos.map((video) => {
+                if (!video.youtubeUrl) return null;
+                const thumbnailUrl = video.thumbnail
+                  ? urlFor(video.thumbnail).width(640).height(360).fit("crop").url()
+                  : undefined;
+                return (
+                  <div key={video._id} className="flex flex-col gap-3 [&_figure]:my-0">
+                    <LiteYouTube
+                      url={video.youtubeUrl}
+                      thumbnailUrl={thumbnailUrl}
+                      duration={video.duration ?? undefined}
+                    />
+                    <Link
+                      href={`/video/${video.slug}`}
+                      className="text-base font-semibold text-foreground hover:text-primary transition-colors"
+                    >
+                      {video.title}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

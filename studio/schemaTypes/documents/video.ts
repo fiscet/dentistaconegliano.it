@@ -14,6 +14,14 @@ export const video = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (rule) => rule.required(),
+      description: "URL della pagina dedicata: /video/<slug>",
+    }),
+    defineField({
       name: "youtubeUrl",
       title: "URL YouTube",
       type: "url",
@@ -30,6 +38,35 @@ export const video = defineType({
       title: "Descrizione",
       type: "text",
       rows: 3,
+    }),
+    defineField({
+      name: "thumbnail",
+      title: "Copertina personalizzata",
+      type: "image",
+      options: { hotspot: true },
+      description:
+        "Facoltativa: se non impostata viene usata la copertina automatica di YouTube.",
+      fields: [
+        defineField({ name: "alt", title: "Testo alternativo", type: "string" }),
+      ],
+    }),
+    defineField({
+      name: "duration",
+      title: "Durata",
+      type: "string",
+      description: "Formato mm:ss, es. 4:13.",
+      validation: (rule) =>
+        rule.custom((value) => {
+          if (!value) return true;
+          return /^\d{1,3}:\d{2}$/.test(value) || "Usa il formato mm:ss, es. 4:13";
+        }),
+    }),
+    defineField({
+      name: "relatedService",
+      title: "Servizio collegato",
+      type: "reference",
+      to: [{ type: "service" }],
+      description: "Il trattamento di cui parla il video, se applicabile.",
     }),
     defineField({
       name: "publishedAt",
@@ -51,6 +88,6 @@ export const video = defineType({
     },
   ],
   preview: {
-    select: { title: "title", subtitle: "youtubeUrl" },
+    select: { title: "title", subtitle: "youtubeUrl", media: "thumbnail" },
   },
 });

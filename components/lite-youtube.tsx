@@ -14,7 +14,17 @@ function getYouTubeId(url: string): string | null {
 // Embed YouTube privacy-friendly: mostra solo la copertina finché l'utente non
 // clicca; solo allora carica il player youtube-nocookie. Niente cookie/richieste
 // a YouTube prima del play → non richiede consenso.
-export function LiteYouTube({ url, caption }: { url: string; caption?: string }) {
+export function LiteYouTube({
+  url,
+  caption,
+  thumbnailUrl,
+  duration,
+}: {
+  url: string;
+  caption?: string;
+  thumbnailUrl?: string;
+  duration?: string;
+}) {
   const [active, setActive] = useState(false);
   const id = getYouTubeId(url);
   if (!id) return null;
@@ -39,7 +49,7 @@ export function LiteYouTube({ url, caption }: { url: string; caption?: string })
           >
             {/* Copertina servita da YouTube: <img> semplice, nessun cookie. */}
             <img
-              src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+              src={thumbnailUrl ?? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
               alt=""
               loading="lazy"
               className="h-full w-full object-cover"
@@ -49,6 +59,11 @@ export function LiteYouTube({ url, caption }: { url: string; caption?: string })
                 <Play className="h-7 w-7 translate-x-0.5 fill-white text-white" aria-hidden="true" />
               </span>
             </span>
+            {duration && (
+              <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-xs font-medium text-white">
+                {duration}
+              </span>
+            )}
           </button>
         )}
       </div>
