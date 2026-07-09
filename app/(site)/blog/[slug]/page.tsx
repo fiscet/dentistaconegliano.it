@@ -4,8 +4,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
-import { socialMeta, ogImageUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
+import { articleJsonLd } from "@/lib/json-ld";
 import { formatDate } from "@/lib/format";
+import { getSiteSettings } from "@/lib/settings";
 import { urlFor } from "@/sanity/lib/image";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -40,17 +42,35 @@ export async function generateMetadata({
       image: ogImageUrl(post.seoImage, post.mainImage),
       type: "article",
     })),
+    ...(await canonicalUrl(`/blog/${slug}`)),
+    ...robotsMeta(post.noIndex),
   };
 }
 
 export default async function PostPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const { data: post } = await sanityFetch({ query: POST_QUERY, params: { slug } });
+  const [{ data: post }, settings] = await Promise.all([
+    sanityFetch({ query: POST_QUERY, params: { slug } }),
+    getSiteSettings(),
+  ]);
 
   if (!post) notFound();
 
+  const jsonLd = articleJsonLd({
+    title: post.seoTitle ?? post.title ?? "Articolo",
+    description: post.seoDescription ?? post.excerpt ?? undefined,
+    image: ogImageUrl(post.seoImage, post.mainImage),
+    publishedAt: post.publishedAt ?? undefined,
+    authorName: post.author?.name ?? undefined,
+    url: new URL(`/blog/${slug}`, settings.url).toString(),
+  });
+
   return (
     <main className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <Link
           href="/blog"

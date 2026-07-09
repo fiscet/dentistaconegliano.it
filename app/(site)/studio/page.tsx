@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CircleCheck, User } from "lucide-react";
 import { resolveIcon } from "@/components/home/icon-map";
-import { socialMeta, ogImageUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -31,6 +31,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       image: ogImageUrl(studio?.seoImage, studio?.hero?.image),
     })),
+    ...(await canonicalUrl("/studio")),
+    ...robotsMeta(studio?.noIndex),
   };
 }
 

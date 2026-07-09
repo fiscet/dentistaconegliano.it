@@ -2,15 +2,25 @@ import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import ContactForm from "@/components/contact-form";
 import { getSiteSettings } from "@/lib/settings";
+import { socialMeta, canonicalUrl } from "@/lib/seo";
+import { dentistJsonLd } from "@/lib/json-ld";
 
-export const metadata: Metadata = {
-  title: "Contatti",
-  description:
-    "Contatta lo Studio Dentistico Dott. Gianluca Marin a Conegliano: telefono, email, indirizzo e modulo per prenotare una visita.",
-};
+const title = "Contatti";
+const description =
+  "Contatta lo Studio Dentistico Dott. Gianluca Marin a Conegliano: telefono, email, indirizzo e modulo per prenotare una visita.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title,
+    description,
+    ...(await socialMeta({ title, description })),
+    ...(await canonicalUrl("/contatti")),
+  };
+}
 
 export default async function ContattiPage() {
   const settings = await getSiteSettings();
+  const jsonLd = dentistJsonLd(settings);
 
   const mapQuery = `${settings.address.street}, ${settings.address.postalCode} ${settings.address.city} ${settings.address.province}`;
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
@@ -37,6 +47,10 @@ export default async function ContattiPage() {
 
   return (
     <main className="flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* HERO */}
       <section className="bg-linear-to-br from-secondary/50 via-background to-secondary/30 py-14 lg:py-16 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

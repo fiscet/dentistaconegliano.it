@@ -3,15 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { formatDate } from "@/lib/format";
+import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Approfondimenti, consigli e novità dallo Studio Dentistico Dott. Gianluca Marin a Conegliano: implantologia, salute orale e tecnologie.",
-};
+const title = "Blog";
+const description =
+  "Approfondimenti, consigli e novità dallo Studio Dentistico Dott. Gianluca Marin a Conegliano: implantologia, salute orale e tecnologie.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title,
+    description,
+    ...(await socialMeta({ title, description })),
+    ...(await canonicalUrl("/blog")),
+  };
+}
 
 export default async function BlogPage() {
   const { data: posts } = await sanityFetch({ query: POSTS_QUERY });

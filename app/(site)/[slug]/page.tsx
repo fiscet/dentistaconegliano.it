@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PortableTextBody from "@/components/portable-text";
-import { socialMeta, ogImageUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { client } from "@/sanity/lib/client";
 import { sanityFetch } from "@/sanity/lib/live";
 import { PAGE_QUERY, PAGE_SLUGS_QUERY } from "@/sanity/lib/queries";
@@ -35,6 +35,8 @@ export async function generateMetadata({
       image: ogImageUrl(page.seoImage),
       type: "article",
     })),
+    ...(await canonicalUrl(`/${slug}`)),
+    ...robotsMeta(page.noIndex),
   };
 }
 

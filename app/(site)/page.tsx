@@ -6,7 +6,8 @@ import DoctorProfile from '@/components/home/doctor-profile';
 import ClinicalCases from '@/components/home/clinical-cases';
 import ContactSection from '@/components/home/contact-section';
 import { getSiteSettings } from '@/lib/settings';
-import { socialMeta, ogImageUrl } from '@/lib/seo';
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from '@/lib/seo';
+import { dentistJsonLd } from '@/lib/json-ld';
 import { sanityFetch } from '@/sanity/lib/live';
 import {
   HOME_PAGE_QUERY,
@@ -27,7 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: title },
     description,
-    ...(await socialMeta({ title, description, image: ogImageUrl(home?.seoImage) }))
+    ...(await socialMeta({ title, description, image: ogImageUrl(home?.seoImage) })),
+    ...(await canonicalUrl('/')),
+    ...robotsMeta(home?.noIndex)
   };
 }
 
@@ -40,55 +43,7 @@ export default async function Home() {
       sanityFetch({ query: HOME_CASES_QUERY })
     ]);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': ['Dentist', 'MedicalBusiness'],
-    name: settings.name,
-    url: settings.url,
-    telephone: settings.phoneHref.replace('tel:', ''),
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: settings.address.street,
-      postalCode: settings.address.postalCode,
-      addressLocality: settings.address.city,
-      addressRegion: settings.address.province,
-      addressCountry: 'IT'
-    },
-    // Orario strutturato: il campo openingHours dei settings è testo libero,
-    // quindi la versione machine-readable resta definita qui.
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday'],
-        opens: '09:00',
-        closes: '18:00'
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Thursday',
-        opens: '09:00',
-        closes: '13:00'
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Thursday',
-        opens: '14:00',
-        closes: '19:00'
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Friday',
-        opens: '08:30',
-        closes: '15:30'
-      }
-    ],
-    founder: {
-      '@type': 'Person',
-      name: settings.doctor,
-      jobTitle: 'Direttore Sanitario e Chirurgo Implantologo'
-    },
-    medicalSpecialty: 'Dentistry'
-  };
+  const jsonLd = dentistJsonLd(settings);
 
   return (
     <main>

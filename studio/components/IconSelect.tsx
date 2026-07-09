@@ -16,6 +16,17 @@ import {
   Volume2,
   Users,
   HeartPulse,
+  Baby,
+  Sparkles,
+  Smile,
+  Crown,
+  Syringe,
+  AlignCenter,
+  Scissors,
+  Sun,
+  RefreshCw,
+  Droplets,
+  Wind,
   type LucideIcon,
 } from "lucide-react";
 
@@ -38,6 +49,17 @@ const icons: Record<string, LucideIcon> = {
   "volume-2": Volume2,
   users: Users,
   "heart-pulse": HeartPulse,
+  baby: Baby,
+  sparkles: Sparkles,
+  smile: Smile,
+  crown: Crown,
+  syringe: Syringe,
+  "align-center": AlignCenter,
+  scissors: Scissors,
+  sun: Sun,
+  "refresh-cw": RefreshCw,
+  droplets: Droplets,
+  wind: Wind,
 };
 
 // Input custom: mostra le opzioni icona come griglia di anteprime cliccabili

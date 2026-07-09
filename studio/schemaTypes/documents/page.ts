@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { DocumentIcon } from "@sanity/icons/Document";
-import { seoFields, seoGroup } from "../shared/seoFields";
+import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 export const page = defineType({
   name: "page",
@@ -38,6 +38,7 @@ export const page = defineType({
       group: "content",
     }),
     ...seoFields,
+    noIndexField,
   ],
   preview: {
     select: { title: "title", subtitle: "slug.current" },

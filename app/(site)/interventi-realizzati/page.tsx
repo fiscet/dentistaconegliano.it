@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
-import { socialMeta, ogImageUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -24,6 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: title },
     description,
     ...(await socialMeta({ title, description, image: ogImageUrl(page?.seoImage) })),
+    ...(await canonicalUrl("/interventi-realizzati")),
+    ...robotsMeta(page?.noIndex),
   };
 }
 

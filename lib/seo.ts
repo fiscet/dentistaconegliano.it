@@ -48,3 +48,16 @@ export async function socialMeta({
     },
   };
 }
+
+// Canonical assoluto per una pagina. path deve iniziare con "/" ("/" per la home).
+export async function canonicalUrl(path: string): Promise<Pick<Metadata, "alternates">> {
+  const settings = await getSiteSettings();
+  return { alternates: { canonical: new URL(path, settings.url).toString() } };
+}
+
+// robots meta per singolo documento con noIndex=true. Assente/false -> nessun
+// override (resta il default index/follow di Next).
+export function robotsMeta(noIndex?: boolean | null): Pick<Metadata, "robots"> {
+  if (!noIndex) return {};
+  return { robots: { index: false, follow: true } };
+}

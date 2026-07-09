@@ -3,15 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, HeartPulse } from "lucide-react";
 import { resolveIcon } from "@/components/home/icon-map";
+import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { SERVICES_QUERY } from "@/sanity/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Servizi e Trattamenti",
-  description:
-    "I trattamenti dello Studio Dentistico Dott. Gianluca Marin a Conegliano: implantologia a carico immediato, All-on-4, chirurgia computer guidata e altro.",
-};
+const title = "Servizi e Trattamenti";
+const description =
+  "I trattamenti dello Studio Dentistico Dott. Gianluca Marin a Conegliano: implantologia a carico immediato, All-on-4, chirurgia computer guidata e altro.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title,
+    description,
+    ...(await socialMeta({ title, description })),
+    ...(await canonicalUrl("/servizi")),
+  };
+}
 
 export default async function ServiziPage() {
   const { data: services } = await sanityFetch({ query: SERVICES_QUERY });

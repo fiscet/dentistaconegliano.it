@@ -26,4 +26,15 @@ export const seoFields = [
   }),
 ];
 
+// Solo per i document type con una route pubblica dedicata (non siteSettings,
+// che non è mai renderizzato come pagina propria).
+export const noIndexField = defineField({
+  name: "noIndex",
+  title: "Escludi dai motori di ricerca (noindex)",
+  type: "boolean",
+  description: "Attiva solo per pagine che non devono comparire su Google.",
+  initialValue: false,
+  group: "seo",
+});
+
 export const seoGroup = { name: "seo", title: "SEO" };
