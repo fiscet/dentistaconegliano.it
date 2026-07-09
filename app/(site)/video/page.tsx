@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { socialMeta, canonicalUrl } from "@/lib/seo";
+import { videoObjectJsonLd } from "@/lib/json-ld";
 import { sanityFetch } from "@/sanity/lib/live";
 import { VIDEOS_QUERY } from "@/sanity/lib/queries";
+import { LiteYouTube } from "@/components/lite-youtube";
+import { urlFor } from "@/sanity/lib/image";
 
 const title = "Video";
 const description =
@@ -14,13 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(await socialMeta({ title, description })),
     ...(await canonicalUrl("/video")),
   };
-}
-
-function youtubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/,
-  );
-  return match?.[1] ?? null;
 }
 
 export default async function VideoPage() {
@@ -41,23 +38,50 @@ export default async function VideoPage() {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2">
             {videos.map((video) => {
-              const id = video.youtubeUrl ? youtubeId(video.youtubeUrl) : null;
-              if (!id) return null;
+              if (!video.youtubeUrl) return null;
+              const thumbnailUrl = video.thumbnail
+                ? urlFor(video.thumbnail).width(640).height(360).fit("crop").url()
+                : undefined;
+              const jsonLd = videoObjectJsonLd({
+                title: video.title ?? "Video",
+                description: video.description ?? undefined,
+                youtubeUrl: video.youtubeUrl,
+                publishedAt: video.publishedAt ?? undefined,
+                duration: video.duration ?? undefined,
+                thumbnailUrl,
+              });
               return (
-                <article key={video._id} className="flex flex-col gap-3">
-                  <div className="aspect-video rounded-xl overflow-hidden border border-border shadow-sm">
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${id}`}
-                      title={video.title ?? "Video"}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      loading="lazy"
-                      className="w-full h-full"
+                <article key={video._id} className="flex flex-col gap-3 [&_figure]:my-0">
+                  {jsonLd && (
+                    <script
+                      type="application/ld+json"
+                      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     />
-                  </div>
-                  <h2 className="text-lg font-semibold text-foreground">{video.title}</h2>
+                  )}
+                  <LiteYouTube
+                    url={video.youtubeUrl}
+                    thumbnailUrl={thumbnailUrl}
+                    duration={video.duration ?? undefined}
+                  />
+                  <h2 className="text-lg font-semibold text-foreground">
+                    {video.slug ? (
+                      <Link href={`/video/${video.slug}`} className="hover:text-primary transition-colors">
+                        {video.title}
+                      </Link>
+                    ) : (
+                      video.title
+                    )}
+                  </h2>
                   {video.description && (
                     <p className="text-sm text-muted-foreground">{video.description}</p>
+                  )}
+                  {video.relatedService?.slug && (
+                    <Link
+                      href={`/servizi/${video.relatedService.slug}`}
+                      className="inline-flex w-fit items-center rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary hover:bg-secondary/80 transition-colors"
+                    >
+                      {video.relatedService.title}
+                    </Link>
                   )}
                 </article>
               );

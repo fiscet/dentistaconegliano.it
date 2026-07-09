@@ -33,6 +33,7 @@ export type SiteSettings = {
   seoTitle?: string;
   seoDescription?: string;
   seoImageUrl?: string;
+  logoUrl?: string;
 };
 
 // "0438 415356" -> "tel:+390438415356"; numeri già internazionali restano invariati.
@@ -85,5 +86,6 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     seoImageUrl: data?.seoImage?.asset
       ? urlFor(data.seoImage).width(1200).height(630).fit("crop").url()
       : undefined,
+    logoUrl: data?.logo?.asset ? urlFor(data.logo).width(512).url() : undefined,
   };
 });

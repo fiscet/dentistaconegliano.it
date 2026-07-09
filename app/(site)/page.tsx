@@ -28,20 +28,28 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: title },
     description,
-    ...(await socialMeta({ title, description, image: ogImageUrl(home?.seoImage) })),
+    ...(await socialMeta({
+      title,
+      description,
+      image: ogImageUrl(home?.seoImage)
+    })),
     ...(await canonicalUrl('/')),
     ...robotsMeta(home?.noIndex)
   };
 }
 
 export default async function Home() {
-  const [settings, { data: home }, { data: homeServices }, { data: homeCases }] =
-    await Promise.all([
-      getSiteSettings(),
-      sanityFetch({ query: HOME_PAGE_QUERY }),
-      sanityFetch({ query: HOME_SERVICES_QUERY }),
-      sanityFetch({ query: HOME_CASES_QUERY })
-    ]);
+  const [
+    settings,
+    { data: home },
+    { data: homeServices },
+    { data: homeCases }
+  ] = await Promise.all([
+    getSiteSettings(),
+    sanityFetch({ query: HOME_PAGE_QUERY }),
+    sanityFetch({ query: HOME_SERVICES_QUERY }),
+    sanityFetch({ query: HOME_CASES_QUERY })
+  ]);
 
   const jsonLd = dentistJsonLd(settings);
 

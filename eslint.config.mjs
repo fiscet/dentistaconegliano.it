@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // studio/ è un progetto Sanity a sé (proprio package.json/tooling):
+    // include un build output (studio/dist) che fa esplodere l'heap.
+    "studio/**",
   ]),
 ]);
 
