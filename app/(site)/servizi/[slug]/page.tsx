@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
 import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
-import { serviceJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
+import { serviceJsonLd, breadcrumbJsonLd, faqPageJsonLd } from "@/lib/json-ld";
 import { urlFor } from "@/sanity/lib/image";
 import { getSiteSettings } from "@/lib/settings";
 import { client } from "@/sanity/lib/client";
@@ -77,6 +77,13 @@ export default async function ServiceDetailPage({
     { name: "Servizi", url: new URL("/servizi", settings.url).toString() },
     { name: service.title ?? "Servizio", url },
   ]);
+  const relatedFaqs = (service.relatedFaqs ?? []).filter(
+    (faq): faq is typeof faq & { question: string; answer: string } =>
+      Boolean(faq.question && faq.answer),
+  );
+  const faqJsonLdData = relatedFaqs.length
+    ? faqPageJsonLd(relatedFaqs.map((faq) => ({ question: faq.question, answer: faq.answer })))
+    : null;
 
   return (
     <main className="flex-1">
@@ -88,6 +95,12 @@ export default async function ServiceDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdData) }}
       />
+      {faqJsonLdData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLdData) }}
+        />
+      )}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <Link
           href="/servizi"
@@ -149,6 +162,33 @@ export default async function ServiceDetailPage({
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {relatedFaqs.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-foreground mb-6">
+              Domande frequenti su questo trattamento
+            </h2>
+            <div className="flex flex-col gap-3">
+              {relatedFaqs.map((faq) => (
+                <details
+                  key={faq._id}
+                  className="group bg-card border border-border rounded-2xl px-6 py-4 open:shadow-sm transition-shadow"
+                >
+                  <summary className="flex items-center justify-between gap-4 cursor-pointer list-none font-semibold text-foreground">
+                    {faq.question}
+                    <span
+                      className="shrink-0 text-primary text-xl leading-none transition-transform group-open:rotate-45"
+                      aria-hidden="true"
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <p className="text-muted-foreground leading-relaxed mt-3">{faq.answer}</p>
+                </details>
+              ))}
             </div>
           </div>
         )}

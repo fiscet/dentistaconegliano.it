@@ -35,6 +35,7 @@ export const homePage = defineType({
     { name: "treatments", title: "Trattamenti" },
     { name: "doctor", title: "Profilo Dottore" },
     { name: "cases", title: "Casi Clinici" },
+    { name: "testimonials", title: "Testimonianze" },
     { name: "contact", title: "Contatti" },
     seoGroup,
   ],
@@ -213,6 +214,21 @@ export const homePage = defineType({
       group: "cases",
       description:
         'Le card mostrano i Casi Clinici con il flag "Mostra in home" attivo. Qui imposti solo l\'intestazione della sezione.',
+      fields: [
+        enabledField,
+        defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),
+        defineField({ name: "title", title: "Titolo", type: "string" }),
+        defineField({ name: "description", title: "Descrizione", type: "text", rows: 3 }),
+      ],
+    }),
+
+    defineField({
+      name: "testimonials",
+      title: "Sezione Testimonianze",
+      type: "object",
+      group: "testimonials",
+      description:
+        'Le card mostrano le Testimonianze con il flag "In evidenza" attivo. Qui imposti solo l\'intestazione della sezione; se non ce n\'è nessuna in evidenza la sezione resta nascosta.',
       fields: [
         enabledField,
         defineField({ name: "eyebrow", title: "Occhiello", type: "string" }),

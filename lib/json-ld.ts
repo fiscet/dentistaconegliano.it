@@ -22,7 +22,25 @@ const AREA_SERVED_CITIES = [
 // Orario strutturato: il campo openingHours dei settings è testo libero,
 // quindi la versione machine-readable resta hardcoded qui — va tenuta
 // sincronizzata manualmente se cambiano gli orari dello studio.
-export function dentistJsonLd(settings: SiteSettings) {
+type ReviewInput = {
+  authorName: string;
+  text: string;
+  rating?: number | null;
+  date?: string | null;
+};
+
+export function dentistJsonLd(settings: SiteSettings, reviews?: ReviewInput[]) {
+  const ratings = (reviews ?? [])
+    .map((r) => r.rating)
+    .filter((r): r is number => typeof r === "number");
+  const aggregateRating = ratings.length
+    ? {
+        "@type": "AggregateRating",
+        ratingValue: Number((ratings.reduce((sum, r) => sum + r, 0) / ratings.length).toFixed(1)),
+        reviewCount: ratings.length,
+      }
+    : undefined;
+
   return {
     "@context": "https://schema.org",
     "@type": ["Dentist", "MedicalBusiness"],
@@ -50,6 +68,20 @@ export function dentistJsonLd(settings: SiteSettings) {
     })),
     ...(settings.socials.length
       ? { sameAs: settings.socials.map((s) => s.url).filter((url): url is string => Boolean(url)) }
+      : {}),
+    ...(aggregateRating ? { aggregateRating } : {}),
+    ...(reviews?.length
+      ? {
+          review: reviews.slice(0, 10).map((r) => ({
+            "@type": "Review",
+            author: { "@type": "Person", name: r.authorName },
+            reviewBody: r.text,
+            ...(typeof r.rating === "number"
+              ? { reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 } }
+              : {}),
+            ...(r.date ? { datePublished: r.date } : {}),
+          })),
+        }
       : {}),
     openingHoursSpecification: [
       {
@@ -194,5 +226,22 @@ export function articleJsonLd({
     ...(publishedAt ? { datePublished: publishedAt } : {}),
     ...(authorName ? { author: { "@type": "Person", name: authorName } } : {}),
     mainEntityOfPage: url,
+  };
+}
+
+// FAQPage per la pagina /faq (o per un elenco di FAQ collegate a un servizio).
+export function faqPageJsonLd(faqs: { question: string; answer: string }[]) {
+  if (!faqs.length) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 }

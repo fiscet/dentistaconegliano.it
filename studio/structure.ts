@@ -23,6 +23,8 @@ const LISTED = [
   "video",
   "staffMember",
   "testimonial",
+  "faq",
+  "locationPage",
 ];
 
 // Tipi da NON mostrare nella sidebar: media.tag arriva dal plugin media e si
@@ -91,6 +93,8 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("video").title("Video"),
       S.documentTypeListItem("staffMember").title("Staff"),
       S.documentTypeListItem("testimonial").title("Testimonianze"),
+      S.documentTypeListItem("faq").title("FAQ"),
+      S.documentTypeListItem("locationPage").title("Landing Località"),
 
       S.divider(),
 
