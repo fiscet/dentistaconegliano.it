@@ -17,7 +17,7 @@ const fallbackDescription =
   "Casi clinici reali di implantologia trattati a Conegliano dallo Studio Dentistico Dott. Gianluca Marin: documentazione fotografica prima e dopo.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: page } = await sanityFetch({ query: CASES_PAGE_QUERY });
+  const { data: page } = await sanityFetch({ query: CASES_PAGE_QUERY, stega: false });
   const title = page?.seoTitle ?? fallbackTitle;
   const description = page?.seoDescription ?? fallbackDescription;
   return {

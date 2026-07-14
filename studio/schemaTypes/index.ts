@@ -13,6 +13,8 @@ import { staffMember } from "./documents/staffMember";
 import { post } from "./documents/post";
 import { testimonial } from "./documents/testimonial";
 import { video } from "./documents/video";
+import { faq } from "./documents/faq";
+import { locationPage } from "./documents/locationPage";
 
 export const schemaTypes = [
   // Tipi condivisi
@@ -34,4 +36,6 @@ export const schemaTypes = [
   post,
   testimonial,
   video,
+  faq,
+  locationPage,
 ];

@@ -4,6 +4,8 @@ import ContactForm from "@/components/contact-form";
 import { getSiteSettings } from "@/lib/settings";
 import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { dentistJsonLd } from "@/lib/json-ld";
+import { sanityFetch } from "@/sanity/lib/live";
+import { TESTIMONIALS_QUERY } from "@/sanity/lib/queries";
 
 const title = "Contatti";
 const description =
@@ -19,8 +21,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContattiPage() {
-  const settings = await getSiteSettings();
-  const jsonLd = dentistJsonLd(settings);
+  const [settings, { data: testimonials }] = await Promise.all([
+    getSiteSettings(),
+    sanityFetch({ query: TESTIMONIALS_QUERY }),
+  ]);
+  const jsonLd = dentistJsonLd(
+    settings,
+    (testimonials ?? []).filter(
+      (t): t is typeof t & { authorName: string; text: string } =>
+        Boolean(t.authorName && t.text),
+    ),
+  );
 
   const mapQuery = `${settings.address.street}, ${settings.address.postalCode} ${settings.address.city} ${settings.address.province}`;
   const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;

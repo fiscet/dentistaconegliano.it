@@ -4,6 +4,7 @@ import StatsBar from '@/components/home/stats-bar';
 import Treatments from '@/components/home/treatments';
 import DoctorProfile from '@/components/home/doctor-profile';
 import ClinicalCases from '@/components/home/clinical-cases';
+import Testimonials from '@/components/home/testimonials';
 import ContactSection from '@/components/home/contact-section';
 import { getSiteSettings } from '@/lib/settings';
 import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from '@/lib/seo';
@@ -12,7 +13,9 @@ import { sanityFetch } from '@/sanity/lib/live';
 import {
   HOME_PAGE_QUERY,
   HOME_SERVICES_QUERY,
-  HOME_CASES_QUERY
+  HOME_CASES_QUERY,
+  HOME_TESTIMONIALS_QUERY,
+  TESTIMONIALS_QUERY
 } from '@/sanity/lib/queries';
 
 const fallbackTitle =
@@ -21,7 +24,7 @@ const fallbackDescription =
   'Impianti dentali a carico immediato a Conegliano: denti fissi in 24 ore, All-on-4, chirurgia computer guidata e sedazione cosciente. Consulenza personalizzata con il Dott. Gianluca Marin.';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY });
+  const { data: home } = await sanityFetch({ query: HOME_PAGE_QUERY, stega: false });
 
   const title = home?.seoTitle ?? fallbackTitle;
   const description = home?.seoDescription ?? fallbackDescription;
@@ -43,15 +46,25 @@ export default async function Home() {
     settings,
     { data: home },
     { data: homeServices },
-    { data: homeCases }
+    { data: homeCases },
+    { data: homeTestimonials },
+    { data: allTestimonials }
   ] = await Promise.all([
     getSiteSettings(),
     sanityFetch({ query: HOME_PAGE_QUERY }),
     sanityFetch({ query: HOME_SERVICES_QUERY }),
-    sanityFetch({ query: HOME_CASES_QUERY })
+    sanityFetch({ query: HOME_CASES_QUERY }),
+    sanityFetch({ query: HOME_TESTIMONIALS_QUERY }),
+    sanityFetch({ query: TESTIMONIALS_QUERY })
   ]);
 
-  const jsonLd = dentistJsonLd(settings);
+  const jsonLd = dentistJsonLd(
+    settings,
+    (allTestimonials ?? []).filter(
+      (t): t is typeof t & { authorName: string; text: string } =>
+        Boolean(t.authorName && t.text),
+    ),
+  );
 
   return (
     <main>
@@ -69,6 +82,9 @@ export default async function Home() {
       )}
       {home?.clinicalCases?.enabled !== false && (
         <ClinicalCases header={home?.clinicalCases} cases={homeCases} />
+      )}
+      {home?.testimonials?.enabled !== false && (
+        <Testimonials header={home?.testimonials} items={homeTestimonials} />
       )}
       {home?.contact?.enabled !== false && (
         <ContactSection data={home?.contact} />

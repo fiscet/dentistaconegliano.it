@@ -137,10 +137,23 @@ export const siteSettings = defineType({
               title: "Piattaforma",
               type: "string",
               options: {
-                list: ["Facebook", "Instagram", "YouTube", "LinkedIn", "TikTok"],
+                list: [
+                  "Facebook",
+                  "Instagram",
+                  "YouTube",
+                  "LinkedIn",
+                  "TikTok",
+                  "Google Business Profile",
+                ],
               },
             }),
-            defineField({ name: "url", title: "URL", type: "url" }),
+            defineField({
+              name: "url",
+              title: "URL",
+              type: "url",
+              description:
+                'Per Google Business Profile: il link "Condividi profilo" dalla scheda su Google Maps/Search.',
+            }),
           ],
           preview: { select: { title: "platform", subtitle: "url" } },
         }),

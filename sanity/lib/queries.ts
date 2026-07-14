@@ -86,6 +86,12 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       title,
       description
     },
+    testimonials{
+      enabled,
+      eyebrow,
+      title,
+      description
+    },
     contact{
       enabled,
       eyebrow,
@@ -155,6 +161,11 @@ export const SERVICE_QUERY = defineQuery(/* groq */ `
       youtubeUrl,
       duration,
       thumbnail{ ..., "alt": alt }
+    },
+    "relatedFaqs": *[_type == "faq" && references(^._id)] | order(order asc){
+      _id,
+      question,
+      answer
     }
   }
 `);
@@ -172,6 +183,31 @@ export const HOME_CASES_QUERY = defineQuery(/* groq */ `
     title,
     description,
     "image": imageAfter{ ..., "alt": alt }
+  }
+`);
+
+// Testimonianze in evidenza mostrate in home.
+export const HOME_TESTIMONIALS_QUERY = defineQuery(/* groq */ `
+  *[_type == "testimonial" && featured == true] | order(date desc){
+    _id,
+    authorName,
+    text,
+    rating,
+    date,
+    source
+  }
+`);
+
+// Tutte le testimonianze: usate per l'aggregateRating nel JSON-LD (Dentist),
+// non solo quelle in evidenza, per non gonfiare artificialmente la media.
+export const TESTIMONIALS_QUERY = defineQuery(/* groq */ `
+  *[_type == "testimonial"] | order(date desc){
+    _id,
+    authorName,
+    text,
+    rating,
+    date,
+    source
   }
 `);
 
@@ -255,6 +291,40 @@ export const PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
 `);
 
+// Elenco landing di zona: /zona.
+export const LOCATION_PAGES_QUERY = defineQuery(/* groq */ `
+  *[_type == "locationPage" && defined(slug.current)] | order(cityName asc){
+    _id,
+    title,
+    "slug": slug.current,
+    cityName,
+    intro,
+    image{ ..., "alt": alt }
+  }
+`);
+
+// Dettaglio singola landing di zona: /zona/[slug].
+export const LOCATION_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_type == "locationPage" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    cityName,
+    intro,
+    image{ ..., "alt": alt },
+    featuredServices[]->{ _id, title, "slug": slug.current, excerpt, icon, image{ ..., "alt": alt } },
+    body,
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
+export const LOCATION_PAGE_SLUGS_QUERY = defineQuery(/* groq */ `
+  *[_type == "locationPage" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
+`);
+
 // Elenco articoli del blog (più recenti prima).
 export const POSTS_QUERY = defineQuery(/* groq */ `
   *[_type == "post" && defined(slug.current)] | order(publishedAt desc){
@@ -321,4 +391,14 @@ export const VIDEO_QUERY = defineQuery(/* groq */ `
 
 export const VIDEO_SLUGS_QUERY = defineQuery(/* groq */ `
   *[_type == "video" && defined(slug.current)]{ "slug": slug.current, _updatedAt }
+`);
+
+// Elenco completo delle FAQ: pagina /faq.
+export const FAQS_QUERY = defineQuery(/* groq */ `
+  *[_type == "faq"] | order(order asc){
+    _id,
+    question,
+    answer,
+    relatedService->{ title, "slug": slug.current }
+  }
 `);

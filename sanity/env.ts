@@ -19,3 +19,10 @@ export const dataset = resolveDataset();
 
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2026-07-01";
+
+// URL dello Studio hosted, con basePath del workspace corretto (development
+// in locale, production in prod). Usato per collegare gli overlay del
+// Visual Editing al documento/campo giusto nello Studio.
+export const studioUrl =
+  process.env.NEXT_PUBLIC_SANITY_STUDIO_URL ??
+  "https://dentistaconegliano.sanity.studio/development";
