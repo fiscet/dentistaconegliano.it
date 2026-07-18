@@ -1,16 +1,22 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
+import { client } from "@/sanity/lib/client";
 
 // Webhook Sanity -> rivalidazione. A ogni modifica di contenuto (create/update/
-// delete) Sanity chiama questa route: verifichiamo la firma col secret e
-// rigeneriamo l'intero sito (revalidatePath "/" layout), così qualsiasi
-// contenuto — video, articoli, servizi, casi, pagine — compare in pochi secondi
-// senza redeploy. Il terzo argomento `true` aggiunge un piccolo ritardo perché
-// il webhook parte prima che la CDN di Sanity si aggiorni.
+// delete) Sanity chiama questa route: verifichiamo la firma col secret.
+// `sanityFetch` (defineLive) cache-a le query con `next.revalidate: false` +
+// tag custom `sanity:<syncTag>` del documento: sono IMMUNI a revalidatePath
+// (che invalida solo la Route Cache, non i fetch con tag propri), quindi senza
+// questo passaggio i visitatori "freschi" vedono contenuti stale a tempo
+// indefinito. Rifacciamo perciò la stessa query sync-tag sul documento
+// modificato per ottenere gli stessi tag di sanityFetch e invalidarli
+// davvero con revalidateTag. revalidatePath resta come rigenerazione extra
+// della shell di pagina. Il terzo argomento di parseBody aggiunge un piccolo
+// ritardo perché il webhook parte prima che la CDN di Sanity si aggiorni.
 export async function POST(req: NextRequest) {
   try {
-    const { isValidSignature } = await parseBody<{ _type?: string }>(
+    const { body, isValidSignature } = await parseBody<{ _id?: string }>(
       req,
       process.env.SANITY_REVALIDATE_SECRET,
       true,
@@ -18,6 +24,15 @@ export async function POST(req: NextRequest) {
 
     if (!isValidSignature) {
       return new Response("Firma non valida", { status: 401 });
+    }
+
+    if (body?._id) {
+      const { syncTags } = await client.fetch(
+        "*[_id == $id][0]",
+        { id: body._id },
+        { filterResponse: false },
+      );
+      for (const tag of syncTags ?? []) revalidateTag(`sanity:${tag}`, "max");
     }
 
     revalidatePath("/", "layout");
