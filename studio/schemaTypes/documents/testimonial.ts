@@ -3,7 +3,7 @@ import { CommentIcon } from "@sanity/icons/Comment";
 
 export const testimonial = defineType({
   name: "testimonial",
-  title: "Testimonianza",
+  title: "Recensione",
   type: "document",
   icon: CommentIcon,
   fields: [
@@ -15,7 +15,7 @@ export const testimonial = defineType({
     }),
     defineField({
       name: "text",
-      title: "Testo della testimonianza",
+      title: "Testo della recensione",
       type: "text",
       rows: 5,
       validation: (rule) => rule.required(),

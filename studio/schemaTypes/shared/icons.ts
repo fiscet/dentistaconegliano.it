@@ -27,4 +27,8 @@ export const iconOptions = [
   "refresh-cw",
   "droplets",
   "wind",
+  "calendar",
+  "search",
+  "clipboard-list",
+  "stethoscope",
 ];

@@ -260,6 +260,18 @@ export const STUDIO_PAGE_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const PATH_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "pathPage"][0]{
+    hero{ eyebrow, title, description },
+    steps[]{ _key, icon, title, text },
+    cta{ title, description, buttonLabel },
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
 // Membri del team per la pagina Lo Studio.
 export const STAFF_QUERY = defineQuery(/* groq */ `
   *[_type == "staffMember"] | order(order asc, name asc){

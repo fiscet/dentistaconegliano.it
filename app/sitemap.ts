@@ -13,6 +13,7 @@ const staticRoutes = [
   "",
   "/servizi",
   "/studio",
+  "/percorso-di-cura",
   "/interventi-realizzati",
   "/contatti",
   "/video",

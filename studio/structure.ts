@@ -4,6 +4,7 @@ import { MenuIcon } from "@sanity/icons/Menu";
 import { HomeIcon } from "@sanity/icons/Home";
 import { UsersIcon } from "@sanity/icons/Users";
 import { ImagesIcon } from "@sanity/icons/Images";
+import { ActivityIcon } from "@sanity/icons/Activity";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
 const SINGLETONS = [
@@ -12,6 +13,7 @@ const SINGLETONS = [
   "homePage",
   "studioPage",
   "casesPage",
+  "pathPage",
 ];
 
 // Tipi a collection già elencati esplicitamente nel menu.
@@ -83,6 +85,15 @@ export const structure: StructureResolver = (S) =>
             .documentId("casesPage")
             .title("Pagina Interventi Realizzati"),
         ),
+      S.listItem()
+        .title("Pagina Percorso di Cura")
+        .icon(ActivityIcon)
+        .child(
+          S.document()
+            .schemaType("pathPage")
+            .documentId("pathPage")
+            .title("Pagina Percorso di Cura"),
+        ),
 
       S.divider(),
 
@@ -92,7 +103,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("post").title("Blog"),
       S.documentTypeListItem("video").title("Video"),
       S.documentTypeListItem("staffMember").title("Staff"),
-      S.documentTypeListItem("testimonial").title("Testimonianze"),
+      S.documentTypeListItem("testimonial").title("Recensioni"),
       S.documentTypeListItem("faq").title("FAQ"),
       S.documentTypeListItem("locationPage").title("Landing Località"),
 
