@@ -32,6 +32,7 @@ export const nav = [
   { label: "Home", href: "/" },
   { label: "Servizi", href: "/servizi" },
   { label: "Lo Studio", href: "/studio" },
+  { label: "Come Funziona", href: "/percorso-di-cura" },
   { label: "Casi Clinici", href: "/interventi-realizzati" },
   { label: "Contatti", href: "/contatti" },
 ] as const;

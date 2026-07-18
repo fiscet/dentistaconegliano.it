@@ -24,6 +24,10 @@ import {
   RefreshCw,
   Droplets,
   Wind,
+  Calendar,
+  Search,
+  ClipboardList,
+  Stethoscope,
   type LucideIcon,
 } from "lucide-react";
 
@@ -55,6 +59,10 @@ const iconMap: Record<string, LucideIcon> = {
   "refresh-cw": RefreshCw,
   droplets: Droplets,
   wind: Wind,
+  calendar: Calendar,
+  search: Search,
+  "clipboard-list": ClipboardList,
+  stethoscope: Stethoscope,
 };
 
 export function resolveIcon(name: string | null | undefined, fallback: LucideIcon): LucideIcon {

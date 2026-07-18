@@ -26,6 +26,7 @@ const singletonRoutes: Record<string, string> = {
   homePage: "/",
   studioPage: "/studio",
   casesPage: "/interventi-realizzati",
+  pathPage: "/percorso-di-cura",
 };
 
 function internalHref(link: NonNullable<SanityNavLink["internalLink"]>): string | null {

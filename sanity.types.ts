@@ -293,6 +293,13 @@ export type CasesPageReference = {
   [internalGroqTypeReferenceTo]?: "casesPage";
 };
 
+export type PathPageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "pathPage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -316,6 +323,7 @@ export type NavItem = {
     | HomePageReference
     | StudioPageReference
     | CasesPageReference
+    | PathPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -337,6 +345,7 @@ export type NavLink = {
     | HomePageReference
     | StudioPageReference
     | CasesPageReference
+    | PathPageReference
     | PageReference
     | ServiceReference
     | PostReference;
@@ -455,7 +464,11 @@ export type IconString =
   | "sun"
   | "refresh-cw"
   | "droplets"
-  | "wind";
+  | "wind"
+  | "calendar"
+  | "search"
+  | "clipboard-list"
+  | "stethoscope";
 
 export type Page = {
   _id: string;
@@ -467,6 +480,35 @@ export type Page = {
   slug?: Slug;
   intro?: string;
   body?: BlockContent;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+  noIndex?: boolean;
+};
+
+export type PathPage = {
+  _id: string;
+  _type: "pathPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
+  steps?: Array<{
+    icon?: IconString;
+    title?: string;
+    text?: string;
+    _type: "pathStep";
+    _key: string;
+  }>;
+  cta?: {
+    title?: string;
+    description?: string;
+    buttonLabel?: string;
+  };
   seoTitle?: string;
   seoDescription?: string;
   seoImage?: SeoImage;
@@ -788,6 +830,7 @@ export type AllSanitySchemaTypes =
   | HomePageReference
   | StudioPageReference
   | CasesPageReference
+  | PathPageReference
   | PageReference
   | PostReference
   | NavItem
@@ -798,6 +841,7 @@ export type AllSanitySchemaTypes =
   | Service
   | IconString
   | Page
+  | PathPage
   | CasesPage
   | StudioPage
   | HomePage
@@ -842,6 +886,10 @@ export type NAVIGATION_QUERY_RESULT =
               slug: string | null;
             }
           | {
+              _type: "pathPage";
+              slug: null;
+            }
+          | {
               _type: "post";
               slug: string | null;
             }
@@ -873,6 +921,10 @@ export type NAVIGATION_QUERY_RESULT =
             | {
                 _type: "page";
                 slug: string | null;
+              }
+            | {
+                _type: "pathPage";
+                slug: null;
               }
             | {
                 _type: "post";
@@ -908,6 +960,10 @@ export type NAVIGATION_QUERY_RESULT =
           | {
               _type: "page";
               slug: string | null;
+            }
+          | {
+              _type: "pathPage";
+              slug: null;
             }
           | {
               _type: "post";
@@ -1553,6 +1609,87 @@ export type STUDIO_PAGE_QUERY_RESULT =
   | null;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: PATH_PAGE_QUERY
+// Query: *[_id == "pathPage"][0]{    hero{ eyebrow, title, description },    steps[]{ _key, icon, title, text },    cta{ title, description, buttonLabel },    seoTitle,    seoDescription,    seoImage,    noIndex  }
+export type PATH_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      steps: null;
+      cta: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      steps: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      steps: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      steps: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      steps: null;
+      cta: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      steps: Array<{
+        _key: string;
+        icon: IconString | null;
+        title: string | null;
+        text: string | null;
+      }> | null;
+      cta: {
+        title: string | null;
+        description: string | null;
+        buttonLabel: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: STAFF_QUERY
 // Query: *[_type == "staffMember"] | order(order asc, name asc){    _id,    name,    role,    category,    excerpt,    photo{ ..., "alt": alt }  }
 export type STAFF_QUERY_RESULT = Array<{
@@ -1813,6 +1950,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "clinicalCase"] | order(order asc, title asc){\n    _id,\n    badge,\n    title,\n    description,\n    imageBefore{ ..., "alt": alt },\n    imageAfter{ ..., "alt": alt }\n  }\n': CASES_QUERY_RESULT;
     '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': STUDIO_PAGE_QUERY_RESULT;
+    '\n  *[_id == "pathPage"][0]{\n    hero{ eyebrow, title, description },\n    steps[]{ _key, icon, title, text },\n    cta{ title, description, buttonLabel },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': PATH_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
     '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    intro,\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': PAGE_QUERY_RESULT;
     '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': PAGE_SLUGS_QUERY_RESULT;
