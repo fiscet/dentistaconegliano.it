@@ -54,8 +54,16 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       titleSuffix,
       description,
       features[]{ _key, label, icon },
-      ctaPrimaryLabel,
-      ctaSecondaryLabel,
+      ctas[]{
+        _key,
+        label,
+        icon,
+        linkType,
+        path,
+        externalUrl,
+        openInNewTab,
+        internalLink->{ _type, "slug": slug.current }
+      },
       images[]{ ..., "alt": alt },
       experienceCard
     },
@@ -253,6 +261,26 @@ export const STUDIO_PAGE_QUERY = defineQuery(/* groq */ `
       image{ ..., "alt": alt },
       features[]{ _key, icon, title, text }
     },
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
+export const BLOG_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "blogPage"][0]{
+    hero{ eyebrow, title, description },
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
+export const VIDEO_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "videoPage"][0]{
+    hero{ eyebrow, title, description },
     seoTitle,
     seoDescription,
     seoImage,

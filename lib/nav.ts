@@ -8,6 +8,8 @@ export type NavItem = {
   children?: NavItem[];
 };
 
+export type InternalLinkTarget = { _type: string; slug: string | null };
+
 type SanityNavLink = {
   _key: string;
   label: string | null;
@@ -15,7 +17,7 @@ type SanityNavLink = {
   path: string | null;
   externalUrl: string | null;
   openInNewTab: boolean | null;
-  internalLink: { _type: string; slug: string | null } | null;
+  internalLink: InternalLinkTarget | null;
   children?: SanityNavLink[] | null;
 };
 
@@ -27,9 +29,11 @@ const singletonRoutes: Record<string, string> = {
   studioPage: "/studio",
   casesPage: "/interventi-realizzati",
   pathPage: "/percorso-di-cura",
+  videoPage: "/video",
+  blogPage: "/blog",
 };
 
-function internalHref(link: NonNullable<SanityNavLink["internalLink"]>): string | null {
+export function internalHref(link: InternalLinkTarget): string | null {
   const singletonRoute = singletonRoutes[link._type];
   if (singletonRoute) return singletonRoute;
   if (!link.slug) return null;
@@ -40,6 +44,8 @@ function internalHref(link: NonNullable<SanityNavLink["internalLink"]>): string 
       return `/servizi/${link.slug}`;
     case "post":
       return `/blog/${link.slug}`;
+    case "video":
+      return `/video/${link.slug}`;
     default:
       return null;
   }

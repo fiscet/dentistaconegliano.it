@@ -31,4 +31,6 @@ export const iconOptions = [
   "search",
   "clipboard-list",
   "stethoscope",
+  "arrow-right",
+  "phone",
 ];
