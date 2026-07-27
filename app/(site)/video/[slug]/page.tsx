@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { videoObjectJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { formatDate } from "@/lib/format";
@@ -112,6 +112,14 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
           thumbnailUrl={thumbnailUrl}
           duration={video.duration ?? undefined}
         />
+
+        <Link
+          href="/contatti"
+          className="mt-8 inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg hover:shadow-xl"
+        >
+          <Calendar className="w-5 h-5" aria-hidden="true" />
+          Prenota ora una visita
+        </Link>
 
         {video.description && (
           <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-8">

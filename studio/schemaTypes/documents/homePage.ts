@@ -144,11 +144,11 @@ export const homePage = defineType({
                   name: "path",
                   title: "Percorso",
                   type: "string",
-                  description: "Percorso relativo al sito, es. /servizi oppure /#contatti",
+                  description: "Percorso relativo al sito, es. /servizi oppure /contatti",
                   hidden: ({ parent }) => parent?.linkType !== "path",
                   validation: (Rule) =>
                     Rule.custom((value, context) => {
-                      const parent = context.parent as { linkType?: string } | undefined;
+                      const parent = context.parent as { linkType?: string; } | undefined;
                       if (parent?.linkType === "path" && !value) return "Percorso obbligatorio";
                       if (value && !value.startsWith("/")) return "Deve iniziare con /";
                       return true;

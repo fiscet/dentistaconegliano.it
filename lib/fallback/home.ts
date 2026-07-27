@@ -25,7 +25,7 @@ export const heroFallback = {
       icon: "arrow-right",
       style: "solid" as const,
       linkType: "path" as const,
-      path: "/#contatti",
+      path: "/contatti",
       externalUrl: null,
       openInNewTab: null,
       internalLink: null,
