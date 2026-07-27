@@ -1,9 +1,9 @@
-import { Sparkles, Check, Clock, ArrowRight, Phone } from 'lucide-react';
+import { Sparkles, Check, Clock, ArrowRight } from 'lucide-react';
 import { getSiteSettings } from '@/lib/settings';
 import { heroFallback as fallback } from '@/lib/fallback/home';
 import { urlFor } from '@/sanity/lib/image';
 import { resolveIcon } from '@/components/home/icon-map';
-import { resolveCtas } from '@/lib/cta';
+import { resolveCtas, type CtaStyle } from '@/lib/cta';
 import { FanRectangles } from '@/components/motion/fan-rectangles';
 import { RevealFrame } from '@/components/motion/reveal-frame';
 import { HeroCarousel, type HeroSlide } from '@/components/home/hero-carousel';
@@ -11,6 +11,13 @@ import type { HOME_PAGE_QUERY_RESULT } from '@/sanity.types';
 import doctorImage from '@/public/images/gianluca-marin-home.jpg';
 
 export type HeroData = NonNullable<HOME_PAGE_QUERY_RESULT>['hero'];
+
+const ctaStyleClasses: Record<CtaStyle, string> = {
+  solid: 'bg-primary hover:bg-primary/95 text-primary-foreground shadow-lg hover:shadow-xl',
+  outline: 'border-2 border-primary/20 hover:border-primary text-primary',
+  soft: 'bg-sky-100 hover:bg-sky-200 text-primary',
+  ghost: 'text-primary hover:text-sky-600',
+};
 
 export default async function Hero({ data }: { data?: HeroData | null }) {
   const settings = await getSiteSettings();
@@ -106,20 +113,15 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
             </div>
 
             <div className="flex flex-col gap-4 mt-4 max-w-95 w-full">
-              {ctas.map((cta, index) => {
-                const isPrimary = index % 2 === 0;
-                const Icon = resolveIcon(cta.icon, isPrimary ? ArrowRight : Phone);
+              {ctas.map((cta) => {
+                const Icon = resolveIcon(cta.icon, ArrowRight);
                 return (
                   <a
                     key={cta.key}
                     href={cta.href}
                     target={cta.newTab ? '_blank' : undefined}
                     rel={cta.newTab ? 'noopener noreferrer' : undefined}
-                    className={
-                      isPrimary
-                        ? 'bg-primary hover:bg-primary/95 text-primary-foreground px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 w-full'
-                        : 'border-2 border-primary/20 hover:border-primary text-primary px-8 py-4 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2 w-full'
-                    }
+                    className={`${ctaStyleClasses[cta.style]} px-8 py-4 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2 w-full`}
                   >
                     <Icon className="w-5 h-5" aria-hidden="true" />
                     {cta.label}

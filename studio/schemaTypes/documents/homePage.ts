@@ -90,8 +90,7 @@ export const homePage = defineType({
         defineField({
           name: "ctas",
           title: "Pulsanti CTA",
-          description:
-            "Pulsanti mostrati uno sotto l'altro, stile pieno/contornato alternato automaticamente.",
+          description: "Pulsanti mostrati uno sotto l'altro.",
           type: "array",
           of: [
             defineArrayMember({
@@ -108,6 +107,22 @@ export const homePage = defineType({
                   name: "icon",
                   title: "Icona",
                   type: "iconString",
+                }),
+                defineField({
+                  name: "style",
+                  title: "Stile pulsante",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "Pieno (colore primario)", value: "solid" },
+                      { title: "Contornato (bordo)", value: "outline" },
+                      { title: "Tenue (sfondo chiaro)", value: "soft" },
+                      { title: "Testo (senza sfondo)", value: "ghost" },
+                    ],
+                    layout: "radio",
+                  },
+                  initialValue: "solid",
+                  validation: (Rule) => Rule.required(),
                 }),
                 defineField({
                   name: "linkType",

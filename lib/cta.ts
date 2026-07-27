@@ -1,9 +1,12 @@
 import { internalHref, type InternalLinkTarget } from "@/lib/nav";
 
+export type CtaStyle = "solid" | "outline" | "soft" | "ghost";
+
 export type SanityCta = {
   _key: string;
   label: string | null;
   icon: string | null;
+  style: CtaStyle | null;
   linkType: "path" | "internal" | "external" | "phone" | null;
   path: string | null;
   externalUrl: string | null;
@@ -15,6 +18,7 @@ export type ResolvedCta = {
   key: string;
   label: string;
   icon: string | null;
+  style: CtaStyle;
   href: string;
   newTab: boolean;
 };
@@ -50,6 +54,7 @@ export function resolveCtas(
         key: cta._key,
         label: cta.label,
         icon: cta.icon,
+        style: cta.style ?? "solid",
         href,
         newTab: cta.linkType === "external" ? (cta.openInNewTab ?? false) : false,
       };

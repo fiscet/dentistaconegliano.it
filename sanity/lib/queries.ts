@@ -58,6 +58,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
         _key,
         label,
         icon,
+        style,
         linkType,
         path,
         externalUrl,
