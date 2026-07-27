@@ -9,6 +9,7 @@ import { casesPage } from "./documents/casesPage";
 import { pathPage } from "./documents/pathPage";
 import { videoPage } from "./documents/videoPage";
 import { blogPage } from "./documents/blogPage";
+import { faqPage } from "./documents/faqPage";
 import { page } from "./documents/page";
 import { service } from "./documents/service";
 import { clinicalCase } from "./documents/clinicalCase";
@@ -35,6 +36,7 @@ export const schemaTypes = [
   pathPage,
   videoPage,
   blogPage,
+  faqPage,
   page,
   service,
   clinicalCase,

@@ -31,6 +31,7 @@ const singletonRoutes: Record<string, string> = {
   pathPage: "/percorso-di-cura",
   videoPage: "/video",
   blogPage: "/blog",
+  faqPage: "/faq",
 };
 
 export function internalHref(link: InternalLinkTarget): string | null {

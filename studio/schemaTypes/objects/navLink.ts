@@ -51,6 +51,7 @@ const linkFields = [
       { type: "pathPage" },
       { type: "videoPage" },
       { type: "blogPage" },
+      { type: "faqPage" },
       { type: "page" },
       { type: "service" },
       { type: "post" },

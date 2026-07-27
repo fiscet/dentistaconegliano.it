@@ -7,6 +7,7 @@ import { ImagesIcon } from "@sanity/icons/Images";
 import { ActivityIcon } from "@sanity/icons/Activity";
 import { PlayIcon } from "@sanity/icons/Play";
 import { DocumentsIcon } from "@sanity/icons/Documents";
+import { HelpCircleIcon } from "@sanity/icons/HelpCircle";
 import { PagesInfoPanel, ContentInfoPanel } from "./components/InfoPanel";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
@@ -19,6 +20,7 @@ const SINGLETONS = [
   "pathPage",
   "videoPage",
   "blogPage",
+  "faqPage",
 ];
 
 // Tipi a collection già elencati esplicitamente nel menu.
@@ -125,6 +127,15 @@ export const structure: StructureResolver = (S) =>
             .documentId("blogPage")
             .title("Pagina Blog"),
         ),
+      S.listItem()
+        .title("Pagina FAQ")
+        .icon(HelpCircleIcon)
+        .child(
+          S.document()
+            .schemaType("faqPage")
+            .documentId("faqPage")
+            .title("Pagina FAQ"),
+        ),
 
       S.divider(),
 
@@ -136,7 +147,7 @@ export const structure: StructureResolver = (S) =>
         .showIcon(false)
         .child(S.component(ContentInfoPanel).id("content-info").title("Contenuti")),
 
-      S.documentTypeListItem("page").title("Pagine"),
+      S.documentTypeListItem("page").title("Pagine Libere"),
       S.documentTypeListItem("service").title("Servizi / Trattamenti"),
       S.documentTypeListItem("clinicalCase").title("Casi Clinici / Interventi"),
       S.documentTypeListItem("post").title("Blog"),

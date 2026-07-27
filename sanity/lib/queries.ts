@@ -278,6 +278,16 @@ export const BLOG_PAGE_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const FAQ_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "faqPage"][0]{
+    hero{ eyebrow, title, description },
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
 export const VIDEO_PAGE_QUERY = defineQuery(/* groq */ `
   *[_id == "videoPage"][0]{
     hero{ eyebrow, title, description },

@@ -290,6 +290,13 @@ export type BlogPageReference = {
   [internalGroqTypeReferenceTo]?: "blogPage";
 };
 
+export type FaqPageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "faqPage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -323,6 +330,7 @@ export type NavItem = {
     | PathPageReference
     | VideoPageReference
     | BlogPageReference
+    | FaqPageReference
     | PageReference
     | ServiceReference
     | PostReference
@@ -348,6 +356,7 @@ export type NavLink = {
     | PathPageReference
     | VideoPageReference
     | BlogPageReference
+    | FaqPageReference
     | PageReference
     | ServiceReference
     | PostReference
@@ -387,6 +396,7 @@ export type HomePage = {
         | PathPageReference
         | VideoPageReference
         | BlogPageReference
+        | FaqPageReference
         | PageReference
         | ServiceReference
         | PostReference
@@ -628,6 +638,23 @@ export type Page = {
   slug?: Slug;
   intro?: string;
   body?: BlockContent;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+  noIndex?: boolean;
+};
+
+export type FaqPage = {
+  _id: string;
+  _type: "faqPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
   seoTitle?: string;
   seoDescription?: string;
   seoImage?: SeoImage;
@@ -915,6 +942,7 @@ export type AllSanitySchemaTypes =
   | PathPageReference
   | VideoPageReference
   | BlogPageReference
+  | FaqPageReference
   | PageReference
   | PostReference
   | VideoReference
@@ -928,6 +956,7 @@ export type AllSanitySchemaTypes =
   | StaffMember
   | Service
   | Page
+  | FaqPage
   | BlogPage
   | VideoPage
   | PathPage
@@ -967,6 +996,10 @@ export type NAVIGATION_QUERY_RESULT =
             }
           | {
               _type: "casesPage";
+              slug: null;
+            }
+          | {
+              _type: "faqPage";
               slug: null;
             }
           | {
@@ -1019,6 +1052,10 @@ export type NAVIGATION_QUERY_RESULT =
                 slug: null;
               }
             | {
+                _type: "faqPage";
+                slug: null;
+              }
+            | {
                 _type: "homePage";
                 slug: null;
               }
@@ -1067,6 +1104,10 @@ export type NAVIGATION_QUERY_RESULT =
             }
           | {
               _type: "casesPage";
+              slug: null;
+            }
+          | {
+              _type: "faqPage";
               slug: null;
             }
           | {
@@ -1292,6 +1333,10 @@ export type HOME_PAGE_QUERY_RESULT =
               }
             | {
                 _type: "casesPage";
+                slug: null;
+              }
+            | {
+                _type: "faqPage";
                 slug: null;
               }
             | {
@@ -1792,6 +1837,55 @@ export type BLOG_PAGE_QUERY_RESULT =
   | null;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: FAQ_PAGE_QUERY
+// Query: *[_id == "faqPage"][0]{    hero{ eyebrow, title, description },    seoTitle,    seoDescription,    seoImage,    noIndex  }
+export type FAQ_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: VIDEO_PAGE_QUERY
 // Query: *[_id == "videoPage"][0]{    hero{ eyebrow, title, description },    seoTitle,    seoDescription,    seoImage,    noIndex  }
 export type VIDEO_PAGE_QUERY_RESULT =
@@ -2183,6 +2277,7 @@ declare module "@sanity/client" {
     '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': STUDIO_PAGE_QUERY_RESULT;
     '\n  *[_id == "blogPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': BLOG_PAGE_QUERY_RESULT;
+    '\n  *[_id == "faqPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': FAQ_PAGE_QUERY_RESULT;
     '\n  *[_id == "videoPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': VIDEO_PAGE_QUERY_RESULT;
     '\n  *[_id == "pathPage"][0]{\n    hero{ eyebrow, title, description },\n    steps[]{ _key, icon, title, text },\n    cta{ title, description, buttonLabel },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': PATH_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
