@@ -99,7 +99,27 @@ export const homePage = defineType({
           type: "string",
           description: "Avvia la chiamata al numero dello studio.",
         }),
-        imageWithAlt("image", "Immagine"),
+        defineField({
+          name: "images",
+          title: "Immagini Carousel",
+          description: "Una o più immagini mostrate a rotazione nella sezione hero.",
+          type: "array",
+          of: [
+            defineArrayMember({
+              type: "image",
+              name: "slide",
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Testo alternativo",
+                  type: "string",
+                }),
+              ],
+            }),
+          ],
+          validation: (Rule) => Rule.max(8),
+        }),
         defineField({
           name: "experienceCard",
           title: "Card esperienza (sull'immagine)",

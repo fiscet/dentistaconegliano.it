@@ -56,7 +56,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       features[]{ _key, label, icon },
       ctaPrimaryLabel,
       ctaSecondaryLabel,
-      image{ ..., "alt": alt },
+      images[]{ ..., "alt": alt },
       experienceCard
     },
     stats{

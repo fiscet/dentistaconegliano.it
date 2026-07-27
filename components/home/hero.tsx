@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Sparkles, Check, Clock, ArrowRight, Phone } from 'lucide-react';
 import { getSiteSettings } from '@/lib/settings';
 import { heroFallback as fallback } from '@/lib/fallback/home';
@@ -6,6 +5,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { resolveIcon } from '@/components/home/icon-map';
 import { FanRectangles } from '@/components/motion/fan-rectangles';
 import { RevealFrame } from '@/components/motion/reveal-frame';
+import { HeroCarousel, type HeroSlide } from '@/components/home/hero-carousel';
 import type { HOME_PAGE_QUERY_RESULT } from '@/sanity.types';
 import doctorImage from '@/public/images/gianluca-marin-home.jpg';
 
@@ -16,7 +16,13 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
 
   const features = data?.features?.length ? data.features : fallback.features;
   const experienceCard = data?.experienceCard ?? fallback.experienceCard;
-  const sanityImage = data?.image?.asset ? data.image : null;
+  const sanityImages = data?.images?.filter((image) => image.asset) ?? [];
+  const slides: HeroSlide[] = sanityImages.length
+    ? sanityImages.map((image) => ({
+        src: urlFor(image).width(1200).height(900).url(),
+        alt: image.alt ?? settings.doctor,
+      }))
+    : [{ src: doctorImage, alt: settings.doctor }];
 
   return (
     <section className="relative py-16 lg:py-24 overflow-hidden bg-gradient-to-br from-background via-secondary/30 to-background">
@@ -133,24 +139,8 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
               ]}
             />
 
-            <RevealFrame className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-border max-w-md md:max-w-full">
-              {sanityImage ? (
-                <Image
-                  src={urlFor(sanityImage).width(1200).height(900).url()}
-                  alt={sanityImage.alt ?? settings.doctor}
-                  width={1200}
-                  height={900}
-                  priority
-                  className="w-full h-[450px] object-cover hover:scale-105 transition-transform duration-500"
-                />
-              ) : (
-                <Image
-                  src={doctorImage}
-                  alt={settings.doctor}
-                  priority
-                  className="w-full h-[450px] object-cover hover:scale-105 transition-transform duration-500"
-                />
-              )}
+            <RevealFrame className="relative w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-border max-w-md md:max-w-full">
+              <HeroCarousel slides={slides} />
               <div className="absolute bottom-6 left-6 bg-background/95 backdrop-blur-md p-4 rounded-xl shadow-lg border border-border flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-sky-500 text-primary-foreground flex items-center justify-center font-bold text-lg">
                   {experienceCard.value ?? fallback.experienceCard.value}
