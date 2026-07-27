@@ -1,34 +1,48 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { socialMeta, canonicalUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { videoObjectJsonLd } from "@/lib/json-ld";
 import { sanityFetch } from "@/sanity/lib/live";
-import { VIDEOS_QUERY } from "@/sanity/lib/queries";
+import { VIDEO_PAGE_QUERY, VIDEOS_QUERY } from "@/sanity/lib/queries";
 import { LiteYouTube } from "@/components/lite-youtube";
 import { urlFor } from "@/sanity/lib/image";
+import { heroFallback } from "@/lib/fallback/video";
 
-const title = "Video";
-const description =
-  "I video dello Studio Dentistico Dott. Gianluca Marin: interventi, tecnologie e consigli per la salute dei tuoi denti.";
+const fallbackTitle =
+  "Video | Studio Dentistico Dott. Gianluca Marin";
+const fallbackDescription = heroFallback.description;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { data: page } = await sanityFetch({ query: VIDEO_PAGE_QUERY, stega: false });
+  const title = page?.seoTitle ?? fallbackTitle;
+  const description = page?.seoDescription ?? fallbackDescription;
   return {
-    title,
+    title: { absolute: title },
     description,
-    ...(await socialMeta({ title, description })),
+    ...(await socialMeta({ title, description, image: ogImageUrl(page?.seoImage) })),
     ...(await canonicalUrl("/video")),
+    ...robotsMeta(page?.noIndex),
   };
 }
 
 export default async function VideoPage() {
-  const { data: videos } = await sanityFetch({ query: VIDEOS_QUERY });
+  const [{ data: page }, { data: videos }] = await Promise.all([
+    sanityFetch({ query: VIDEO_PAGE_QUERY }),
+    sanityFetch({ query: VIDEOS_QUERY }),
+  ]);
+  const hero = page?.hero;
 
   return (
     <main className="flex-1">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-4">Video</h1>
+        <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
+          {hero?.eyebrow ?? heroFallback.eyebrow}
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-4">
+          {hero?.title ?? heroFallback.title}
+        </h1>
         <p className="text-muted-foreground mb-10 max-w-2xl">
-          Interventi, tecnologie e consigli dallo studio.
+          {hero?.description ?? heroFallback.description}
         </p>
 
         {!videos?.length ? (

@@ -3,6 +3,7 @@ import { getSiteSettings } from '@/lib/settings';
 import { heroFallback as fallback } from '@/lib/fallback/home';
 import { urlFor } from '@/sanity/lib/image';
 import { resolveIcon } from '@/components/home/icon-map';
+import { resolveCtas } from '@/lib/cta';
 import { FanRectangles } from '@/components/motion/fan-rectangles';
 import { RevealFrame } from '@/components/motion/reveal-frame';
 import { HeroCarousel, type HeroSlide } from '@/components/home/hero-carousel';
@@ -15,6 +16,7 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
   const settings = await getSiteSettings();
 
   const features = data?.features?.length ? data.features : fallback.features;
+  const ctas = resolveCtas(data?.ctas?.length ? data.ctas : fallback.ctas, settings.phoneHref);
   const experienceCard = data?.experienceCard ?? fallback.experienceCard;
   const sanityImages = data?.images?.filter((image) => image.asset) ?? [];
   const slides: HeroSlide[] = sanityImages.length
@@ -103,21 +105,27 @@ export default async function Hero({ data }: { data?: HeroData | null }) {
               })}
             </div>
 
-            <div className="flex flex-wrap gap-4 items-center mt-4">
-              <a
-                href="#contatti"
-                className="bg-primary hover:bg-primary/95 text-primary-foreground px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
-              >
-                {data?.ctaPrimaryLabel ?? fallback.ctaPrimaryLabel}
-                <ArrowRight className="w-5 h-5" aria-hidden="true" />
-              </a>
-              <a
-                href={settings.phoneHref}
-                className="border-2 border-primary/20 hover:border-primary text-primary px-8 py-4 rounded-xl text-base font-bold transition-all flex items-center gap-2"
-              >
-                <Phone className="w-5 h-5" aria-hidden="true" />
-                {data?.ctaSecondaryLabel ?? fallback.ctaSecondaryLabel}
-              </a>
+            <div className="flex flex-col gap-4 mt-4 max-w-95 w-full">
+              {ctas.map((cta, index) => {
+                const isPrimary = index % 2 === 0;
+                const Icon = resolveIcon(cta.icon, isPrimary ? ArrowRight : Phone);
+                return (
+                  <a
+                    key={cta.key}
+                    href={cta.href}
+                    target={cta.newTab ? '_blank' : undefined}
+                    rel={cta.newTab ? 'noopener noreferrer' : undefined}
+                    className={
+                      isPrimary
+                        ? 'bg-primary hover:bg-primary/95 text-primary-foreground px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 w-full'
+                        : 'border-2 border-primary/20 hover:border-primary text-primary px-8 py-4 rounded-xl text-base font-bold transition-all flex items-center justify-center gap-2 w-full'
+                    }
+                  >
+                    <Icon className="w-5 h-5" aria-hidden="true" />
+                    {cta.label}
+                  </a>
+                );
+              })}
             </div>
           </div>
 

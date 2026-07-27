@@ -28,6 +28,8 @@ import {
   Search,
   ClipboardList,
   Stethoscope,
+  ArrowRight,
+  Phone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -63,6 +65,8 @@ const iconMap: Record<string, LucideIcon> = {
   search: Search,
   "clipboard-list": ClipboardList,
   stethoscope: Stethoscope,
+  "arrow-right": ArrowRight,
+  phone: Phone,
 };
 
 export function resolveIcon(name: string | null | undefined, fallback: LucideIcon): LucideIcon {

@@ -3,41 +3,49 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { formatDate } from "@/lib/format";
-import { socialMeta, canonicalUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-import { POSTS_QUERY } from "@/sanity/lib/queries";
+import { BLOG_PAGE_QUERY, POSTS_QUERY } from "@/sanity/lib/queries";
+import { heroFallback } from "@/lib/fallback/blog";
 
-const title = "Blog";
-const description =
+const fallbackTitle = "Blog | Studio Dentistico Dott. Gianluca Marin";
+const fallbackDescription =
   "Approfondimenti, consigli e novità dallo Studio Dentistico Dott. Gianluca Marin a Conegliano: implantologia, salute orale e tecnologie.";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { data: page } = await sanityFetch({ query: BLOG_PAGE_QUERY, stega: false });
+  const title = page?.seoTitle ?? fallbackTitle;
+  const description = page?.seoDescription ?? fallbackDescription;
   return {
-    title,
+    title: { absolute: title },
     description,
-    ...(await socialMeta({ title, description })),
+    ...(await socialMeta({ title, description, image: ogImageUrl(page?.seoImage) })),
     ...(await canonicalUrl("/blog")),
+    ...robotsMeta(page?.noIndex),
   };
 }
 
 export default async function BlogPage() {
-  const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
+  const [{ data: page }, { data: posts }] = await Promise.all([
+    sanityFetch({ query: BLOG_PAGE_QUERY }),
+    sanityFetch({ query: POSTS_QUERY }),
+  ]);
+  const hero = page?.hero;
 
   return (
     <main className="flex-1">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="max-w-3xl mb-14">
           <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
-            Blog
+            {hero?.eyebrow ?? heroFallback.eyebrow}
           </span>
           <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
-            Approfondimenti e consigli
+            {hero?.title ?? heroFallback.title}
           </h1>
           <div className="w-24 h-1 bg-sky-500 mt-4 rounded-full" aria-hidden="true" />
           <p className="text-base text-muted-foreground mt-4">
-            Novità dallo studio, consigli per la salute dei tuoi denti e approfondimenti sulle
-            tecniche implantari.
+            {hero?.description ?? heroFallback.description}
           </p>
         </div>
 

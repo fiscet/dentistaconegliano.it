@@ -27,6 +27,12 @@ import {
   RefreshCw,
   Droplets,
   Wind,
+  Calendar,
+  Search,
+  ClipboardList,
+  Stethoscope,
+  ArrowRight,
+  Phone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -60,6 +66,12 @@ const icons: Record<string, LucideIcon> = {
   "refresh-cw": RefreshCw,
   droplets: Droplets,
   wind: Wind,
+  calendar: Calendar,
+  search: Search,
+  "clipboard-list": ClipboardList,
+  stethoscope: Stethoscope,
+  "arrow-right": ArrowRight,
+  phone: Phone,
 };
 
 // Input custom: mostra le opzioni icona come griglia di anteprime cliccabili

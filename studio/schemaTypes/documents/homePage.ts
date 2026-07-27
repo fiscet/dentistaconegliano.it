@@ -88,16 +88,97 @@ export const homePage = defineType({
           ],
         }),
         defineField({
-          name: "ctaPrimaryLabel",
-          title: "CTA principale (testo)",
-          type: "string",
-          description: "Porta alla sezione contatti.",
-        }),
-        defineField({
-          name: "ctaSecondaryLabel",
-          title: "CTA secondaria (testo)",
-          type: "string",
-          description: "Avvia la chiamata al numero dello studio.",
+          name: "ctas",
+          title: "Pulsanti CTA",
+          description:
+            "Pulsanti mostrati uno sotto l'altro, stile pieno/contornato alternato automaticamente.",
+          type: "array",
+          of: [
+            defineArrayMember({
+              type: "object",
+              name: "heroCta",
+              fields: [
+                defineField({
+                  name: "label",
+                  title: "Testo",
+                  type: "string",
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({
+                  name: "icon",
+                  title: "Icona",
+                  type: "iconString",
+                }),
+                defineField({
+                  name: "linkType",
+                  title: "Tipo di destinazione",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "Percorso interno (es. /contatti)", value: "path" },
+                      { title: "Contenuto Sanity", value: "internal" },
+                      { title: "URL esterno", value: "external" },
+                      { title: "Telefono dello studio", value: "phone" },
+                    ],
+                    layout: "radio",
+                  },
+                  initialValue: "path",
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({
+                  name: "path",
+                  title: "Percorso",
+                  type: "string",
+                  description: "Percorso relativo al sito, es. /servizi oppure /#contatti",
+                  hidden: ({ parent }) => parent?.linkType !== "path",
+                  validation: (Rule) =>
+                    Rule.custom((value, context) => {
+                      const parent = context.parent as { linkType?: string } | undefined;
+                      if (parent?.linkType === "path" && !value) return "Percorso obbligatorio";
+                      if (value && !value.startsWith("/")) return "Deve iniziare con /";
+                      return true;
+                    }),
+                }),
+                defineField({
+                  name: "internalLink",
+                  title: "Contenuto collegato",
+                  type: "reference",
+                  to: [
+                    { type: "homePage" },
+                    { type: "studioPage" },
+                    { type: "casesPage" },
+                    { type: "pathPage" },
+                    { type: "videoPage" },
+                    { type: "blogPage" },
+                    { type: "page" },
+                    { type: "service" },
+                    { type: "post" },
+                    { type: "video" },
+                  ],
+                  hidden: ({ parent }) => parent?.linkType !== "internal",
+                }),
+                defineField({
+                  name: "externalUrl",
+                  title: "URL esterno",
+                  type: "url",
+                  hidden: ({ parent }) => parent?.linkType !== "external",
+                  validation: (Rule) =>
+                    Rule.uri({ scheme: ["http", "https", "mailto", "tel"] }),
+                }),
+                defineField({
+                  name: "openInNewTab",
+                  title: "Apri in nuova scheda",
+                  type: "boolean",
+                  initialValue: false,
+                  hidden: ({ parent }) => parent?.linkType !== "external",
+                }),
+              ],
+              preview: {
+                select: { title: "label", subtitle: "linkType" },
+              },
+            }),
+          ],
+          validation: (Rule) => Rule.min(1).max(4),
         }),
         defineField({
           name: "images",

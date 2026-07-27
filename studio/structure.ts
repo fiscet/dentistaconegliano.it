@@ -5,6 +5,9 @@ import { HomeIcon } from "@sanity/icons/Home";
 import { UsersIcon } from "@sanity/icons/Users";
 import { ImagesIcon } from "@sanity/icons/Images";
 import { ActivityIcon } from "@sanity/icons/Activity";
+import { PlayIcon } from "@sanity/icons/Play";
+import { DocumentsIcon } from "@sanity/icons/Documents";
+import { PagesInfoPanel, ContentInfoPanel } from "./components/InfoPanel";
 
 // Tipi gestiti come singleton (documento unico con _id fisso).
 const SINGLETONS = [
@@ -14,6 +17,8 @@ const SINGLETONS = [
   "studioPage",
   "casesPage",
   "pathPage",
+  "videoPage",
+  "blogPage",
 ];
 
 // Tipi a collection già elencati esplicitamente nel menu.
@@ -58,6 +63,14 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
+      // Titolo di blocco cliccabile: apre la spiegazione della sezione
+      // "Pagine del Sito" (differenza con "Contenuti" sotto). Niente icona e
+      // maiuscolo/trattini per farlo leggere come separatore, non come voce.
+      S.listItem()
+        .title("── PAGINE DEL SITO ──")
+        .showIcon(false)
+        .child(S.component(PagesInfoPanel).id("pages-info").title("Pagine del Sito")),
+
       S.listItem()
         .title("Home Page")
         .icon(HomeIcon)
@@ -94,8 +107,34 @@ export const structure: StructureResolver = (S) =>
             .documentId("pathPage")
             .title("Pagina Percorso di Cura"),
         ),
+      S.listItem()
+        .title("Pagina Video")
+        .icon(PlayIcon)
+        .child(
+          S.document()
+            .schemaType("videoPage")
+            .documentId("videoPage")
+            .title("Pagina Video"),
+        ),
+      S.listItem()
+        .title("Pagina Blog")
+        .icon(DocumentsIcon)
+        .child(
+          S.document()
+            .schemaType("blogPage")
+            .documentId("blogPage")
+            .title("Pagina Blog"),
+        ),
 
       S.divider(),
+
+      // Titolo di blocco cliccabile: apre la spiegazione della sezione
+      // "Contenuti" (differenza con "Pagine del Sito" sopra). Niente icona e
+      // maiuscolo/trattini per farlo leggere come separatore, non come voce.
+      S.listItem()
+        .title("── CONTENUTI ──")
+        .showIcon(false)
+        .child(S.component(ContentInfoPanel).id("content-info").title("Contenuti")),
 
       S.documentTypeListItem("page").title("Pagine"),
       S.documentTypeListItem("service").title("Servizi / Trattamenti"),
