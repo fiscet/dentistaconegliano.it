@@ -135,6 +135,15 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
             Scopri di più su {video.relatedService.title}
           </Link>
         )}
+
+        {video.relatedPost?.slug && (
+          <Link
+            href={`/blog/${video.relatedPost.slug}`}
+            className="inline-flex w-fit items-center rounded-full bg-secondary px-4 py-2 mt-4 text-sm font-semibold text-primary hover:bg-secondary/80 transition-colors"
+          >
+            Leggi l&apos;articolo: {video.relatedPost.title}
+          </Link>
+        )}
       </article>
     </main>
   );

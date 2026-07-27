@@ -69,6 +69,13 @@ export const video = defineType({
       description: "Il trattamento di cui parla il video, se applicabile.",
     }),
     defineField({
+      name: "relatedPost",
+      title: "Articolo collegato",
+      type: "reference",
+      to: [{ type: "post" }],
+      description: "L'articolo del blog a cui si collega questo video, se applicabile.",
+    }),
+    defineField({
       name: "publishedAt",
       title: "Data",
       type: "date",
