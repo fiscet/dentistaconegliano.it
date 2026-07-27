@@ -58,6 +58,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
         _key,
         label,
         icon,
+        style,
         linkType,
         path,
         externalUrl,
@@ -278,6 +279,16 @@ export const BLOG_PAGE_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+export const FAQ_PAGE_QUERY = defineQuery(/* groq */ `
+  *[_id == "faqPage"][0]{
+    hero{ eyebrow, title, description },
+    seoTitle,
+    seoDescription,
+    seoImage,
+    noIndex
+  }
+`);
+
 export const VIDEO_PAGE_QUERY = defineQuery(/* groq */ `
   *[_id == "videoPage"][0]{
     hero{ eyebrow, title, description },
@@ -392,7 +403,15 @@ export const POST_QUERY = defineQuery(/* groq */ `
     seoTitle,
     seoDescription,
     seoImage,
-    noIndex
+    noIndex,
+    "relatedVideos": *[_type == "video" && references(^._id) && defined(slug.current)] | order(order asc, publishedAt desc){
+      _id,
+      title,
+      "slug": slug.current,
+      youtubeUrl,
+      duration,
+      thumbnail{ ..., "alt": alt }
+    }
   }
 `);
 
@@ -410,7 +429,8 @@ export const VIDEOS_QUERY = defineQuery(/* groq */ `
     duration,
     thumbnail{ ..., "alt": alt },
     publishedAt,
-    relatedService->{ title, "slug": slug.current }
+    relatedService->{ title, "slug": slug.current },
+    relatedPost->{ title, "slug": slug.current }
   }
 `);
 
@@ -425,7 +445,8 @@ export const VIDEO_QUERY = defineQuery(/* groq */ `
     duration,
     thumbnail{ ..., "alt": alt },
     publishedAt,
-    relatedService->{ title, "slug": slug.current }
+    relatedService->{ title, "slug": slug.current },
+    relatedPost->{ title, "slug": slug.current }
   }
 `);
 

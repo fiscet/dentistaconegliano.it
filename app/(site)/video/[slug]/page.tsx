@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { socialMeta, canonicalUrl } from "@/lib/seo";
 import { videoObjectJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { formatDate } from "@/lib/format";
@@ -113,6 +113,14 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
           duration={video.duration ?? undefined}
         />
 
+        <Link
+          href="/contatti"
+          className="mt-8 inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-primary hover:bg-primary/95 text-primary-foreground px-8 py-4 rounded-xl text-base font-bold transition-all shadow-lg hover:shadow-xl"
+        >
+          <Calendar className="w-5 h-5" aria-hidden="true" />
+          Prenota ora una visita
+        </Link>
+
         {video.description && (
           <p className="text-muted-foreground text-base sm:text-lg leading-relaxed mt-8">
             {video.description}
@@ -125,6 +133,15 @@ export default async function VideoDetailPage({ params }: { params: Promise<Para
             className="inline-flex w-fit items-center rounded-full bg-secondary px-4 py-2 mt-8 text-sm font-semibold text-primary hover:bg-secondary/80 transition-colors"
           >
             Scopri di più su {video.relatedService.title}
+          </Link>
+        )}
+
+        {video.relatedPost?.slug && (
+          <Link
+            href={`/blog/${video.relatedPost.slug}`}
+            className="inline-flex w-fit items-center rounded-full bg-secondary px-4 py-2 mt-4 text-sm font-semibold text-primary hover:bg-secondary/80 transition-colors"
+          >
+            Leggi l&apos;articolo: {video.relatedPost.title}
           </Link>
         )}
       </article>

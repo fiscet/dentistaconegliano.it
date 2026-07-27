@@ -1,25 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { socialMeta, canonicalUrl } from "@/lib/seo";
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { faqPageJsonLd } from "@/lib/json-ld";
 import { sanityFetch } from "@/sanity/lib/live";
-import { FAQS_QUERY } from "@/sanity/lib/queries";
+import { FAQ_PAGE_QUERY, FAQS_QUERY } from "@/sanity/lib/queries";
+import { heroFallback } from "@/lib/fallback/faq";
 
-const title = "Domande frequenti";
-const description =
+const fallbackTitle = "Domande frequenti | Studio Dentistico Dott. Gianluca Marin";
+const fallbackDescription =
   "Le risposte alle domande più frequenti sui trattamenti e sull'organizzazione dello Studio Dentistico Dott. Gianluca Marin a Conegliano.";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const { data: page } = await sanityFetch({ query: FAQ_PAGE_QUERY, stega: false });
+  const title = page?.seoTitle ?? fallbackTitle;
+  const description = page?.seoDescription ?? fallbackDescription;
   return {
-    title,
+    title: { absolute: title },
     description,
-    ...(await socialMeta({ title, description })),
+    ...(await socialMeta({ title, description, image: ogImageUrl(page?.seoImage) })),
     ...(await canonicalUrl("/faq")),
+    ...robotsMeta(page?.noIndex),
   };
 }
 
 export default async function FaqPage() {
-  const { data: faqs } = await sanityFetch({ query: FAQS_QUERY });
+  const [{ data: page }, { data: faqs }] = await Promise.all([
+    sanityFetch({ query: FAQ_PAGE_QUERY }),
+    sanityFetch({ query: FAQS_QUERY }),
+  ]);
+  const hero = page?.hero;
 
   const jsonLd = faqs?.length
     ? faqPageJsonLd(
@@ -40,13 +49,15 @@ export default async function FaqPage() {
         />
       )}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <span className="text-xs font-bold text-sky-600 uppercase tracking-widest block mb-2">
+          {hero?.eyebrow ?? heroFallback.eyebrow}
+        </span>
         <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
-          Domande frequenti
+          {hero?.title ?? heroFallback.title}
         </h1>
         <div className="w-24 h-1 bg-sky-500 mt-4 mb-8 rounded-full" aria-hidden="true" />
         <p className="text-lg text-muted-foreground leading-relaxed mb-10">
-          Le risposte alle domande che ci vengono rivolte più spesso. Non trovi la tua? Contattaci
-          direttamente.
+          {hero?.description ?? heroFallback.description}
         </p>
 
         {!faqs?.length ? (

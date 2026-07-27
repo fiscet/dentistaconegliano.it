@@ -28,11 +28,11 @@ const linkFields = [
     name: "path",
     title: "Percorso",
     type: "string",
-    description: "Percorso relativo al sito, es. /servizi oppure /#contatti",
+    description: "Percorso relativo al sito, es. /servizi oppure /contatti",
     hidden: ({ parent }) => parent?.linkType !== "path",
     validation: (rule) =>
       rule.custom((value, context) => {
-        const parent = context.parent as { linkType?: string } | undefined;
+        const parent = context.parent as { linkType?: string; } | undefined;
         if (parent?.linkType === "path" && !value) return "Percorso obbligatorio";
         if (value && !value.startsWith("/")) return "Deve iniziare con /";
         return true;
@@ -51,6 +51,7 @@ const linkFields = [
       { type: "pathPage" },
       { type: "videoPage" },
       { type: "blogPage" },
+      { type: "faqPage" },
       { type: "page" },
       { type: "service" },
       { type: "post" },

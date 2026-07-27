@@ -290,6 +290,13 @@ export type BlogPageReference = {
   [internalGroqTypeReferenceTo]?: "blogPage";
 };
 
+export type FaqPageReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "faqPage";
+};
+
 export type PageReference = {
   _ref: string;
   _type: "reference";
@@ -323,6 +330,7 @@ export type NavItem = {
     | PathPageReference
     | VideoPageReference
     | BlogPageReference
+    | FaqPageReference
     | PageReference
     | ServiceReference
     | PostReference
@@ -348,6 +356,7 @@ export type NavLink = {
     | PathPageReference
     | VideoPageReference
     | BlogPageReference
+    | FaqPageReference
     | PageReference
     | ServiceReference
     | PostReference
@@ -378,6 +387,7 @@ export type HomePage = {
     ctas?: Array<{
       label?: string;
       icon?: IconString;
+      style?: "solid" | "outline" | "soft" | "ghost";
       linkType?: "path" | "internal" | "external" | "phone";
       path?: string;
       internalLink?:
@@ -387,6 +397,7 @@ export type HomePage = {
         | PathPageReference
         | VideoPageReference
         | BlogPageReference
+        | FaqPageReference
         | PageReference
         | ServiceReference
         | PostReference
@@ -528,6 +539,7 @@ export type Video = {
   };
   duration?: string;
   relatedService?: ServiceReference;
+  relatedPost?: PostReference;
   publishedAt?: string;
   order?: number;
 };
@@ -628,6 +640,23 @@ export type Page = {
   slug?: Slug;
   intro?: string;
   body?: BlockContent;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoImage?: SeoImage;
+  noIndex?: boolean;
+};
+
+export type FaqPage = {
+  _id: string;
+  _type: "faqPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  hero?: {
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+  };
   seoTitle?: string;
   seoDescription?: string;
   seoImage?: SeoImage;
@@ -915,6 +944,7 @@ export type AllSanitySchemaTypes =
   | PathPageReference
   | VideoPageReference
   | BlogPageReference
+  | FaqPageReference
   | PageReference
   | PostReference
   | VideoReference
@@ -928,6 +958,7 @@ export type AllSanitySchemaTypes =
   | StaffMember
   | Service
   | Page
+  | FaqPage
   | BlogPage
   | VideoPage
   | PathPage
@@ -967,6 +998,10 @@ export type NAVIGATION_QUERY_RESULT =
             }
           | {
               _type: "casesPage";
+              slug: null;
+            }
+          | {
+              _type: "faqPage";
               slug: null;
             }
           | {
@@ -1019,6 +1054,10 @@ export type NAVIGATION_QUERY_RESULT =
                 slug: null;
               }
             | {
+                _type: "faqPage";
+                slug: null;
+              }
+            | {
                 _type: "homePage";
                 slug: null;
               }
@@ -1067,6 +1106,10 @@ export type NAVIGATION_QUERY_RESULT =
             }
           | {
               _type: "casesPage";
+              slug: null;
+            }
+          | {
+              _type: "faqPage";
               slug: null;
             }
           | {
@@ -1199,7 +1242,7 @@ export type SITE_SETTINGS_QUERY_RESULT =
 
 // Source: ../sanity/lib/queries.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_id == "homePage"][0]{    hero{      enabled,      badge,      title,      titleHighlight,      titleSuffix,      description,      features[]{ _key, label, icon },      ctas[]{        _key,        label,        icon,        linkType,        path,        externalUrl,        openInNewTab,        internalLink->{ _type, "slug": slug.current }      },      images[]{ ..., "alt": alt },      experienceCard    },    stats{      enabled,      items[]{ _key, value, label }    },    treatments{      enabled,      eyebrow,      title,      description    },    doctorProfile{      enabled,      eyebrow,      title,      roleLabel,      paragraphs,      image{ ..., "alt": alt },      highlights[]{ _key, title, subtitle, icon },      ctaLabel,      ctaHref    },    clinicalCases{      enabled,      eyebrow,      title,      description    },    testimonials{      enabled,      eyebrow,      title,      description    },    contact{      enabled,      eyebrow,      title,      description,      formTitle    },    seoTitle,    seoDescription,    seoImage,    noIndex  }
+// Query: *[_id == "homePage"][0]{    hero{      enabled,      badge,      title,      titleHighlight,      titleSuffix,      description,      features[]{ _key, label, icon },      ctas[]{        _key,        label,        icon,        style,        linkType,        path,        externalUrl,        openInNewTab,        internalLink->{ _type, "slug": slug.current }      },      images[]{ ..., "alt": alt },      experienceCard    },    stats{      enabled,      items[]{ _key, value, label }    },    treatments{      enabled,      eyebrow,      title,      description    },    doctorProfile{      enabled,      eyebrow,      title,      roleLabel,      paragraphs,      image{ ..., "alt": alt },      highlights[]{ _key, title, subtitle, icon },      ctaLabel,      ctaHref    },    clinicalCases{      enabled,      eyebrow,      title,      description    },    testimonials{      enabled,      eyebrow,      title,      description    },    contact{      enabled,      eyebrow,      title,      description,      formTitle    },    seoTitle,    seoDescription,    seoImage,    noIndex  }
 export type HOME_PAGE_QUERY_RESULT =
   | {
       hero: null;
@@ -1281,6 +1324,7 @@ export type HOME_PAGE_QUERY_RESULT =
           _key: string;
           label: string | null;
           icon: IconString | null;
+          style: "ghost" | "outline" | "soft" | "solid" | null;
           linkType: "external" | "internal" | "path" | "phone" | null;
           path: string | null;
           externalUrl: string | null;
@@ -1292,6 +1336,10 @@ export type HOME_PAGE_QUERY_RESULT =
               }
             | {
                 _type: "casesPage";
+                slug: null;
+              }
+            | {
+                _type: "faqPage";
                 slug: null;
               }
             | {
@@ -1792,6 +1840,55 @@ export type BLOG_PAGE_QUERY_RESULT =
   | null;
 
 // Source: ../sanity/lib/queries.ts
+// Variable: FAQ_PAGE_QUERY
+// Query: *[_id == "faqPage"][0]{    hero{ eyebrow, title, description },    seoTitle,    seoDescription,    seoImage,    noIndex  }
+export type FAQ_PAGE_QUERY_RESULT =
+  | {
+      hero: null;
+      seoTitle: null;
+      seoDescription: null;
+      seoImage: null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: null;
+    }
+  | {
+      hero: null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | {
+      hero: {
+        eyebrow: string | null;
+        title: string | null;
+        description: string | null;
+      } | null;
+      seoTitle: string | null;
+      seoDescription: string | null;
+      seoImage: SeoImage | null;
+      noIndex: boolean | null;
+    }
+  | null;
+
+// Source: ../sanity/lib/queries.ts
 // Variable: VIDEO_PAGE_QUERY
 // Query: *[_id == "videoPage"][0]{    hero{ eyebrow, title, description },    seoTitle,    seoDescription,    seoImage,    noIndex  }
 export type VIDEO_PAGE_QUERY_RESULT =
@@ -2051,7 +2148,7 @@ export type POSTS_QUERY_RESULT = Array<{
 
 // Source: ../sanity/lib/queries.ts
 // Variable: POST_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    publishedAt,    excerpt,    mainImage{ ..., "alt": alt },    author->{ name, role, photo{ ..., "alt": alt } },    body,    seoTitle,    seoDescription,    seoImage,    noIndex  }
+// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    publishedAt,    excerpt,    mainImage{ ..., "alt": alt },    author->{ name, role, photo{ ..., "alt": alt } },    body,    seoTitle,    seoDescription,    seoImage,    noIndex,    "relatedVideos": *[_type == "video" && references(^._id) && defined(slug.current)] | order(order asc, publishedAt desc){      _id,      title,      "slug": slug.current,      youtubeUrl,      duration,      thumbnail{ ..., "alt": alt }    }  }
 export type POST_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -2083,6 +2180,21 @@ export type POST_QUERY_RESULT = {
   seoDescription: string | null;
   seoImage: SeoImage | null;
   noIndex: boolean | null;
+  relatedVideos: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    youtubeUrl: string | null;
+    duration: string | null;
+    thumbnail: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string | null;
+      _type: "image";
+    } | null;
+  }>;
 } | null;
 
 // Source: ../sanity/lib/queries.ts
@@ -2095,7 +2207,7 @@ export type POST_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../sanity/lib/queries.ts
 // Variable: VIDEOS_QUERY
-// Query: *[_type == "video"] | order(order asc, publishedAt desc){    _id,    title,    "slug": slug.current,    youtubeUrl,    description,    duration,    thumbnail{ ..., "alt": alt },    publishedAt,    relatedService->{ title, "slug": slug.current }  }
+// Query: *[_type == "video"] | order(order asc, publishedAt desc){    _id,    title,    "slug": slug.current,    youtubeUrl,    description,    duration,    thumbnail{ ..., "alt": alt },    publishedAt,    relatedService->{ title, "slug": slug.current },    relatedPost->{ title, "slug": slug.current }  }
 export type VIDEOS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -2116,11 +2228,15 @@ export type VIDEOS_QUERY_RESULT = Array<{
     title: string | null;
     slug: string | null;
   } | null;
+  relatedPost: {
+    title: string | null;
+    slug: string | null;
+  } | null;
 }>;
 
 // Source: ../sanity/lib/queries.ts
 // Variable: VIDEO_QUERY
-// Query: *[_type == "video" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    youtubeUrl,    description,    duration,    thumbnail{ ..., "alt": alt },    publishedAt,    relatedService->{ title, "slug": slug.current }  }
+// Query: *[_type == "video" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    youtubeUrl,    description,    duration,    thumbnail{ ..., "alt": alt },    publishedAt,    relatedService->{ title, "slug": slug.current },    relatedPost->{ title, "slug": slug.current }  }
 export type VIDEO_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -2138,6 +2254,10 @@ export type VIDEO_QUERY_RESULT = {
   } | null;
   publishedAt: string | null;
   relatedService: {
+    title: string | null;
+    slug: string | null;
+  } | null;
+  relatedPost: {
     title: string | null;
     slug: string | null;
   } | null;
@@ -2170,7 +2290,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_id == "navigation"][0]{\n    items[]{\n      \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n,\n      children[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n    },\n    footerLinks[]{ \n  _key,\n  label,\n  linkType,\n  path,\n  externalUrl,\n  openInNewTab,\n  internalLink->{ _type, "slug": slug.current }\n }\n  }\n': NAVIGATION_QUERY_RESULT;
     '\n  *[_id == "siteSettings"][0]{\n    siteName,\n    shortName,\n    doctor,\n    logo,\n    yearsBadge,\n    footerDescription,\n    legalName,\n    vatNumber,\n    shareCapital,\n    alboRegistration,\n    phone,\n    email,\n    whatsapp,\n    address,\n    openingHours,\n    socials[]{ _key, platform, url },\n    seoTitle,\n    seoDescription,\n    seoImage\n  }\n': SITE_SETTINGS_QUERY_RESULT;
-    '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctas[]{\n        _key,\n        label,\n        icon,\n        linkType,\n        path,\n        externalUrl,\n        openInNewTab,\n        internalLink->{ _type, "slug": slug.current }\n      },\n      images[]{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    testimonials{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_id == "homePage"][0]{\n    hero{\n      enabled,\n      badge,\n      title,\n      titleHighlight,\n      titleSuffix,\n      description,\n      features[]{ _key, label, icon },\n      ctas[]{\n        _key,\n        label,\n        icon,\n        style,\n        linkType,\n        path,\n        externalUrl,\n        openInNewTab,\n        internalLink->{ _type, "slug": slug.current }\n      },\n      images[]{ ..., "alt": alt },\n      experienceCard\n    },\n    stats{\n      enabled,\n      items[]{ _key, value, label }\n    },\n    treatments{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    doctorProfile{\n      enabled,\n      eyebrow,\n      title,\n      roleLabel,\n      paragraphs,\n      image{ ..., "alt": alt },\n      highlights[]{ _key, title, subtitle, icon },\n      ctaLabel,\n      ctaHref\n    },\n    clinicalCases{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    testimonials{\n      enabled,\n      eyebrow,\n      title,\n      description\n    },\n    contact{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      formTitle\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_type == "service" && showInHome == true] | order(order asc, title asc){\n    _id,\n    "slug": slug.current,\n    "title": coalesce(homeTitle, title),\n    "description": coalesce(homeExcerpt, excerpt),\n    icon\n  }\n': HOME_SERVICES_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    icon,\n    image{ ..., "alt": alt }\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "service" && showInFooter == true] | order(order asc, title asc){\n    _id,\n    title,\n    "slug": slug.current\n  }\n': FOOTER_SERVICES_QUERY_RESULT;
@@ -2183,6 +2303,7 @@ declare module "@sanity/client" {
     '\n  *[_id == "casesPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': CASES_PAGE_QUERY_RESULT;
     '\n  *[_id == "studioPage"][0]{\n    hero{\n      eyebrow,\n      title,\n      description,\n      highlights,\n      image{ ..., "alt": alt },\n      imageRole\n    },\n    profile{ enabled, eyebrow, title, cards[]{ _key, icon, title, text } },\n    team{ enabled, eyebrow, title, description },\n    studio{\n      enabled,\n      eyebrow,\n      title,\n      description,\n      image{ ..., "alt": alt },\n      features[]{ _key, icon, title, text }\n    },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': STUDIO_PAGE_QUERY_RESULT;
     '\n  *[_id == "blogPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': BLOG_PAGE_QUERY_RESULT;
+    '\n  *[_id == "faqPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': FAQ_PAGE_QUERY_RESULT;
     '\n  *[_id == "videoPage"][0]{\n    hero{ eyebrow, title, description },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': VIDEO_PAGE_QUERY_RESULT;
     '\n  *[_id == "pathPage"][0]{\n    hero{ eyebrow, title, description },\n    steps[]{ _key, icon, title, text },\n    cta{ title, description, buttonLabel },\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': PATH_PAGE_QUERY_RESULT;
     '\n  *[_type == "staffMember"] | order(order asc, name asc){\n    _id,\n    name,\n    role,\n    category,\n    excerpt,\n    photo{ ..., "alt": alt }\n  }\n': STAFF_QUERY_RESULT;
@@ -2192,10 +2313,10 @@ declare module "@sanity/client" {
     '\n  *[_type == "locationPage" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    cityName,\n    intro,\n    image{ ..., "alt": alt },\n    featuredServices[]->{ _id, title, "slug": slug.current, excerpt, icon, image{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': LOCATION_PAGE_QUERY_RESULT;
     '\n  *[_type == "locationPage" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': LOCATION_PAGE_SLUGS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    "author": author->name\n  }\n': POSTS_QUERY_RESULT;
-    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    author->{ name, role, photo{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': POST_QUERY_RESULT;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    author->{ name, role, photo{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex,\n    "relatedVideos": *[_type == "video" && references(^._id) && defined(slug.current)] | order(order asc, publishedAt desc){\n      _id,\n      title,\n      "slug": slug.current,\n      youtubeUrl,\n      duration,\n      thumbnail{ ..., "alt": alt }\n    }\n  }\n': POST_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': POST_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    youtubeUrl,\n    description,\n    duration,\n    thumbnail{ ..., "alt": alt },\n    publishedAt,\n    relatedService->{ title, "slug": slug.current }\n  }\n': VIDEOS_QUERY_RESULT;
-    '\n  *[_type == "video" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    youtubeUrl,\n    description,\n    duration,\n    thumbnail{ ..., "alt": alt },\n    publishedAt,\n    relatedService->{ title, "slug": slug.current }\n  }\n': VIDEO_QUERY_RESULT;
+    '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    youtubeUrl,\n    description,\n    duration,\n    thumbnail{ ..., "alt": alt },\n    publishedAt,\n    relatedService->{ title, "slug": slug.current },\n    relatedPost->{ title, "slug": slug.current }\n  }\n': VIDEOS_QUERY_RESULT;
+    '\n  *[_type == "video" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    youtubeUrl,\n    description,\n    duration,\n    thumbnail{ ..., "alt": alt },\n    publishedAt,\n    relatedService->{ title, "slug": slug.current },\n    relatedPost->{ title, "slug": slug.current }\n  }\n': VIDEO_QUERY_RESULT;
     '\n  *[_type == "video" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': VIDEO_SLUGS_QUERY_RESULT;
     '\n  *[_type == "faq"] | order(order asc){\n    _id,\n    question,\n    answer,\n    relatedService->{ title, "slug": slug.current }\n  }\n': FAQS_QUERY_RESULT;
   }

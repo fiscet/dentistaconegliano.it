@@ -97,6 +97,14 @@ export default async function VideoPage() {
                       {video.relatedService.title}
                     </Link>
                   )}
+                  {video.relatedPost?.slug && (
+                    <Link
+                      href={`/blog/${video.relatedPost.slug}`}
+                      className="inline-flex w-fit items-center rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary hover:bg-secondary/80 transition-colors"
+                    >
+                      {video.relatedPost.title}
+                    </Link>
+                  )}
                 </article>
               );
             })}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import PortableTextBody from "@/components/portable-text";
+import { LiteYouTube } from "@/components/lite-youtube";
 import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { formatDate } from "@/lib/format";
@@ -116,6 +117,35 @@ export default async function PostPage({ params }: { params: Promise<Params> }) 
         )}
 
         {post.body && <PortableTextBody value={post.body} />}
+
+        {post.relatedVideos && post.relatedVideos.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Video su questo articolo</h2>
+            <div className="grid gap-8 sm:grid-cols-2">
+              {post.relatedVideos.map((video) => {
+                if (!video.youtubeUrl) return null;
+                const thumbnailUrl = video.thumbnail
+                  ? urlFor(video.thumbnail).width(640).height(360).fit("crop").url()
+                  : undefined;
+                return (
+                  <div key={video._id} className="flex flex-col gap-3 [&_figure]:my-0">
+                    <LiteYouTube
+                      url={video.youtubeUrl}
+                      thumbnailUrl={thumbnailUrl}
+                      duration={video.duration ?? undefined}
+                    />
+                    <Link
+                      href={`/video/${video.slug}`}
+                      className="text-base font-semibold text-foreground hover:text-primary transition-colors"
+                    >
+                      {video.title}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </article>
     </main>
   );

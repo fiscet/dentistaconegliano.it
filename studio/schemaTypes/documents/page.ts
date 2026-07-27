@@ -4,7 +4,7 @@ import { seoFields, noIndexField, seoGroup } from "../shared/seoFields";
 
 export const page = defineType({
   name: "page",
-  title: "Pagina",
+  title: "Pagina Libera",
   type: "document",
   icon: DocumentIcon,
   groups: [{ name: "content", title: "Contenuto", default: true }, seoGroup],

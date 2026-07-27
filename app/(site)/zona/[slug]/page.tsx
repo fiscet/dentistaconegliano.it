@@ -1,17 +1,20 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ArrowLeft, Phone, HeartPulse } from "lucide-react";
-import PortableTextBody from "@/components/portable-text";
-import { resolveIcon } from "@/components/home/icon-map";
-import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/json-ld";
-import { urlFor } from "@/sanity/lib/image";
-import { getSiteSettings } from "@/lib/settings";
-import { client } from "@/sanity/lib/client";
-import { sanityFetch } from "@/sanity/lib/live";
-import { LOCATION_PAGE_QUERY, LOCATION_PAGE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, Phone, HeartPulse } from 'lucide-react';
+import PortableTextBody from '@/components/portable-text';
+import { resolveIcon } from '@/components/home/icon-map';
+import { socialMeta, ogImageUrl, canonicalUrl, robotsMeta } from '@/lib/seo';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { urlFor } from '@/sanity/lib/image';
+import { getSiteSettings } from '@/lib/settings';
+import { client } from '@/sanity/lib/client';
+import { sanityFetch } from '@/sanity/lib/live';
+import {
+  LOCATION_PAGE_QUERY,
+  LOCATION_PAGE_SLUGS_QUERY
+} from '@/sanity/lib/queries';
 
 type Params = { slug: string };
 
@@ -24,7 +27,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params,
+  params
 }: {
   params: Promise<Params>;
 }): Promise<Metadata> {
@@ -32,10 +35,10 @@ export async function generateMetadata({
   const { data: location } = await sanityFetch({
     query: LOCATION_PAGE_QUERY,
     params: { slug },
-    stega: false,
+    stega: false
   });
   if (!location) return {};
-  const title = location.seoTitle ?? location.title ?? "Zona servita";
+  const title = location.seoTitle ?? location.title ?? 'Zona servita';
   const description = location.seoDescription ?? location.intro ?? undefined;
   return {
     title,
@@ -44,38 +47,40 @@ export async function generateMetadata({
       title,
       description,
       image: ogImageUrl(location.seoImage, location.image),
-      type: "article",
+      type: 'article'
     })),
     ...(await canonicalUrl(`/zona/${slug}`)),
-    ...robotsMeta(location.noIndex),
+    ...robotsMeta(location.noIndex)
   };
 }
 
 export default async function LocationDetailPage({
-  params,
+  params
 }: {
   params: Promise<Params>;
 }) {
   const { slug } = await params;
   const [{ data: location }, settings] = await Promise.all([
     sanityFetch({ query: LOCATION_PAGE_QUERY, params: { slug } }),
-    getSiteSettings(),
+    getSiteSettings()
   ]);
 
   if (!location) notFound();
 
   const url = new URL(`/zona/${slug}`, settings.url).toString();
   const breadcrumbJsonLdData = breadcrumbJsonLd([
-    { name: "Home", url: settings.url },
-    { name: "Zone servite", url: new URL("/zona", settings.url).toString() },
-    { name: location.cityName ?? location.title ?? "Zona", url },
+    { name: 'Home', url: settings.url },
+    { name: 'Zone servite', url: new URL('/zona', settings.url).toString() },
+    { name: location.cityName ?? location.title ?? 'Zona', url }
   ]);
 
   return (
     <main className="flex-1">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLdData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLdData)
+        }}
       />
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <Link
@@ -89,17 +94,22 @@ export default async function LocationDetailPage({
         <h1 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground">
           {location.title}
         </h1>
-        <div className="w-24 h-1 bg-sky-500 mt-4 mb-6 rounded-full" aria-hidden="true" />
+        <div
+          className="w-24 h-1 bg-sky-500 mt-4 mb-6 rounded-full"
+          aria-hidden="true"
+        />
 
         {location.intro && (
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{location.intro}</p>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+            {location.intro}
+          </p>
         )}
 
         {location.image?.asset && (
           <div className="relative rounded-2xl overflow-hidden border border-border mb-10">
             <Image
               src={urlFor(location.image).width(1200).height(675).url()}
-              alt={location.image.alt ?? location.title ?? ""}
+              alt={location.image.alt ?? location.title ?? ''}
               width={1200}
               height={675}
               className="w-full h-auto object-cover"
@@ -125,16 +135,22 @@ export default async function LocationDetailPage({
                 return (
                   <Link
                     key={service._id}
-                    href={service.slug ? `/servizi/${service.slug}` : "/servizi"}
+                    href={
+                      service.slug ? `/servizi/${service.slug}` : '/servizi'
+                    }
                     className="flex items-start gap-4 bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div className="w-11 h-11 rounded-xl bg-sky-100 flex items-center justify-center text-primary shrink-0">
                       <Icon className="w-5 h-5" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-foreground mb-1">{service.title}</h3>
+                      <h3 className="font-bold text-foreground mb-1">
+                        {service.title}
+                      </h3>
                       {service.excerpt && (
-                        <p className="text-sm text-muted-foreground">{service.excerpt}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {service.excerpt}
+                        </p>
                       )}
                     </div>
                   </Link>
@@ -146,7 +162,7 @@ export default async function LocationDetailPage({
 
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row gap-4">
           <Link
-            href="/#contatti"
+            href="/contatti"
             className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:opacity-90 transition"
           >
             Richiedi una consulenza

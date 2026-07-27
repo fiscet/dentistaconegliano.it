@@ -93,11 +93,11 @@ export default function SiteHeader({
               </a>
             </div>
             <Link
-              href="/#contatti"
+              href="/contatti"
               className="hidden sm:flex bg-primary hover:bg-primary/95 text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-md hover:shadow-lg items-center gap-2"
             >
               <Calendar className="w-4 h-4" aria-hidden="true" />
-              Prenota Visita
+              Prenota una Visita
             </Link>
             <button
               type="button"
