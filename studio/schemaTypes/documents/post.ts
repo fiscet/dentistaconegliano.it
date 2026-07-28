@@ -41,6 +41,25 @@ export const post = defineType({
       group: "content",
     }),
     defineField({
+      name: "category",
+      title: "Categoria",
+      type: "string",
+      options: {
+        list: [
+          { title: "Bambini", value: "bambini" },
+          { title: "Casi di successo", value: "casi-di-successo" },
+          { title: "Estetica Dentale", value: "estetica-dentale" },
+          { title: "Gravidanza", value: "gravidanza" },
+          { title: "Implantologia Dentale", value: "implantologia-dentale" },
+          { title: "Patologie varie", value: "patologie-varie" },
+          { title: "Paura del Dentista", value: "paura-del-dentista" },
+          { title: "Prevenzione", value: "prevenzione" },
+          { title: "Sedazione Cosciente", value: "sedazione-cosciente" },
+        ],
+      },
+      group: "content",
+    }),
+    defineField({
       name: "mainImage",
       title: "Immagine principale",
       type: "image",

@@ -384,6 +384,7 @@ export const POSTS_QUERY = defineQuery(/* groq */ `
     "slug": slug.current,
     publishedAt,
     excerpt,
+    category,
     mainImage{ ..., "alt": alt },
     "author": author->name
   }

@@ -8,6 +8,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 import { BLOG_PAGE_QUERY, POSTS_QUERY } from "@/sanity/lib/queries";
 import { heroFallback } from "@/lib/fallback/blog";
+import { BLOG_CATEGORY_LABELS, BLOG_CATEGORY_ORDER } from "@/lib/blog-categories";
 
 const fallbackTitle = "Blog | Studio Dentistico Dott. Gianluca Marin";
 const fallbackDescription =
@@ -26,12 +27,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function BlogPage() {
-  const [{ data: page }, { data: posts }] = await Promise.all([
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ categoria?: string }>;
+}) {
+  const [{ data: page }, { data: posts }, { categoria }] = await Promise.all([
     sanityFetch({ query: BLOG_PAGE_QUERY }),
     sanityFetch({ query: POSTS_QUERY }),
+    searchParams,
   ]);
   const hero = page?.hero;
+
+  // Solo le categorie effettivamente usate da almeno un articolo, nell'ordine
+  // canonico definito in BLOG_CATEGORY_ORDER.
+  const usedCategories = new Set<string>(
+    (posts ?? []).flatMap((p) => (p.category ? [p.category as string] : [])),
+  );
+  const availableCategories = BLOG_CATEGORY_ORDER.filter((cat) => usedCategories.has(cat));
+  const activeCategory = categoria && usedCategories.has(categoria) ? categoria : undefined;
+  const filteredPosts = activeCategory
+    ? (posts ?? []).filter((p) => p.category === activeCategory)
+    : posts;
 
   return (
     <main className="flex-1">
@@ -49,13 +66,43 @@ export default async function BlogPage() {
           </p>
         </div>
 
-        {!posts?.length ? (
+        {availableCategories.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-10">
+            <Link
+              href="/blog"
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                !activeCategory
+                  ? "bg-sky-600 border-sky-600 text-white"
+                  : "border-border text-muted-foreground hover:border-sky-400 hover:text-sky-600"
+              }`}
+            >
+              Tutti
+            </Link>
+            {availableCategories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/blog?categoria=${cat}`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                  activeCategory === cat
+                    ? "bg-sky-600 border-sky-600 text-white"
+                    : "border-border text-muted-foreground hover:border-sky-400 hover:text-sky-600"
+                }`}
+              >
+                {BLOG_CATEGORY_LABELS[cat] ?? cat}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {!filteredPosts?.length ? (
           <p className="text-muted-foreground">
-            Nessun articolo pubblicato al momento. Torna a trovarci presto!
+            {activeCategory
+              ? "Nessun articolo in questa categoria al momento."
+              : "Nessun articolo pubblicato al momento. Torna a trovarci presto!"}
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
+            {filteredPosts.map((post) => (
               <Link
                 key={post._id}
                 href={`/blog/${post.slug}`}
