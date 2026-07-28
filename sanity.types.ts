@@ -561,6 +561,16 @@ export type Post = {
   slug?: Slug;
   publishedAt?: string;
   excerpt?: string;
+  category?:
+    | "bambini"
+    | "casi-di-successo"
+    | "estetica-dentale"
+    | "gravidanza"
+    | "implantologia-dentale"
+    | "patologie-varie"
+    | "paura-del-dentista"
+    | "prevenzione"
+    | "sedazione-cosciente";
   mainImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -2128,13 +2138,24 @@ export type LOCATION_PAGE_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../sanity/lib/queries.ts
 // Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    excerpt,    mainImage{ ..., "alt": alt },    "author": author->name  }
+// Query: *[_type == "post" && defined(slug.current)] | order(publishedAt desc){    _id,    title,    "slug": slug.current,    publishedAt,    excerpt,    category,    mainImage{ ..., "alt": alt },    "author": author->name  }
 export type POSTS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
   slug: string | null;
   publishedAt: string | null;
   excerpt: string | null;
+  category:
+    | "bambini"
+    | "casi-di-successo"
+    | "estetica-dentale"
+    | "gravidanza"
+    | "implantologia-dentale"
+    | "patologie-varie"
+    | "paura-del-dentista"
+    | "prevenzione"
+    | "sedazione-cosciente"
+    | null;
   mainImage: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -2312,7 +2333,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "locationPage" && defined(slug.current)] | order(cityName asc){\n    _id,\n    title,\n    "slug": slug.current,\n    cityName,\n    intro,\n    image{ ..., "alt": alt }\n  }\n': LOCATION_PAGES_QUERY_RESULT;
     '\n  *[_type == "locationPage" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    cityName,\n    intro,\n    image{ ..., "alt": alt },\n    featuredServices[]->{ _id, title, "slug": slug.current, excerpt, icon, image{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex\n  }\n': LOCATION_PAGE_QUERY_RESULT;
     '\n  *[_type == "locationPage" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': LOCATION_PAGE_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    "author": author->name\n  }\n': POSTS_QUERY_RESULT;
+    '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    category,\n    mainImage{ ..., "alt": alt },\n    "author": author->name\n  }\n': POSTS_QUERY_RESULT;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    publishedAt,\n    excerpt,\n    mainImage{ ..., "alt": alt },\n    author->{ name, role, photo{ ..., "alt": alt } },\n    body,\n    seoTitle,\n    seoDescription,\n    seoImage,\n    noIndex,\n    "relatedVideos": *[_type == "video" && references(^._id) && defined(slug.current)] | order(order asc, publishedAt desc){\n      _id,\n      title,\n      "slug": slug.current,\n      youtubeUrl,\n      duration,\n      thumbnail{ ..., "alt": alt }\n    }\n  }\n': POST_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current, _updatedAt }\n': POST_SLUGS_QUERY_RESULT;
     '\n  *[_type == "video"] | order(order asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    youtubeUrl,\n    description,\n    duration,\n    thumbnail{ ..., "alt": alt },\n    publishedAt,\n    relatedService->{ title, "slug": slug.current },\n    relatedPost->{ title, "slug": slug.current }\n  }\n': VIDEOS_QUERY_RESULT;
