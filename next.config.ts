@@ -100,7 +100,6 @@ const legacyRedirects: { source: string; destination: string }[] = [
 
   // Contatti / legal
   { source: "/contatti.html", destination: "/contatti" },
-  { source: "/contatti", destination: "/contatti" },
   { source: "/privacy", destination: IUBENDA_PRIVACY_URL },
   { source: "/cookie", destination: IUBENDA_COOKIE_URL },
 
