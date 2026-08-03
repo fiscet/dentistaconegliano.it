@@ -12,7 +12,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "studio": "npm --prefix studio run dev",
-    "typegen": "npm --prefix studio run typegen"
+    "typegen": "npm --prefix studio run typegen",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@arcjet/next": "^1.5.0",
@@ -30,6 +31,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^8.0.1",
