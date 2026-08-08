@@ -106,7 +106,16 @@ const legacyRedirects: { source: string; destination: string }[] = [
   // Blog (nessun redirect verso una categoria specifica: ora il blog esiste
   // davvero sul sito nuovo, quindi si punta all'indice generale)
   { source: "/blog.html", destination: "/blog" },
-  { source: "/blog/:path*", destination: "/blog" },
+  // NOTE: il suffisso ".html" e' obbligatorio per due motivi:
+  // 1) "/blog/:path*" (senza suffisso) fa match anche di "/blog" stesso
+  //    (il param opzionale assorbe pure lo slash iniziale), creando un
+  //    redirect loop /blog -> /blog -> ... (ERR_TOO_MANY_REDIRECTS).
+  // 2) senza vincolo il pattern intercetterebbe anche i veri articoli del
+  //    blog nuovo su /blog/:slug (i redirect vengono valutati da Next.js
+  //    PRIMA delle route dinamiche), rendendoli irraggiungibili. I vecchi
+  //    URL del sito precedente terminavano tutti in ".html", quindi il
+  //    suffisso li isola correttamente dai nuovi slug.
+  { source: "/blog/:path*.html", destination: "/blog" },
 ];
 
 const nextConfig: NextConfig = {
