@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/next';
 import { Source_Sans_3 } from 'next/font/google';
 import { getSiteSettings } from '@/lib/settings';
 import { Analytics } from '@/components/analytics';
@@ -61,6 +62,7 @@ export default function RootLayout({
     <html lang="it" className={`${sourceSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground overflow-x-hidden">
         {GA_ID && <Analytics />}
+        <VercelAnalytics />
         <MotionProvider>
           {children}
           {GA_ID && <CookieConsent />}
